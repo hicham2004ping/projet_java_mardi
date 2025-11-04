@@ -1,8 +1,8 @@
-package ma.dentalTech.repository.modules.patient.fileBase_implementation;
+package ma.prodenta.repository.modules.patient.fileBase_implementation;
 
-import ma.dentalTech.repository.modules.patient.api.PatientDao;
-import ma.dentalTech.entities.En.Patient;
-import ma.dentalTech.conf.DatabaseConnection;
+import ma.prodenta.repository.modules.patient.api.PatientDao;
+import ma.prodenta.entities.En.Patient;
+import ma.prodenta.conf.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;

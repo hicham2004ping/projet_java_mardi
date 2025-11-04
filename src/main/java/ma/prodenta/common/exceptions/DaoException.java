@@ -1,4 +1,4 @@
-package ma.dentalTech.common.exceptions;
+package ma.prodenta.common.exceptions;
 
 public class DaoException extends Exception {
     public DaoException(String m) {

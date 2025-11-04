@@ -1,4 +1,4 @@
-package ma.dentalTech.service.modules.patient.baseImplementation;
+package ma.prodenta.service.modules.patient.baseImplementation;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ma.dentalTech.entities.patient.Patient;
-import ma.dentalTech.mvc.dto.PatientDTO;
-import ma.dentalTech.repository.modules.patient.api.PatientDao;
-import ma.dentalTech.service.modules.patient.api.PatientService;
+import ma.prodenta.entities.patient.Patient;
+import ma.prodenta.mvc.dto.PatientDTO;
+import ma.prodenta.repository.modules.patient.api.PatientDao;
+import ma.prodenta.service.modules.patient.api.PatientService;
 
 @Data
 @AllArgsConstructor

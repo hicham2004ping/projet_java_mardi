@@ -1,8 +1,8 @@
-package ma.dentalTech.entities.En;
+package ma.prodenta.entities.En;
 
 
-import ma.dentalTech.conf.ApplicationContext;
-import ma.dentalTech.mvc.controllers.modules.patient.api.PatientController;
+import ma.prodenta.conf.ApplicationContext;
+import ma.prodenta.mvc.controllers.modules.patient.api.PatientController;
 
 public class MainApp
 {

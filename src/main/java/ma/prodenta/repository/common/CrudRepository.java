@@ -1,4 +1,4 @@
-package ma.dentalTech.repository.common;
+package ma.prodenta.repository.common;
 
 import java.util.List;
 

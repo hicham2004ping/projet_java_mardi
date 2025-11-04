@@ -1,8 +1,8 @@
-package ma.dentalTech.service.modules.patient.api;
+package ma.prodenta.service.modules.patient.api;
 
 
 import java.util.List;
-import ma.dentalTech.mvc.dto.PatientDTO;
+import ma.prodenta.mvc.dto.PatientDTO;
 
 public interface PatientService {
 

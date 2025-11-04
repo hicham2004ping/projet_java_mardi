@@ -1,4 +1,4 @@
-package ma.dentalTech.entities.Enum;
+package ma.prodenta.entities.Enum;
 
 public enum Forme {
     Comprimé,Gelule,Sirop,Pommade,Injection
