@@ -1,4 +1,4 @@
-package ma.dentalTech.entities.En;
+package ma.prodenta.entities.En;
 
 import lombok.*;
 import java.io.Serializable;
