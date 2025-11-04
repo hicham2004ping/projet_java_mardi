@@ -1,6 +1,6 @@
-package ma.dentalTech.repository.modules.patient.api;
+package ma.prodenta.repository.modules.patient.api;
 
-import ma.dentalTech.entities.En.Patient;
+import ma.prodenta.entities.En.Patient;
 import java.util.List;
 
 public interface PatientDao {

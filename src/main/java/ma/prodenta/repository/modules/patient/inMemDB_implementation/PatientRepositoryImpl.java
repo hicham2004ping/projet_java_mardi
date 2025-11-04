@@ -1,14 +1,14 @@
-package ma.dentalTech.repository.modules.patient.inMemDB_implementation;
+package ma.prodenta.repository.modules.patient.inMemDB_implementation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import ma.dentalTech.entities.Enum.Assurance;
-import ma.dentalTech.entities.Enum.Sexe;
-import ma.dentalTech.entities.patient.Patient;
-import ma.dentalTech.repository.modules.patient.api.PatientDao;
+import ma.prodenta.entities.Enum.Assurance;
+import ma.prodenta.entities.Enum.Sexe;
+import ma.prodenta.entities.patient.Patient;
+import ma.prodenta.repository.modules.patient.api.PatientDao;
 
 public class PatientRepositoryImpl implements PatientDao {
 
