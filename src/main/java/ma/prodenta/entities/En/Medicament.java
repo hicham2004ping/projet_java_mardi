@@ -12,7 +12,7 @@ public class Medicament implements Serializable {
     private String nom;
     private String laboratoire;
     private String type;
-    private Boolean remboursable; // tinyint(1)
+    private Boolean remboursable;
     private Double prixUnit;
     private String description;
     private Integer idForme;
