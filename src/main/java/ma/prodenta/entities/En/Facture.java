@@ -7,6 +7,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Facture implements Serializable {
     private Integer idFact;
     private Double total;

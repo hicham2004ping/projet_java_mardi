@@ -7,6 +7,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Revenus implements Serializable {
     private Integer idRev;
     private String type;

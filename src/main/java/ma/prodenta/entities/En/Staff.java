@@ -7,6 +7,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Staff implements Serializable {
     private Integer idStaff;
     private Double salaire;

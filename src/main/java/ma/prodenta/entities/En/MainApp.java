@@ -1,7 +1,7 @@
 package ma.prodenta.entities.En;
 
 
-import ma.prodenta.conf.ApplicationContext;
+import ma.prodenta.config.ApplicationContext;
 import ma.prodenta.mvc.controllers.modules.patient.api.PatientController;
 
 public class MainApp

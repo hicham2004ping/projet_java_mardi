@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class RDV implements Serializable {
     private Integer idRDV;
     private Date dateRDV;

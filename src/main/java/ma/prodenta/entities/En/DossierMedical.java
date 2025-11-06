@@ -7,6 +7,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class DossierMedical implements Serializable {
     private Integer idDossier;
     private Date dateCreation;

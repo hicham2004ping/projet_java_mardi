@@ -7,6 +7,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Certificat implements Serializable {
     private Integer idCert;
     private Date dateDebut;

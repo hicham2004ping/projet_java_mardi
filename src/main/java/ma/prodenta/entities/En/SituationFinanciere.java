@@ -6,6 +6,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SituationFinanciere implements Serializable {
     private Integer idSF;
     private Double totalActes;

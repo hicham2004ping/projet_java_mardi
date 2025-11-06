@@ -6,6 +6,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Medicament implements Serializable {
     private Integer idMed;
     private String nom;

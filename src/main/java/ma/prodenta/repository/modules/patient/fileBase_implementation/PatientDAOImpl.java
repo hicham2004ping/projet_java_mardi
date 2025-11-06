@@ -2,7 +2,7 @@ package ma.prodenta.repository.modules.patient.fileBase_implementation;
 
 import ma.prodenta.repository.modules.patient.api.PatientDao;
 import ma.prodenta.entities.En.Patient;
-import ma.prodenta.conf.DatabaseConnection;
+import ma.prodenta.config.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 public class PatientDAOImpl implements PatientDao {
 
     @Override
-    public void ajouter(Patient patient) throws Exception {
+    public void create(Patient patient) throws Exception {
         String sql = "INSERT INTO patient(nom, dateNaissance, adresse, telephone, idSexe, idAssurance) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -26,7 +26,7 @@ public class PatientDAOImpl implements PatientDao {
     }
 
     @Override
-    public void mettreAJour(Patient patient) throws Exception {
+    public void update(Patient patient) throws Exception {
         String sql = "UPDATE patient SET nom=?, dateNaissance=?, adresse=?, telephone=?, idSexe=?, idAssurance=? WHERE idPatient=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -42,7 +42,7 @@ public class PatientDAOImpl implements PatientDao {
     }
 
     @Override
-    public void supprimer(int idPatient) throws Exception {
+    public void delete(int idPatient) throws Exception {
         String sql = "DELETE FROM patient WHERE idPatient=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -52,7 +52,7 @@ public class PatientDAOImpl implements PatientDao {
     }
 
     @Override
-    public Patient trouverParId(int idPatient) throws Exception {
+    public Patient FindById(int idPatient) throws Exception {
         String sql = "SELECT * FROM patient WHERE idPatient=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -75,7 +75,7 @@ public class PatientDAOImpl implements PatientDao {
     }
 
     @Override
-    public List<Patient> trouverTous() throws Exception {
+    public List<Patient> FindAll() throws Exception {
         List<Patient> liste = new ArrayList<>();
         String sql = "SELECT * FROM patient";
         try (Connection conn = DatabaseConnection.getConnection();

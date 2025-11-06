@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.Sexe;
-import ma.prodenta.entities.patient.Patient;
+import ma.prodenta.entities.En.Patient;
 import ma.prodenta.repository.modules.patient.api.PatientDao;
 
 public class PatientRepositoryImpl implements PatientDao {

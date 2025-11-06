@@ -4,9 +4,9 @@ import ma.prodenta.entities.En.Patient;
 import java.util.List;
 
 public interface PatientDao {
-    void ajouter(Patient patient) throws Exception;
-    void mettreAJour(Patient patient) throws Exception;
-    void supprimer(int idPatient) throws Exception;
-    Patient trouverParId(int idPatient) throws Exception;
-    List<Patient> trouverTous() throws Exception;
+    void create(Patient patient) throws Exception;
+    void update(Patient patient) throws Exception;
+    void delete(int idPatient) throws Exception;
+    Patient FindById(int idPatient) throws Exception;
+    List<Patient> FindAll() throws Exception;
 }

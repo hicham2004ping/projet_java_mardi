@@ -6,6 +6,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Antecedent implements Serializable {
     private Integer idAntecedent;
     private String nom;

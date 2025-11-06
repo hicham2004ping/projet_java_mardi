@@ -6,6 +6,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Utilisateur {
     private int idUser;
     private String nom;

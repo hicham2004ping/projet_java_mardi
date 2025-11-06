@@ -7,6 +7,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Ordonnance implements Serializable {
     private Integer idOrd;
     private Date dateOrd;
