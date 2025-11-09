@@ -13,6 +13,6 @@ public class Revenus implements Serializable {
     private String type;
     private String description;
     private Double montant;
-    private Date dateRev; // datetime
+    private Date dateRev;
     private Integer idCabinet;
 }

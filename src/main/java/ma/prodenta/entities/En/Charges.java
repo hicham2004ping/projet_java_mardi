@@ -13,6 +13,6 @@ public class Charges implements Serializable {
     private String titre;
     private String description;
     private Double montant;
-    private Date dateCharge; // datetime in DB
+    private Date dateCharge;
     private Integer idCabinet;
 }

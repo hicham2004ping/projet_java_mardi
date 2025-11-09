@@ -1,3 +1,4 @@
+/*
 package ma.prodenta.service.modules.patient.baseImplementation;
 
 import java.time.LocalDate;
@@ -22,20 +23,24 @@ public class PatientServiceImpl implements PatientService {
     private PatientDao repository;
 
 
-    /**
+    */
+/**
      * Formattage de date
      * @param dt : date Non Formatée
      * @return  date formatée
-     */
+     *//*
+
     private static String formatDate(java.time.LocalDateTime dt) {
         return dt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 
-    /**
+    */
+/**
      * Calculer l'âge du patient à partir de sa date de naissance
      * @param birthDate
      * @return age
-     */
+     *//*
+
     private static int computeAge(LocalDate birthDate) {
         if (birthDate == null) return 0;
         return Period.between(birthDate, LocalDate.now()).getYears();
@@ -56,3 +61,4 @@ public class PatientServiceImpl implements PatientService {
                 .collect(Collectors.toList());
     }
 }
+*/

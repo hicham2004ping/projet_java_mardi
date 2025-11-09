@@ -1,3 +1,4 @@
+/*
 package ma.prodenta.repository.modules.patient.inMemDB_implementation;
 
 import java.time.LocalDate;
@@ -10,11 +11,13 @@ import ma.prodenta.entities.Enum.Sexe;
 import ma.prodenta.entities.En.Patient;
 import ma.prodenta.repository.modules.patient.api.PatientDao;
 
-public class PatientRepositoryImpl implements PatientDao {
 
-    private final List<Patient> data = new ArrayList<>();
 
-    public PatientRepositoryImpl() {
+//// public class PatientRepositoryImpl implements PatientDao {
+
+    //// private final List<Patient> data = new ArrayList<>();
+
+    //// public PatientRepositoryImpl() {
         // Données d'exemple : 3 patients d'aujourd'hui, 1 d'hier
         LocalDateTime now = LocalDateTime.now();
         data.add(Patient.builder()
@@ -75,4 +78,5 @@ public class PatientRepositoryImpl implements PatientDao {
 
     @Override
     public void deleteById(Long id) { data.removeIf(p -> p.getId().equals(id)); }
-}
+////}////
+*/
