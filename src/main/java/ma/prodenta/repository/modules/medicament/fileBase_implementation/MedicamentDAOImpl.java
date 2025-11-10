@@ -2,7 +2,7 @@ package ma.prodenta.repository.modules.medicament.fileBase_implementation;
 
 import ma.prodenta.repository.modules.medicament.api.MedicamentDao;
 import ma.prodenta.entities.En.Medicament;
-import ma.prodenta.config.DatabaseConnection;
+import ma.prodenta.config.SessionFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
     @Override
     public void create(Medicament medicament) throws Exception {
         String sql = "INSERT INTO medicament(nom, laboratoire, type, remboursable, prixUnit, description, idForme) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, medicament.getNom());
             ps.setString(2, medicament.getLaboratoire());
@@ -29,7 +29,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
     @Override
     public void update(Medicament medicament) throws Exception {
         String sql = "UPDATE medicament SET nom=?, laboratoire=?, type=?, remboursable=?, prixUnit=?, description=?, idForme=? WHERE idMed=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, medicament.getNom());
             ps.setString(2, medicament.getLaboratoire());
@@ -46,7 +46,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
     @Override
     public void delete(int idMed) throws Exception {
         String sql = "DELETE FROM medicament WHERE idMed=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idMed);
             ps.executeUpdate();
@@ -56,7 +56,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
     @Override
     public Medicament findById(int idMed) throws Exception {
         String sql = "SELECT * FROM medicament WHERE idMed=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idMed);
             try (ResultSet rs = ps.executeQuery()) {
@@ -82,7 +82,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
     public List<Medicament> findAll() throws Exception {
         List<Medicament> liste = new ArrayList<>();
         String sql = "SELECT * FROM medicament";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {

@@ -1,6 +1,6 @@
 package ma.prodenta.repository.modules.statistiques.fileBase_implementation;
 
-import ma.prodenta.config.DatabaseConnection;
+import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Charges;
 import ma.prodenta.repository.modules.statistiques.api.ChargesDao;
 
@@ -13,7 +13,7 @@ public class ChargesDAOImpl implements ChargesDao {
     @Override
     public void create(Charges charge) throws Exception {
         String sql = "INSERT INTO charges (titre, description, montant, dateCharge, idCabinet) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, charge.getTitre());
@@ -31,7 +31,7 @@ public class ChargesDAOImpl implements ChargesDao {
         String sql = "SELECT * FROM charges WHERE idCharge = ?";
         Charges charge = null;
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -49,7 +49,7 @@ public class ChargesDAOImpl implements ChargesDao {
         List<Charges> list = new ArrayList<>();
         String sql = "SELECT * FROM charges";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -63,7 +63,7 @@ public class ChargesDAOImpl implements ChargesDao {
     @Override
     public void update(Charges charge) throws Exception {
         String sql = "UPDATE charges SET titre = ?, description = ?, montant = ?, dateCharge = ?, idCabinet = ? WHERE idCharge = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, charge.getTitre());
@@ -80,7 +80,7 @@ public class ChargesDAOImpl implements ChargesDao {
     @Override
     public void delete(Integer id) throws Exception {
         String sql = "DELETE FROM charges WHERE idCharge = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);

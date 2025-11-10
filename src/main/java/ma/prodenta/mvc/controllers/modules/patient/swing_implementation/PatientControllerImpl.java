@@ -1,3 +1,4 @@
+/*
 package ma.prodenta.mvc.controllers.modules.patient.swing_implementation;
 
 import java.util.List;
@@ -20,3 +21,4 @@ public class PatientControllerImpl implements PatientController {
         PatientView.showAsync(dtos);
     }
 }
+*/

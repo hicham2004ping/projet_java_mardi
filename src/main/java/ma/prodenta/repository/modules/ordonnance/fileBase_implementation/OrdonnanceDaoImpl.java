@@ -2,7 +2,7 @@ package ma.prodenta.repository.modules.ordonnance.fileBase_implementation;
 
 import ma.prodenta.repository.modules.ordonnance.api.OrdonnanceDao;
 import ma.prodenta.entities.En.Ordonnance;
-import ma.prodenta.config.DatabaseConnection;
+import ma.prodenta.config.SessionFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class OrdonnanceDaoImpl implements OrdonnanceDao {
     @Override
     public void create(Ordonnance ordonnance) throws Exception {
         String sql = "INSERT INTO ordonnance(dateOrd, idDossier) VALUES (?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDate(1, new java.sql.Date(ordonnance.getDateOrd().getTime()));
             ps.setInt(2, ordonnance.getIdDossier());
@@ -24,7 +24,7 @@ public class OrdonnanceDaoImpl implements OrdonnanceDao {
     @Override
     public void update(Ordonnance ordonnance) throws Exception {
         String sql = "UPDATE ordonnance SET dateOrd=?, idDossier=? WHERE idOrd=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDate(1, new java.sql.Date(ordonnance.getDateOrd().getTime()));
             ps.setInt(2, ordonnance.getIdDossier());
@@ -36,7 +36,7 @@ public class OrdonnanceDaoImpl implements OrdonnanceDao {
     @Override
     public void delete(int idOrd) throws Exception {
         String sql = "DELETE FROM ordonnance WHERE idOrd=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idOrd);
             ps.executeUpdate();
@@ -46,7 +46,7 @@ public class OrdonnanceDaoImpl implements OrdonnanceDao {
     @Override
     public Ordonnance findById(int idOrd) throws Exception {
         String sql = "SELECT * FROM ordonnance WHERE idOrd=?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idOrd);
             try (ResultSet rs = ps.executeQuery()) {
@@ -66,7 +66,7 @@ public class OrdonnanceDaoImpl implements OrdonnanceDao {
     public List<Ordonnance> findAll() throws Exception {
         List<Ordonnance> liste = new ArrayList<>();
         String sql = "SELECT * FROM ordonnance";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {

@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class LoginInterface extends JFrame {
+public class LoginView extends JFrame {
 
-    public LoginInterface() {
+    public LoginView() {
         setTitle("ProDenta - Connexion");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 450);
@@ -127,7 +127,7 @@ public class LoginInterface extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LoginInterface().setVisible(true));
+        SwingUtilities.invokeLater(() -> new LoginView().setVisible(true));
     }
 }
 

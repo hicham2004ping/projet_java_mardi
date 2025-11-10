@@ -1,8 +1,8 @@
 package ma.prodenta.repository.modules.statistiques.fileBase_implementation;
 
-import ma.prodenta.config.DatabaseConnection;
+import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Revenus;
-import ma.prodenta.repository.modules.revenus.api.RevenusDao;
+import ma.prodenta.repository.modules.statistiques.api.RevenusDao;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class RevenusDAOImpl implements RevenusDao {
     @Override
     public void create(Revenus revenu) throws Exception {
         String sql = "INSERT INTO revenus (type, description, montant, dateRev, idCabinet) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, revenu.getType());
@@ -31,7 +31,7 @@ public class RevenusDAOImpl implements RevenusDao {
         String sql = "SELECT * FROM revenus WHERE idRev = ?";
         Revenus revenu = null;
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -49,7 +49,7 @@ public class RevenusDAOImpl implements RevenusDao {
         List<Revenus> list = new ArrayList<>();
         String sql = "SELECT * FROM revenus";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -63,7 +63,7 @@ public class RevenusDAOImpl implements RevenusDao {
     @Override
     public void update(Revenus revenu) throws Exception {
         String sql = "UPDATE revenus SET type = ?, description = ?, montant = ?, dateRev = ?, idCabinet = ? WHERE idRev = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, revenu.getType());
@@ -80,7 +80,7 @@ public class RevenusDAOImpl implements RevenusDao {
     @Override
     public void delete(Integer id) throws Exception {
         String sql = "DELETE FROM revenus WHERE idRev = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);

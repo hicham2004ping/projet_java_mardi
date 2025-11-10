@@ -1,3 +1,4 @@
+/*
 package ma.prodenta.mvc.controllers.modules.patient.batch_implentation;
 
 import java.util.List;
@@ -25,3 +26,4 @@ public class PatientControllerImpl implements PatientController {
                 dto.getNomComplet(), dto.getAge(), dto.getDateCreationFormatee()));
     }
 }
+*/
