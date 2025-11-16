@@ -1,5 +1,4 @@
 package ma.prodenta.repository.common;
-
 import ma.prodenta.entities.En.Antecedent;
 
 import java.util.List;

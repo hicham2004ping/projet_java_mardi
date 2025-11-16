@@ -14,7 +14,7 @@ public class Antecedent {
 
     private Long IdAntecedent;
     private String nom;
-    private CategorieAntecedent categorie;
+    private String categorie;
     private NiveauRisque niveauRisque;
 
     private List<Patient> patients;

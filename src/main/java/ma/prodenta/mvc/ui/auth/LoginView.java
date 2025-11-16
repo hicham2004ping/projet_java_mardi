@@ -1,10 +1,12 @@
 package ma.prodenta.mvc.ui.auth;
-
+import ma.prodenta.entities.En.Utilisateur;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.sql.SQLException;
+import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
+import ma.prodenta.repository.modules.user.implementation.UserImpl;
 public class LoginView extends JFrame {
 
     public LoginView() {
@@ -87,6 +89,28 @@ public class LoginView extends JFrame {
         loginButton.setFocusPainted(false);
         loginButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         loginButton.setPreferredSize(new Dimension(200, 40));
+        loginButton.addActionListener(e->{
+            String motdepasse = passField.getText();
+            String username=userField.getText();
+            System.out.println(motdepasse);
+            UserImpl user=new UserImpl();
+            dispose();
+            new Dashboard_view();
+            try{
+                Utilisateur u=user.getUser(username,motdepasse);
+                if (u!=null){
+                    System.out.println("connexion reussie");
+                    dispose();
+                    new Dashboard_view();
+                }
+                else{
+                    System.out.println("connexion non reussie");
+                }
+            }
+            catch(SQLException e1){
+                System.out.println(e1.getMessage());
+            }
+        });
 
         // Espacement
         leftPanel.add(titleLabel);

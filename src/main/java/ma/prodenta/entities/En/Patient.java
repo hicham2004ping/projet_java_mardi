@@ -24,8 +24,6 @@ public class Patient { //implements Comparable<Patient>{
     private LocalDateTime dateCreation;
     private Sexe sexe;
     private Assurance assurance;
-
-
     private List<Antecedent> antecedents = null;
 
 
