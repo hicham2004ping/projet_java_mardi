@@ -7,7 +7,7 @@ import ma.prodenta.mvc.controllers.modules.auth.swing_Implementation.LoginContro
 import ma.prodenta.mvc.controllers.modules.patient.api.PatientController;
 import ma.prodenta.mvc.controllers.modules.patient.batch_implentation.PatientControllerImpl;
 import ma.prodenta.repository.modules.patient.api.PatientDao;
-import ma.prodenta.repository.modules.patient.fileBase_implementation.PatientDAOImpl;
+import ma.prodenta.repository.modules.patient.patient_impl.PatientDAOImpl;
 import ma.prodenta.service.modules.auth.api.AuthService;
 import ma.prodenta.service.modules.auth.baseImplementation.InMemoryAuthService;
 import ma.prodenta.service.modules.auth.baseImplementation.JdbcAuthService;
