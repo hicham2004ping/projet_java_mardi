@@ -1,16 +1,25 @@
 package ma.prodenta.common.util;
-
-import org.mindrot.jbcrypt.BCrypt; //hachage dl psswd
-
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.Base64;
 public class PasswordUtil {
-
-    // rounds = 12 mzyan
-    public static String hashPassword(String plain) {
-        return BCrypt.hashpw(plain, BCrypt.gensalt(12));
+    private static final SecureRandom RANDOM = new SecureRandom();
+    public static String hash(String password, String salt) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(salt.getBytes(StandardCharsets.UTF_8));
+            byte[] hashed =
+                    md.digest(password.getBytes(StandardCharsets.UTF_8));
+                        return Base64.getEncoder().encodeToString(hashed);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-
-    public static boolean verifyPassword(String plain, String hash) {
-        if (plain == null || hash == null) return false;
-        return BCrypt.checkpw(plain, hash);
+    public static String generateSalt() {
+        byte[] s = new byte[16];
+        RANDOM.nextBytes(s);
+        return Base64.getEncoder().encodeToString(s);
     }
 }
+
