@@ -4,9 +4,24 @@ package ma.prodenta.config;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
 import ma.prodenta.mvc.controllers.modules.patient.api.PatientController;
 import ma.prodenta.repository.modules.patient.api.PatientDao;
 import ma.prodenta.service.modules.patient.api.PatientService;
+import ma.prodenta.mvc.controllers.modules.admin.AdminAuthController;
+import ma.prodenta.repository.common.AdminRepository;
+import ma.prodenta.repository.modules.admin.AdminRepositoryImpl;
+import ma.prodenta.service.common.AdminService;
+import ma.prodenta.service.modules.admin.AdminServiceImpl;
+
+//
+import ma.prodenta.repository.common.DossierMedicalRepository;
+import ma.prodenta.repository.modules.dossierMedical.DossierMedicalRepositoryImpl;
+import ma.prodenta.service.common.DossierMedicalService;
+import ma.prodenta.service.modules.dossierMedical.DossierMedicalServiceImpl;
+import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
+
 
 // Fabrique
 public class ApplicationContext {
@@ -65,9 +80,50 @@ public class ApplicationContext {
     public static <T> T getBean(Class<T> beanClass) {
         return beanClass.cast(context.get(beanClass));
     }
+    //travail au dessous de othmane (auth)
+    private static SessionFactory sessionFactory;
 
+    static {
+        // TODO: initialiser sessionFactory (URL, user, password) si ce n'est pas déjà fait.
+        sessionFactory = new SessionFactory();
+    }
 
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    // ==== Beans Admin ====
+
+    public static AdminRepository getAdminRepository() {
+        return new AdminRepositoryImpl(getSessionFactory());
+    }
+
+    public static AdminService getAdminService() {
+        return new AdminServiceImpl(getAdminRepository());
+    }
+
+    public static AdminAuthController getAdminAuthController() {
+        return new AdminAuthController(getAdminService());
+    }
+
+    public static DossierMedicalController getDossierMedicalController() {
+        return null;
+    }
 }
+//youssef
+
+        public static DossierMedicalRepository getDossierMedicalRepository() {
+            return new DossierMedicalRepositoryImpl(ApplicationContext.getSessionFactory());
+        }
+
+        public static DossierMedicalService getDossierMedicalService() {
+            return new DossierMedicalServiceImpl(getDossierMedicalRepository());
+        }
+
+        public static DossierMedicalController getDossierMedicalController() {
+            return new DossierMedicalController(getDossierMedicalService());
+        }
+
 
 
 

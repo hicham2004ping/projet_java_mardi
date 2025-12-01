@@ -1,6 +1,5 @@
 package ma.prodenta.mvc.controllers.modules.auth;
-import ma.prodenta.mvc.dto.LoginRequest;
-import ma.prodenta.mvc.dto.LoginResponse;
+import ma.prodenta.mvc.dto.admin.LoginRequest;
 import ma.prodenta.service.modules.auth.AuthService;
 import ma.prodenta.service.modules.auth.AuthServiceImpl;
 public class AuthController {

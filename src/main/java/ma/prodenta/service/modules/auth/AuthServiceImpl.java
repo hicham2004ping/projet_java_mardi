@@ -1,7 +1,6 @@
 package ma.prodenta.service.modules.auth;
 import ma.prodenta.common.exceptions.AuthException;
-import ma.prodenta.mvc.dto.LoginRequest;
-import ma.prodenta.mvc.dto.LoginResponse;
+import ma.prodenta.mvc.dto.admin.LoginRequest;
 import ma.prodenta.mvc.dto.UserDTO;
 import ma.prodenta.repository.modules.auth.UserRepository;
 import ma.prodenta.entities.En.Utilisateur;
