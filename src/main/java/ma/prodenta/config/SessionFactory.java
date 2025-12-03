@@ -61,7 +61,7 @@ public final class SessionFactory {
      * Constructeur privé → empêche toute instanciation directe.
      * Initialise la configuration et le driver JDBC.
      */
-    private SessionFactory() {
+    SessionFactory() {
         var properties = PropertiesExtractor.loadConfigFile(PROPS_PATH);
 
         this.url      = PropertiesExtractor.getPropertyValue(URL_KEY, properties);
