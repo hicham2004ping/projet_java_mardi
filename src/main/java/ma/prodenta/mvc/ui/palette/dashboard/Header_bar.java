@@ -1,5 +1,4 @@
 package ma.prodenta.mvc.ui.palette.dashboard;
-
 import javax.swing.*;
 import java.awt.*;
 

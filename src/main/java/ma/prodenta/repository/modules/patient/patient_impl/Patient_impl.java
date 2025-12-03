@@ -1,4 +1,7 @@
 package ma.prodenta.repository.modules.patient.patient_impl;
+import com.mysql.cj.protocol.Resultset;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
 import ma.prodenta.entities.Enum.Assurance;
@@ -6,16 +9,26 @@ import ma.prodenta.repository.common.Connextion_db;
 import ma.prodenta.repository.common.CrudRepository;
 import ma.prodenta.repository.modules.patient.api.PatientDao;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import ma.prodenta.entities.Enum.Sexe;
-class Patient_impl implements PatientDao  {
+@Data @NoArgsConstructor
+public class Patient_impl implements PatientDao  {
     public static  Connextion_db connetion_base;
+    public int get_last_id() throws IOException, SQLException {
+        int id=0;
+        try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
+            PreparedStatement pst=conn.prepareStatement("select max(idpatient) from patient");
+            ResultSet rs=pst.executeQuery();
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+        }
+        return id;
+    }
     @Override
     public Patient findByEmail(String email) {
         return null;
@@ -58,7 +71,6 @@ class Patient_impl implements PatientDao  {
 
     @Override
     public void removeAllAntecedentsFromPatient(Long patientId) {
-
     }
 
     @Override
@@ -72,8 +84,46 @@ class Patient_impl implements PatientDao  {
     }
 
     @Override
-    public List<Patient> findAll() throws Exception {
-        return List.of();
+    public List<Patient> findAll() throws Exception,IOException, SQLException {
+        List<Patient> patients=new ArrayList<>();
+        Patient patient=new Patient();
+        try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
+            String requete= """
+                    select * from patient 
+                    """;
+            PreparedStatement stmt=conn.prepareStatement(requete);
+            ResultSet rs=stmt.executeQuery();
+            while(rs.next()){
+                patient.setId(rs.getInt("idpatient"));
+                patient.setDateNaissance(rs.getDate("datenaissance").toLocalDate());
+                patient.setAdresse(rs.getString("adresse"));
+                patient.setTelephone(rs.getString("telephone"));
+                patient.setNom(rs.getString("nom"));
+                int id_sexe=rs.getInt("idsexe");
+                int id_assurance=rs.getInt("idassurance");
+                if (id_sexe==1){
+                    patient.setSexe(Sexe.Homme);
+                }
+                else{
+                    patient.setSexe(Sexe.Femme);
+                }
+                if (id_assurance==1){
+                    patient.setAssurance(Assurance.CNOPS);
+                }
+                else if (id_assurance==2){
+                    patient.setAssurance(Assurance.CNSS);
+                }
+                else if (id_assurance==3){
+                    patient.setAssurance(Assurance.RAMED);
+                }
+                else{
+                    patient.setAssurance(Assurance.Aucune);
+                }
+                patients.add(patient);
+                patient=new Patient();
+            }
+            return patients;
+        }
     }
 
     @Override
@@ -86,9 +136,9 @@ class Patient_impl implements PatientDao  {
         try(Connection con=DriverManager.getConnection(new Connextion_db().getUrl(), new Connextion_db().getUsername(),new Connextion_db().getPassword())){
             String requete= """
                     insert into patient 
-                    (nom,datenaissance,adresse,telephone,idsexe,idassurance)
+                    (nom,datenaissance,adresse,telephone,idsexe,idassurance,prenom,email)
                     values
-                    (?,?,?,?,?,?)
+                    (?,?,?,?,?,?,?,?)
                     """;
             int id_sexe;
             int id_assurance;
@@ -113,6 +163,8 @@ class Patient_impl implements PatientDao  {
             prp.setString(4,objet.getTelephone());
             prp.setInt(5,id_sexe);
             prp.setInt(6,id_assurance);
+            prp.setString(7,objet.getPrenom());
+            prp.setString(8,objet.getEmail());
             int nombre_lignes=prp.executeUpdate();
             return  (nombre_lignes>0);
         }
@@ -143,22 +195,22 @@ class Patient_impl implements PatientDao  {
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
     }
-    //on peut le transformer en main en editons le nom vers main
-    public static void test(String[] args){
-        List<Antecedent> list=null;
-        Patient p=new Patient(2,"karaki",LocalDate.of(2024,9,20),"beirut","021831241",Sexe.Homme, Assurance.CNOPS,list);
+    public static void main(String[] args) {
+        LocalDate date=LocalDate.of(2024,9,27);
+        ArrayList<Antecedent> listeAntecedents=new ArrayList<>();
+        Patient patient=new Patient("nascerallah",3,"hassan",date,"Beirut","hezbollah@gmail.com","0777181657",Sexe.Femme,Assurance.CNOPS,listeAntecedents);
         try{
-            Patient_impl pat=new Patient_impl();
-            boolean flag=pat.create(p);
-            if(flag){
-                System.out.println("l'utilisateur a ete bien creer ");
-            }
-            else{
-                System.out.println("l'utilisateur n'a pas ete bien creer");
-            }
+            Patient_impl p=new Patient_impl();
+           boolean flag = p.create(patient);
+           if(flag==true){
+               System.out.println("le patient a ete creer ");
+           }
+           else{
+               System.out.println("le patient a ete supprimer ");
+           }
         }
-        catch(Exception ex){
-            System.err.println(ex.getMessage());
+        catch(Exception e){
+            System.out.println(e);
         }
     }
 }

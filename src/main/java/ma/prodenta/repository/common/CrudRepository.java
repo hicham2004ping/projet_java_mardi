@@ -1,16 +1,16 @@
 package ma.prodenta.repository.common;
 import ma.prodenta.entities.En.Antecedent;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public interface CrudRepository<T, ID> {
-
     List<T> findAll() throws Exception;
 
     T findById(ID id) throws Exception;
 
-    boolean create(T objet) throws SQLException;
+    boolean create(T objet) throws SQLException, IOException;
 
     void update(T objet);
 
@@ -18,6 +18,5 @@ public interface CrudRepository<T, ID> {
 
     boolean deleteById(ID id) throws SQLException;
 
-    // -------- Extras --------
     Optional<Antecedent> findByNom(String nom);
 }

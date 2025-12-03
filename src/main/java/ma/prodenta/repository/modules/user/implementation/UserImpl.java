@@ -14,11 +14,10 @@ import java.util.Optional;
 
 @Data
 public class UserImpl implements user_dao {
-    public static Connextion_db connexion_base;
     @Override
     public Utilisateur getUser(String username,String password ) throws RuntimeException, SQLException {
         Utilisateur utilisateur=null;
-        try(Connection myconn= DriverManager.getConnection(connexion_base.getUrl(),connexion_base.getUsername(),connexion_base.getPassword())){
+        try(Connection myconn= DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
             PreparedStatement pstmt = myconn.prepareStatement("select * from utilisateur where login=? and motdepasse=?");
             pstmt.setString(1,username);
             pstmt.setString(2,password);
@@ -39,6 +38,8 @@ public class UserImpl implements user_dao {
                 int idRole=rs.getInt("idrole");
                 utilisateur =new Utilisateur(idUser,nom,email,adresse,cin,tel,idSexe,login,motdepasse,dateNaissance,ldt,idRole);
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return utilisateur;
     }
@@ -46,7 +47,7 @@ public class UserImpl implements user_dao {
     @Override
     public List<Utilisateur> findAll() throws SQLException,IOException {
         List<Utilisateur>users=new ArrayList<>();
-        try(Connection myconn= DriverManager.getConnection(connexion_base.getUrl(),connexion_base.getUsername(),connexion_base.getPassword())){
+        try(Connection myconn= DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
             PreparedStatement pstmt = myconn.prepareStatement("select * from utilisateur");
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()){
@@ -74,7 +75,7 @@ public class UserImpl implements user_dao {
     @Override
     public Utilisateur findById(Integer integer) throws Exception,SQLException {
               Utilisateur utilisateur=null;
-              try(Connection conn=DriverManager.getConnection(connexion_base.getUrl(),connexion_base.getUsername(),connexion_base.getPassword())){
+              try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
                     PreparedStatement stmt = conn.prepareStatement("select * from utilisateur where idUser=?");
                     stmt.setInt(1,integer);
                    ResultSet rs =stmt.executeQuery();
@@ -99,7 +100,7 @@ public class UserImpl implements user_dao {
     }
 
     @Override
-    public boolean create(Utilisateur user) throws SQLException{
+    public boolean create(Utilisateur user) throws SQLException, IOException {
         int utilisateur_id=user.getIdUser();
         Utilisateur user_test=null;
       //  UserImpl user_sup=new UserImpl();
@@ -113,7 +114,7 @@ public class UserImpl implements user_dao {
             System.out.println("l'utilisateur invalide");
             return false;
         }
-        try(Connection conn=DriverManager.getConnection(connexion_base.getUrl(),connexion_base.getUsername(),connexion_base.getPassword())){
+        try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
             int id=user.getIdUser();
             String nom=user.getNom();
             String email=user.getEmail();
@@ -154,7 +155,7 @@ public class UserImpl implements user_dao {
     public boolean delete(Utilisateur objet) throws SQLException {
        int  user_id=objet.getIdUser();
        Utilisateur user1=null;
-       try(Connection conn= DriverManager.getConnection(connexion_base.getUrl(),connexion_base.getUsername(),connexion_base.getPassword())){
+       try(Connection conn= DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
            PreparedStatement prp=conn.prepareStatement("delete from utilisateur where idUser=?");
            prp.setInt(1,user_id);
         int numerolignes= prp.executeUpdate();
@@ -168,7 +169,7 @@ public class UserImpl implements user_dao {
 
     @Override
     public boolean deleteById(Integer integer)throws SQLException{
-        try(Connection conn=DriverManager.getConnection(connexion_base.getUrl(),connexion_base.getUsername(),connexion_base.getPassword())){
+        try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
             PreparedStatement stmt=conn.prepareStatement("delete from utilisateur where idUser=?");
             stmt.setInt(1,integer);
            int nombre_lignes= stmt.executeUpdate();
