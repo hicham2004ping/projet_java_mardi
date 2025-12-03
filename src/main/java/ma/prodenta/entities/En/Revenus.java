@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class Revenus implements Serializable {
-    private Integer idRev;
+    private Long idRev;
     private String type;
     private String description;
     private Double montant;

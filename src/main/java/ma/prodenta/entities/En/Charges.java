@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class Charges implements Serializable {
-    private Integer idCharge;
+    private Long idCharge;
     private String titre;
     private String description;
     private Double montant;
