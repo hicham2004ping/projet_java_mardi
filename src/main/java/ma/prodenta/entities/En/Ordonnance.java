@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class Ordonnance implements Serializable {
-    private Integer idOrd;
+    private Long idOrd;
     private Date dateOrd;
     private Integer idDossier;
 }

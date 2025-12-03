@@ -1,40 +1,26 @@
 package ma.prodenta.repository.modules.statistiques.fileBase_implementation;
 
 import ma.prodenta.config.SessionFactory;
+import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Revenus;
 import ma.prodenta.repository.modules.statistiques.api.RevenusDao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RevenusDAOImpl implements RevenusDao {
 
     @Override
-    public void create(Revenus revenu) throws Exception {
-        String sql = "INSERT INTO revenus (type, description, montant, dateRev, idCabinet) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = SessionFactory.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, revenu.getType());
-            stmt.setString(2, revenu.getDescription());
-            stmt.setDouble(3, revenu.getMontant());
-            stmt.setTimestamp(4, new Timestamp(revenu.getDateRev().getTime()));
-            stmt.setInt(5, revenu.getIdCabinet());
-
-            stmt.executeUpdate();
-        }
-    }
-
-    @Override
-    public Revenus findById(Integer id) throws Exception {
+    public Revenus findById(Long idRevenue) throws Exception {
         String sql = "SELECT * FROM revenus WHERE idRev = ?";
         Revenus revenu = null;
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
+            stmt.setLong(1, idRevenue);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -61,6 +47,29 @@ public class RevenusDAOImpl implements RevenusDao {
     }
 
     @Override
+    public void create(Revenus revenu) throws Exception {
+        String sql = "INSERT INTO revenus (type, description, montant, dateRev, idCabinet) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, revenu.getType());
+            stmt.setString(2, revenu.getDescription());
+            stmt.setDouble(3, revenu.getMontant());
+            stmt.setTimestamp(4, new Timestamp(revenu.getDateRev().getTime()));
+            stmt.setInt(5, revenu.getIdCabinet());
+
+            stmt.executeUpdate();
+
+            // récupérer l'ID généré automatiquement
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    revenu.setIdRev(rs.getLong(1));
+                }
+            }
+        }
+    }
+
+    @Override
     public void update(Revenus revenu) throws Exception {
         String sql = "UPDATE revenus SET type = ?, description = ?, montant = ?, dateRev = ?, idCabinet = ? WHERE idRev = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
@@ -71,26 +80,37 @@ public class RevenusDAOImpl implements RevenusDao {
             stmt.setDouble(3, revenu.getMontant());
             stmt.setTimestamp(4, new Timestamp(revenu.getDateRev().getTime()));
             stmt.setInt(5, revenu.getIdCabinet());
-            stmt.setInt(6, revenu.getIdRev());
+            stmt.setLong(6, revenu.getIdRev());
 
             stmt.executeUpdate();
         }
     }
 
     @Override
-    public void delete(Integer id) throws Exception {
+    public void delete(Revenus revenu) throws Exception {
+
+    }
+
+    @Override
+    public void deleteById(Long idRevenue) throws Exception {
         String sql = "DELETE FROM revenus WHERE idRev = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
+            stmt.setLong(1, idRevenue);
             stmt.executeUpdate();
         }
     }
 
+    @Override
+    public Optional<Antecedent> findByNom(String nom) {
+        return Optional.empty();
+    }
+
+    // mapping ResultSet → Revenus
     private Revenus mapResultSetToRevenu(ResultSet rs) throws SQLException {
         return Revenus.builder()
-                .idRev(rs.getInt("idRev"))
+                .idRev(rs.getLong("idRev"))
                 .type(rs.getString("type"))
                 .description(rs.getString("description"))
                 .montant(rs.getDouble("montant"))
