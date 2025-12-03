@@ -1,10 +1,8 @@
 package ma.prodenta.repository.modules.medicament.fileBase_implementation;
-
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Medicament;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.repository.modules.medicament.api.MedicamentDao;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
