@@ -15,7 +15,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de données : `cabinet_medical`
@@ -33,7 +32,7 @@ CREATE TABLE `antecedent` (
   `categorie` varchar(100) DEFAULT NULL,
   `idRisque` int DEFAULT NULL,
   `idPatient` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -44,7 +43,7 @@ CREATE TABLE `antecedent` (
 CREATE TABLE `assurance` (
   `idAssurance` int NOT NULL,
   `libelle` enum('cmss','cnops','ramed','privée','aucune') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -64,7 +63,7 @@ CREATE TABLE `cabinetmedical` (
   `description` text,
   `instagram` varchar(100) DEFAULT NULL,
   `facebook` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -79,7 +78,7 @@ CREATE TABLE `certificat` (
   `nature` varchar(200) DEFAULT NULL,
   `noteMedecin` text,
   `idDossier` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -94,7 +93,7 @@ CREATE TABLE `charges` (
   `montant` double DEFAULT NULL,
   `dateCharge` datetime DEFAULT NULL,
   `idCabinet` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -108,7 +107,7 @@ CREATE TABLE `consultation` (
   `observationMedecin` text,
   `idDossier` int DEFAULT NULL,
   `idStatut` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -121,7 +120,7 @@ CREATE TABLE `dossiermedical` (
   `dateCreation` date DEFAULT NULL,
   `idPatient` int DEFAULT NULL,
   `idMedecin` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -137,7 +136,7 @@ CREATE TABLE `facture` (
   `statut` enum('payee','non payee','en attente','annulé') DEFAULT NULL,
   `dateFact` datetime DEFAULT NULL,
   `idSF` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -148,7 +147,7 @@ CREATE TABLE `facture` (
 CREATE TABLE `forme` (
   `idForme` int NOT NULL,
   `libelle` enum('Comprimé','Gelule','Sirop','Pommade','Injection') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -160,7 +159,7 @@ CREATE TABLE `medecin` (
   `idUser` int NOT NULL,
   `specialite` varchar(100) DEFAULT NULL,
   `agendaMensuel` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -177,7 +176,7 @@ CREATE TABLE `medicament` (
   `prixUnit` double DEFAULT NULL,
   `description` text,
   `idForme` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -188,7 +187,7 @@ CREATE TABLE `medicament` (
 CREATE TABLE `niveaurisque` (
   `idRisque` int NOT NULL,
   `libelle` enum('Faible','Modéré','Dangereux','Très dangereux') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -200,7 +199,7 @@ CREATE TABLE `ordonnance` (
   `idOrd` int NOT NULL,
   `dateOrd` date DEFAULT NULL,
   `idDossier` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -216,7 +215,7 @@ CREATE TABLE `patient` (
   `telephone` varchar(20) DEFAULT NULL,
   `idSexe` int DEFAULT NULL,
   `idAssurance` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -231,7 +230,7 @@ CREATE TABLE `prescription` (
   `dureeEnJours` int DEFAULT NULL,
   `idOrd` int DEFAULT NULL,
   `idMed` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -246,7 +245,7 @@ CREATE TABLE `rdv` (
   `motif` varchar(150) DEFAULT NULL,
   `noteMedecin` text,
   `idPatient` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -261,7 +260,7 @@ CREATE TABLE `revenus` (
   `montant` double DEFAULT NULL,
   `dateRev` datetime DEFAULT NULL,
   `idCabinet` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -272,7 +271,7 @@ CREATE TABLE `revenus` (
 CREATE TABLE `role` (
   `idRole` int NOT NULL,
   `libelle` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -284,7 +283,7 @@ CREATE TABLE `secretaire` (
   `idUser` int NOT NULL,
   `numCNSS` varchar(30) DEFAULT NULL,
   `commission` double DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -295,7 +294,7 @@ CREATE TABLE `secretaire` (
 CREATE TABLE `sexe` (
   `idSexe` int NOT NULL,
   `libelle` enum('homme','femme') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -311,7 +310,7 @@ CREATE TABLE `situationfinanciere` (
   `statut` enum('payee','non payee','en attente','annulé') DEFAULT NULL,
   `enPromo` enum('Oui','Non') DEFAULT NULL,
   `idPatient` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -327,7 +326,7 @@ CREATE TABLE `staff` (
   `soldeConge` int DEFAULT NULL,
   `idMedecin` int DEFAULT NULL,
   `idSecretaire` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -338,7 +337,7 @@ CREATE TABLE `staff` (
 CREATE TABLE `statutconsultation` (
   `idStatut` int NOT NULL,
   `libelle` enum('En cours','Terminé','Annulé') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -359,7 +358,7 @@ CREATE TABLE `utilisateur` (
   `dateNaissance` date DEFAULT NULL,
   `lastLoginDate` datetime DEFAULT NULL,
   `idRole` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Index pour les tables déchargées

@@ -1,8 +1,9 @@
 package ma.prodenta.entities.En;
-
 import lombok.*;
-import java.util.Date;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +18,9 @@ public class Utilisateur {
     private Integer idSexe;
     private String login;
     private String motdepasse;
-    private Date dateNaissance;
-    private Date lastLoginDate;
+    private LocalDate dateNaissance;
+    private LocalDateTime lastLoginDate;
     private Integer idRole;
+
+
 }

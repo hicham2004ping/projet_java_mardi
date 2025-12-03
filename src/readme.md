@@ -27,4 +27,5 @@ auth:Role-Staff-Utilsateur-Medecin-Secretaire
 patient:  Patient-Dossier medicale-Consultation-Situation Financiere-Antecedent-RDV
 Statistique :Dossier Medicale
 
+une fenetre jframe qui s'affiche apres la connetion a ete ajouter et 2 autres classes du package palette qui seront reutilisable dans tous le code ont ete aussi ajouter
 

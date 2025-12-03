@@ -1,10 +1,12 @@
 package ma.prodenta.mvc.ui.auth;
-
+import ma.prodenta.entities.En.Utilisateur;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.sql.SQLException;
+import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
+import ma.prodenta.repository.modules.user.implementation.UserImpl;
 public class LoginView extends JFrame {
 
     public LoginView() {
@@ -53,7 +55,7 @@ public class LoginView extends JFrame {
         passField.setForeground(Color.GRAY);
         passField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                String pwd = new String(passField.getPassword());
+                String pwd = new String(passField.getMotDePasse());
                 if (pwd.equals("Veuillez saisir le mot de passe...")) {
                     passField.setText("");
                     passField.setEchoChar('•');
@@ -62,7 +64,7 @@ public class LoginView extends JFrame {
             }
 
             public void focusLost(java.awt.event.FocusEvent evt) {
-                String pwd = new String(passField.getPassword());
+                String pwd = new String(passField.getMotDePasse());
                 if (pwd.isEmpty()) {
                     passField.setEchoChar((char) 0);
                     passField.setForeground(Color.GRAY);
@@ -87,6 +89,28 @@ public class LoginView extends JFrame {
         loginButton.setFocusPainted(false);
         loginButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         loginButton.setPreferredSize(new Dimension(200, 40));
+        loginButton.addActionListener(e->{
+            String motdepasse = passField.getText();
+            String login=userField.getText();
+            System.out.println(motdepasse);
+            UserImpl user=new UserImpl();
+            dispose();
+            new Dashboard_view();
+            try{
+                Utilisateur u=user.getUser(login,motdepasse);
+                if (u!=null){
+                    System.out.println("connexion reussie");
+                    dispose();
+                    new Dashboard_view();
+                }
+                else{
+                    System.out.println("connexion non reussie");
+                }
+            }
+            catch(SQLException e1){
+                System.out.println(e1.getMessage());
+            }
+        });
 
         // Espacement
         leftPanel.add(titleLabel);
@@ -130,4 +154,5 @@ public class LoginView extends JFrame {
         SwingUtilities.invokeLater(() -> new LoginView().setVisible(true));
     }
 }
+
 

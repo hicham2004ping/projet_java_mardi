@@ -1,15 +1,15 @@
 package ma.prodenta.repository.modules.patient.api;
-
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
-import ma.prodenta.repository.common.CrudRepository;
+import ma.prodenta.repository.common.*;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public interface PatientDao  extends CrudRepository<Patient, Long> {
-    Optional<Patient> findByEmail(String email);
+public interface PatientDao  extends ma.prodenta.repository.common.CrudRepository<Patient, Long> {
+    Patient findByEmail(String email) throws Exception;
     Optional<Patient> findByTelephone(String telephone);
     List<Patient> searchByNomPrenom(String keyword); // LIKE %keyword%
     boolean existsById(Long id);

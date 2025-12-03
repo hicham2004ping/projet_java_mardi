@@ -1,7 +1,6 @@
 package ma.prodenta.repository.common;
 
 import ma.prodenta.entities.En.Antecedent;
-import ma.prodenta.entities.En.RDV;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,13 +11,13 @@ public interface CrudRepository<T, ID> {
 
     T findById(ID id) throws Exception;
 
-    void create(T objet) throws Exception;
+    void create(T patient);
 
-    void update(T objet) throws Exception;
+    void update(T patient);
 
-    void delete(T objet)  throws Exception;
+    void delete(T patient);
 
-    void deleteById(ID id) throws Exception;
+    void deleteById(ID id);
 
     // -------- Extras --------
     Optional<Antecedent> findByNom(String nom);

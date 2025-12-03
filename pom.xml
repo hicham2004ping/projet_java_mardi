@@ -45,7 +45,7 @@
         <!-- Permet d’utiliser le driver JDBC pour établir la connexion -->
         <dependency>
             <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <artifactId>mysql-connector-java</artifactId    >
             <version>8.0.33</version>
         </dependency>
 
@@ -66,6 +66,13 @@
             <version>0.4</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.6.2</version>
+            <scope>runtime</scope>
+        </dependency>
 
         <!-- === JUnit (tests unitaires) === -->
         <!-- Librairie utilisée pour écrire et exécuter des tests -->
@@ -124,6 +131,9 @@
                 <configuration>
                     <release>${maven.compiler.release}</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <source>25</source>
+                    <target>25</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
 
