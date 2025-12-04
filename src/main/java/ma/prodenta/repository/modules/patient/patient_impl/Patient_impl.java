@@ -55,6 +55,47 @@ public class Patient_impl implements PatientDao  {
     }
 
     @Override
+    public Patient mapResultSetToPatient(ResultSet rs) throws SQLException {
+        Patient patient = new Patient();
+
+        patient.setId(rs.getInt("idpatient"));
+
+        Date dateNaissanceSql = rs.getDate("datenaissance");
+        if (dateNaissanceSql != null) {
+            patient.setDateNaissance(dateNaissanceSql.toLocalDate());
+        }
+
+        patient.setNom(rs.getString("nom"));
+        patient.setPrenom(rs.getString("prenom"));
+        patient.setAdresse(rs.getString("adresse"));
+        patient.setTelephone(rs.getString("telephone"));
+        patient.setEmail(rs.getString("email"));
+
+        // Gestion du sexe
+        int id_sexe = rs.getInt("idsexe");
+        if (id_sexe == 1) {
+            patient.setSexe(Sexe.Homme);
+        } else {
+            patient.setSexe(Sexe.Femme);
+        }
+
+        // Gestion de l'assurance
+        int id_assurance = rs.getInt("idassurance");
+        switch (id_assurance) {
+            case 1 -> patient.setAssurance(Assurance.CNOPS);
+            case 2 -> patient.setAssurance(Assurance.CNSS);
+            case 3 -> patient.setAssurance(Assurance.RAMED);
+            default -> patient.setAssurance(Assurance.Aucune);
+        }
+
+        // Initialisation d'une liste vide d'antécédents
+        patient.setAntecedents(new ArrayList<>());
+
+        return patient;
+    }
+
+
+    @Override
     public List<Patient> findPage(int limit, int offset) {
         return List.of();
     }

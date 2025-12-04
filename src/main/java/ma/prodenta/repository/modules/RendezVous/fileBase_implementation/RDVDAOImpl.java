@@ -1,10 +1,8 @@
 package ma.prodenta.repository.modules.RendezVous.fileBase_implementation;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.RDV;
 import ma.prodenta.repository.modules.RendezVous.api.RDVDAO;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,8 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class RDVDAOImpl implements RDVDAO {
-
-
     @Override public long count() {
         String sql = "SELECT COUNT(*) FROM RDV";
         try (Connection c = SessionFactory.getInstance().getConnection();
@@ -110,11 +106,11 @@ public class RDVDAOImpl implements RDVDAO {
 
 
     @Override
-    public void create(RDV rdv){
+    public boolean create(RDV rdv){
 
         String sql = "INSERT INTO RDV (dateRDV, heure, motif, noteMedecin, idPatient) " +
                 "VALUES (?, ?, ?, ?, ?)";
-
+        int nombre =0;
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -124,10 +120,11 @@ public class RDVDAOImpl implements RDVDAO {
             stmt.setString(4, rdv.getNoteMedecin());
             stmt.setLong(5, rdv.getIdPatient());
 
-            stmt.executeUpdate();
+           nombre = stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return nombre>0;
     }
 
 
@@ -155,21 +152,20 @@ public class RDVDAOImpl implements RDVDAO {
 
 
     @Override
-    public void delete(RDV rdv) throws Exception {
-
+    public boolean delete(RDV rdv) throws SQLException{
         String sql = "DELETE FROM RDV WHERE idRDV = ?";
-
+        int nombre=0 ;
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setLong(1, rdv.getIdRDV());
-            stmt.executeUpdate();
+           nombre=stmt.executeUpdate();
         }
+        return nombre >0;
     }
 
     @Override
-    public void deleteById(Integer integer) {
-
+    public boolean deleteById(Integer integer) {
+        return false;
     }
 
     @Override

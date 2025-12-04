@@ -5,6 +5,7 @@ import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Charges;
 import ma.prodenta.repository.modules.statistiques.api.ChargesDao;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,8 @@ public class ChargesDAOImpl implements ChargesDao {
     }
 
     @Override
-    public void create(Charges charge) throws Exception {
+    public boolean create(Charges charge) throws SQLException, IOException {
+        int n=0;
         String sql = "INSERT INTO charges (titre, description, montant, dateCharge, idCabinet) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -42,7 +44,7 @@ public class ChargesDAOImpl implements ChargesDao {
             stmt.setTimestamp(4, new Timestamp(charge.getDateCharge().getTime()));
             stmt.setInt(5, charge.getIdCabinet());
 
-            stmt.executeUpdate();
+           n= stmt.executeUpdate();
 
             // récupérer l'ID généré
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -51,6 +53,7 @@ public class ChargesDAOImpl implements ChargesDao {
                 }
             }
         }
+        return n>0;
     }
 
     @Override
@@ -87,8 +90,8 @@ public class ChargesDAOImpl implements ChargesDao {
     }
 
     @Override
-    public void delete(Charges objet) throws Exception {
-
+    public boolean delete(Charges objet) {
+        return false;
     }
 
     @Override
@@ -97,16 +100,16 @@ public class ChargesDAOImpl implements ChargesDao {
     }
 
     @Override
-    public void deleteById(Long aLong) throws Exception {
+    public boolean deleteById(Long aLong) throws SQLException {
+        int n=0;
         String sql = "DELETE FROM charges WHERE idCharge = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setLong(1, aLong);
-            stmt.executeUpdate();
+           n= stmt.executeUpdate();
         }
+        return n>0;
     }
-
     // méthode pour mapper ResultSet → Charges
     private Charges mapResultSetToCharge(ResultSet rs) throws SQLException {
         return Charges.builder()

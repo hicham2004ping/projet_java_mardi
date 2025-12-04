@@ -1,7 +1,5 @@
 package ma.prodenta.entities.En;
-
 import lombok.*;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

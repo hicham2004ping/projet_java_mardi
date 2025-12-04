@@ -8,6 +8,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class Role implements Serializable {
-    private Integer idRole;
+    private int idRole;
     private String libelle;
 }

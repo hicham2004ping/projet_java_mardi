@@ -21,6 +21,4 @@ public class Utilisateur {
     private LocalDate dateNaissance;
     private LocalDateTime lastLoginDate;
     private Integer idRole;
-
-
 }

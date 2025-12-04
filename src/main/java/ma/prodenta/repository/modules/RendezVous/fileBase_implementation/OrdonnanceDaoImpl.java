@@ -1,10 +1,8 @@
 package ma.prodenta.repository.modules.RendezVous.fileBase_implementation;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Ordonnance;
 import ma.prodenta.repository.modules.RendezVous.api.OrdonnanceDao;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +47,8 @@ public class OrdonnanceDaoImpl implements OrdonnanceDao {
         return liste;
     }
     @Override
-    public void create(Ordonnance ord) throws Exception {
-
+    public boolean create(Ordonnance ord) throws SQLException {
+        int n=0;
         String sql = "INSERT INTO Ordonnance (dateOrd, idDossier) VALUES (?, ?)";
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
@@ -58,9 +56,9 @@ public class OrdonnanceDaoImpl implements OrdonnanceDao {
 
             stmt.setDate(1, new Date(ord.getDateOrd().getTime()));
             stmt.setInt(2, ord.getIdDossier());
-
-            stmt.executeUpdate();
+           n= stmt.executeUpdate();
         }
+        return n>0;
     }
 
 
@@ -81,21 +79,22 @@ public class OrdonnanceDaoImpl implements OrdonnanceDao {
     }
 
     @Override
-    public void delete(Ordonnance ord) throws Exception {
-
+    public boolean delete(Ordonnance ord) throws Exception {
+        int n=0;
         String sql = "DELETE FROM Ordonnance WHERE idOrd = ?";
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1,ord.getIdOrd());
-            stmt.executeUpdate();
+           n= stmt.executeUpdate();
         }
+        return n>0;
     }
 
     @Override
-    public void deleteById(Long aLong) {
-
+    public boolean deleteById(Long aLong) {
+        return false;
     }
 
     @Override

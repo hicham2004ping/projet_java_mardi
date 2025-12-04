@@ -1,10 +1,10 @@
 package ma.prodenta.repository.modules.statistiques.fileBase_implementation;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Revenus;
 import ma.prodenta.repository.modules.statistiques.api.RevenusDao;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,8 @@ public class RevenusDAOImpl implements RevenusDao {
     }
 
     @Override
-    public void create(Revenus revenu) throws Exception {
+    public boolean create(Revenus revenu) throws SQLException {
+        int nombre=0;
         String sql = "INSERT INTO revenus (type, description, montant, dateRev, idCabinet) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -58,7 +59,7 @@ public class RevenusDAOImpl implements RevenusDao {
             stmt.setTimestamp(4, new Timestamp(revenu.getDateRev().getTime()));
             stmt.setInt(5, revenu.getIdCabinet());
 
-            stmt.executeUpdate();
+           nombre= stmt.executeUpdate();
 
             // récupérer l'ID généré automatiquement
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -67,14 +68,14 @@ public class RevenusDAOImpl implements RevenusDao {
                 }
             }
         }
+        return nombre>0;
     }
 
     @Override
-    public void update(Revenus revenu) throws Exception {
+    public void update(Revenus revenu) throws SQLException, Exception , IOException {
         String sql = "UPDATE revenus SET type = ?, description = ?, montant = ?, dateRev = ?, idCabinet = ? WHERE idRev = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setString(1, revenu.getType());
             stmt.setString(2, revenu.getDescription());
             stmt.setDouble(3, revenu.getMontant());
@@ -87,19 +88,21 @@ public class RevenusDAOImpl implements RevenusDao {
     }
 
     @Override
-    public void delete(Revenus revenu) throws Exception {
-
+    public boolean delete(Revenus revenu) throws SQLException {
+        return false;
     }
 
     @Override
-    public void deleteById(Long idRevenue) throws Exception {
+    public boolean deleteById(Long idRevenue) throws SQLException {
         String sql = "DELETE FROM revenus WHERE idRev = ?";
+        int nombre=0;
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, idRevenue);
-            stmt.executeUpdate();
+           nombre= stmt.executeUpdate();
         }
+        return nombre>0 ;
     }
 
     @Override

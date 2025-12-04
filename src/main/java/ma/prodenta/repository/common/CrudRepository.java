@@ -12,11 +12,11 @@ public interface CrudRepository<T, ID> {
 
     boolean create(T objet) throws SQLException, IOException;
 
-    void update(T objet);
+void update(T objet) throws SQLException, IOException,Exception;
 
-    boolean delete(T objet) throws SQLException;
+    boolean delete(T objet) throws SQLException,Exception;
 
-    boolean deleteById(ID id) throws SQLException;
+    boolean deleteById(ID id) throws SQLException,Exception;
 
     Optional<Antecedent> findByNom(String nom);
 }

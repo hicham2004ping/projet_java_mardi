@@ -1,5 +1,4 @@
 package ma.prodenta.config;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -45,10 +44,10 @@ public final class SessionFactory {
     private Connection connection;
 
     /** Propriétés de configuration (fichier .properties) */
-    private static final String PROPS_PATH = "config/db.properties";
-    private static final String URL_KEY    = "datasource.url";
-    private static final String USER_KEY   = "datasource.user";
-    private static final String PASS_KEY   = "datasource.password";
+    private static final String PROPS_PATH = "db.properties";
+    private static final String URL_KEY    = "dburl";
+    private static final String USER_KEY   = "user";
+    private static final String PASS_KEY   = "password";
     private static final String DRIVER_KEY = "datasource.driver";
 
     /** Valeurs lues depuis le fichier de configuration */
@@ -127,8 +126,6 @@ public final class SessionFactory {
             return false;
         }
     }
-
-
 
     /**
      * Ferme proprement la connexion si elle est ouverte.

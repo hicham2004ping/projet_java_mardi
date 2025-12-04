@@ -40,7 +40,8 @@ public class MedicamentDAOImpl implements MedicamentDao {
     }
 
     @Override
-    public void create(Medicament medicament) throws Exception {
+    public boolean create(Medicament medicament) throws SQLException {
+        int n=0;
         String sql = "INSERT INTO medicament (nom, laboratoire, type, remboursable, prixUnit, description, idForme) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = SessionFactory.getInstance().getConnection();
@@ -54,7 +55,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
             stmt.setString(6, medicament.getDescription());
             stmt.setInt(7, medicament.getIdForme());
 
-            stmt.executeUpdate();
+           n= stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -62,6 +63,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
                 }
             }
         }
+        return n>0;
     }
 
     @Override
@@ -85,19 +87,22 @@ public class MedicamentDAOImpl implements MedicamentDao {
     }
 
     @Override
-    public void delete(Medicament medicament) throws Exception {
-        deleteById(medicament.getIdMed());
+    public boolean delete(Medicament medicament) throws SQLException,Exception {
+       return deleteById(medicament.getIdMed());
     }
 
+
     @Override
-    public void deleteById(Long idMed) throws Exception {
+    public boolean deleteById(Long idMed) throws Exception {
         String sql = "DELETE FROM medicament WHERE idMed = ?";
+        int n;
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, idMed);
-            stmt.executeUpdate();
+           n= stmt.executeUpdate();
         }
+        return n>0;
     }
 
     @Override
