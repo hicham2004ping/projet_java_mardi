@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class RDVDAOImpl implements RDVDAO {
-    @Override public long count() {
+    @Override public Integer count() {
         String sql = "SELECT COUNT(*) FROM RDV";
         try (Connection c = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = c.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             rs.next();
-            return rs.getLong(1);
+            return rs.getInt(1);
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
     @Override
@@ -37,7 +37,7 @@ public class RDVDAOImpl implements RDVDAO {
         return list;
     }
 
-    public RDV FindById(Long id) throws Exception {
+    public RDV findById(Integer id) throws Exception {
 
         String sql = "SELECT * FROM RDV WHERE idRDV = ?";
 
@@ -77,11 +77,11 @@ public class RDVDAOImpl implements RDVDAO {
         return list;
     }
 
-    @Override public boolean existsById(Long id) {
+    @Override public boolean existsById(Integer id) {
         String sql = "SELECT 1 FROM RDV WHERE id = ?";
         try (Connection c = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) { return rs.next(); }
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
@@ -95,14 +95,6 @@ public class RDVDAOImpl implements RDVDAO {
                 .idPatient(rs.getInt("idPatient"))
                 .build();
     }
-
-
-
-    @Override
-    public RDV findById(Integer integer) {
-        return null;
-    }
-
 
 
     @Override
@@ -119,7 +111,6 @@ public class RDVDAOImpl implements RDVDAO {
             stmt.setString(3, rdv.getMotif());
             stmt.setString(4, rdv.getNoteMedecin());
             stmt.setLong(5, rdv.getIdPatient());
-
            nombre = stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

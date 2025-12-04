@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface RDVDAO extends CrudRepository<RDV,Integer> {
     List<RDV> FindByDay(Date DateTime) throws Exception;
-    boolean existsById(Long id);
-    long count();
+    boolean existsById(Integer id);
+    Integer count();
 }
