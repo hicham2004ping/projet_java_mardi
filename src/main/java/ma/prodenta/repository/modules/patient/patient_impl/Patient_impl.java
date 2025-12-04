@@ -27,7 +27,7 @@ public class Patient_impl implements PatientDao  {
                 id=rs.getInt(1);
             }
         }
-        return id;
+        return id+1;
     }
     @Override
     public Patient findByEmail(String email) {

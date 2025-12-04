@@ -221,6 +221,7 @@ public class Antecedent_impl implements Antecedent_api {
     public static void main(String[] args){
         Antecedent_impl a = new Antecedent_impl();
         try{
+            a.create(new Antecedent(2,"Zebi","Mrid",NiveauRisque.Trèsdangereux,null));
             Antecedent a1 = new Antecedent();
             a1=a.findById(1);
             a.update(new Antecedent(1,"Hypertension artérielle","Maladie chronique",NiveauRisque.Faible,null));

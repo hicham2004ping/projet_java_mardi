@@ -112,7 +112,7 @@ public class SituationFinanciereDaoImpl implements SituationFinancierDao {
 
     @Override
     public Optional<Antecedent> findByNom(String nom) {
-        return Optional.empty(); // NON UTILISÉ
+        return Optional.empty();
     }
 
     // Convertisseur ResultSet → SituationFinanciere

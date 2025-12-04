@@ -186,39 +186,37 @@ public class Antecedent_patient_impl implements Antecedent_patient {
         return Optional.empty();
     }
 
-     static void main(){
-        Antecedent_patient_impl a=new Antecedent_patient_impl();
-        Patient_impl p=new Patient_impl();
-        Patient patient=new Patient();
-        Antecedent_impl a1=new Antecedent_impl();
-        List<Antecedent> liste=new ArrayList<>();
-       try{
-            for(int i=1;i<=5;i++){
-                liste.add(a1.findById(i));
-            }
-            patient.setId(p.get_last_id());
-            patient.setNom("safiyeddine");
-            patient.setPrenom("hachem");
-            patient.setDateNaissance(LocalDate.of(2024,10,3));
-            patient.setAdresse("Dahia");
-            patient.setTelephone("0777181657");
-            patient.setSexe(Sexe.Homme);
-            patient.setEmail("hezbollah");
-            patient.setAssurance(Assurance.CNSS);
-            p.create(patient);
-           patient.setAntecedents(liste);
-           System.out.println("l'id du patient est "+patient.getId());
-            boolean flag=a.create(patient);
-            if(flag){
-                System.out.println("valider");
-            }
-            else{
-                System.out.println("erreur");
-            }
-            System.out.println("le nom du patient c'est"+patient.getNom());
-       }
-       catch(Exception e){
-            System.out.println(e.getMessage());
-       }
-    }
+     static void main() {
+         Antecedent_patient_impl a = new Antecedent_patient_impl();
+         Patient_impl p = new Patient_impl();
+         Patient patient = new Patient();
+         Antecedent_impl a1 = new Antecedent_impl();
+         List<Antecedent> liste = new ArrayList<>();
+         try {
+             for (int i = 1; i <= 5; i++) {
+                 liste.add(a1.findById(i));
+             }
+             patient.setId(p.get_last_id());
+             patient.setNom("safiyeddine");
+             patient.setPrenom("hachem");
+             patient.setDateNaissance(LocalDate.of(2024, 10, 3));
+             patient.setAdresse("Dahia");
+             patient.setTelephone("0777181657");
+             patient.setSexe(Sexe.Homme);
+             patient.setEmail("hezbollah");
+             patient.setAssurance(Assurance.CNSS);
+             p.create(patient);
+             patient.setAntecedents(liste);
+             System.out.println("l'id du patient est " + patient.getId());
+             boolean flag = a.create(patient);
+             if (flag) {
+                 System.out.println("valider");
+             } else {
+                 System.out.println("erreur");
+             }
+             System.out.println("le nom du patient c'est" + patient.getNom());
+         } catch (Exception e) {
+             System.out.println(e.getMessage());
+         }
+     }
 }
