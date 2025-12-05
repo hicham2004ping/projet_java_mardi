@@ -1,5 +1,4 @@
 package ma.prodenta.tools;
-
 import ma.prodenta.common.util.PasswordUtil;
 
 public class GenerateHash {

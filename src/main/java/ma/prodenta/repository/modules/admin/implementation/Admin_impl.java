@@ -1,11 +1,9 @@
 package ma.prodenta.repository.modules.admin.implementation;
-
 import ma.prodenta.entities.En.Admin;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.common.Connextion_db;
 import ma.prodenta.repository.modules.admin.api.AdminDao;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -45,7 +43,7 @@ public class Admin_impl implements AdminDao {
     }
 
     @Override
-    public boolean existsById(Long id) {
+    public boolean existsById(int id) {
         String sql = "SELECT count(*) FROM admin WHERE id = ?";
         try (Connection con = DriverManager.getConnection(new Connextion_db().getUrl(), new Connextion_db().getUsername(), new Connextion_db().getPassword());
              PreparedStatement pr = con.prepareStatement(sql)) {
@@ -112,12 +110,7 @@ public class Admin_impl implements AdminDao {
     }
 
     @Override
-    public boolean delete(Integer id) {
-        return false;
-    }
-
-    @Override
-    public Admin findById(Long id) throws Exception {
+    public Admin findById(Integer id) throws Exception {
         String sql = "SELECT * FROM admin WHERE id = ?";
         try (Connection con = DriverManager.getConnection(new Connextion_db().getUrl(), new Connextion_db().getUsername(), new Connextion_db().getPassword());
              PreparedStatement pr = con.prepareStatement(sql)) {
@@ -153,10 +146,6 @@ public class Admin_impl implements AdminDao {
         }
     }
 
-    @Override
-    public Utilisateur save(Utilisateur user) {
-        return null;
-    }
 
     @Override
     public void update(Admin a) {
@@ -182,13 +171,13 @@ public class Admin_impl implements AdminDao {
     }
 
     @Override
-    public boolean delete(Admin objet) throws SQLException {
-        return deleteById((long) objet.getId());
+    public boolean delete(Admin objet) throws SQLException, IOException {
+        return deleteById(objet.getId()) ;
     }
 
 
     @Override
-    public boolean deleteById(Long id) throws SQLException {
+    public boolean deleteById(Integer id) throws SQLException, IOException {
         String sql = "DELETE FROM admin WHERE id = ?";
         try (Connection con = DriverManager.getConnection(new Connextion_db().getUrl(), new Connextion_db().getUsername(), new Connextion_db().getPassword());
              PreparedStatement pr = con.prepareStatement(sql)) {

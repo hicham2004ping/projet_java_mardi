@@ -16,7 +16,7 @@ import ma.prodenta.service.common.AdminService;
 import ma.prodenta.service.modules.admin.AdminServiceImpl;
 
 import ma.prodenta.repository.common.DossierMedicalRepository;
-import ma.prodenta.repository.modules.dossierMedical.DossierMedicalRepositoryImpl;
+import ma.prodenta.repository.modules.dossierMedical.impl.DossierMedicalRepositoryImpl;
 import ma.prodenta.service.common.DossierMedicalService;
 import ma.prodenta.service.modules.dossierMedical.DossierMedicalServiceImpl;
 

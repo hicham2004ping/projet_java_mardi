@@ -1,5 +1,7 @@
 package ma.prodenta.repository.common;
 import ma.prodenta.entities.En.Antecedent;
+import ma.prodenta.entities.En.Utilisateur;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -12,7 +14,7 @@ public interface CrudRepository<T, ID> {
 
     boolean create(T objet) throws SQLException, IOException;
 
-void update(T objet) throws SQLException, IOException,Exception;
+    void update(T objet) throws SQLException, IOException,Exception;
 
     boolean delete(T objet) throws SQLException,Exception;
 

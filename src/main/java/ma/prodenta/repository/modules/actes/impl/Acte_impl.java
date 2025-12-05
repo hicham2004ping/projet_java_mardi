@@ -27,7 +27,7 @@ public class Acte_impl implements Acte_api {
                 n=rs.getInt(1);
             }
         }
-        return n;
+        return n+1;
     }
 
     @Override
@@ -106,7 +106,7 @@ public class Acte_impl implements Acte_api {
             pst.setInt(1,objet.getId());
             pst.setString(2,objet.getCategorie());
             pst.setString(3,objet.getLibelle());
-            pst.setDouble(3,objet.getPrix_de_base());
+            pst.setDouble(4,objet.getPrix_de_base());
             n= pst.executeUpdate();
             return n>0;
         }
@@ -156,5 +156,18 @@ public class Acte_impl implements Acte_api {
     @Override
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
+    }
+
+    public static void main(){
+        System.out.println("salut comment ca va");
+        Acte_impl acte = new Acte_impl();
+        try{
+            Acte a1=acte.findById(22);
+            int id=acte.get_last_id();
+            System.out.println("l'id c'est "+a1.getId()+" sa categorie est "+a1.getCategorie());
+        }
+        catch(Exception e ){
+            System.out.println(e.getMessage());
+        }
     }
 }

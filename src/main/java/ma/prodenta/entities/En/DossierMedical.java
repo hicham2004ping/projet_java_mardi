@@ -1,10 +1,9 @@
 package ma.prodenta.entities.En;
-
 import lombok.*;
-
 import java.time.LocalDate;
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,10 +14,6 @@ public class DossierMedical implements Serializable {
     private Date dateCreation;
     private Integer idPatient;
     private Integer idMedecin;
-    private String allergies;
-    private String antecedents;
-    private String notes;
-
     public void setIdDossier(long aLong) {
     }
 

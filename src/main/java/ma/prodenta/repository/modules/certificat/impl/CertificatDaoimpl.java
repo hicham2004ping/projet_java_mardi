@@ -1,5 +1,4 @@
 package ma.prodenta.repository.modules.certificat.impl;
-
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Certificat;
 import ma.prodenta.repository.modules.certificat.api.CertificatDao;

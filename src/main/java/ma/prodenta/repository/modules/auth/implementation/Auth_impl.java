@@ -1,5 +1,4 @@
 package ma.prodenta.repository.modules.auth.implementation;
-
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.common.Connextion_db;
@@ -14,7 +13,6 @@ import java.util.Optional;
 
 public class Auth_impl implements AuthDao {
 
-    // --------------------------------------------
     @Override
     public Optional<Utilisateur> findByLogin(String login) throws Exception {
         String sql = "SELECT * FROM utilisateur WHERE login=?";
@@ -108,13 +106,14 @@ public class Auth_impl implements AuthDao {
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(Utilisateur objet) {
+
         return false;
     }
 
     // --------------------------------------------
     @Override
-    public Utilisateur findById(Long id) throws Exception {
+    public Utilisateur findById(Integer id) throws Exception {
         String sql = "SELECT * FROM utilisateur WHERE idUser=?";
         try (Connection con = DriverManager.getConnection(new Connextion_db().getUrl(), new Connextion_db().getUsername(), new Connextion_db().getPassword());
              PreparedStatement pr = con.prepareStatement(sql)) {
@@ -155,11 +154,6 @@ public class Auth_impl implements AuthDao {
         }
     }
 
-    @Override
-    public Utilisateur save(Utilisateur user) {
-        return null;
-    }
-
     // --------------------------------------------
     @Override
     public void update(Utilisateur u) {
@@ -189,13 +183,9 @@ public class Auth_impl implements AuthDao {
     }
 
     // --------------------------------------------
-    @Override
-    public boolean delete(Utilisateur u) throws SQLException {
-        return deleteById((long) u.getIdUser());
-    }
 
     @Override
-    public boolean deleteById(Long id) throws SQLException {
+    public boolean deleteById(Integer id) throws SQLException {
         String sql = "DELETE FROM utilisateur WHERE idUser=?";
         try (Connection con = DriverManager.getConnection(new Connextion_db().getUrl(), new Connextion_db().getUsername(), new Connextion_db().getPassword());
              PreparedStatement pr = con.prepareStatement(sql)) {
