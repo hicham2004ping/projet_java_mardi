@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 public class Acte_impl implements Acte_api {
-
     @Override
     public int get_last_id() throws SQLException {
         String requete= """

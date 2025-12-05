@@ -1,9 +1,7 @@
 package ma.prodenta.config;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
 import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
 import ma.prodenta.mvc.controllers.modules.patient.api.PatientController;
 import ma.prodenta.repository.modules.patient.api.PatientDao;
@@ -14,7 +12,7 @@ import ma.prodenta.repository.common.AdminRepository;
 import ma.prodenta.repository.modules.admin.AdminRepositoryImpl;
 import ma.prodenta.service.common.AdminService;
 import ma.prodenta.service.modules.admin.AdminServiceImpl;
-
+import ma.prodenta.repository.modules.dossierMedical.implementation.DossierMedicalRepositoryImpl;
 import ma.prodenta.repository.common.DossierMedicalRepository;
 import ma.prodenta.repository.modules.dossierMedical.impl.DossierMedicalRepositoryImpl;
 import ma.prodenta.service.common.DossierMedicalService;

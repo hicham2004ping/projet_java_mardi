@@ -1,9 +1,7 @@
 // repository/modules/DossierMedical/implementation/DossierMedicalRepositoryImpl.java
 package ma.prodenta.repository.modules.dossierMedical.implementation;
-
 import ma.prodenta.entities.En.DossierMedical;
 import ma.prodenta.repository.modules.dossierMedical.api.DossierMedicalRepository;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
