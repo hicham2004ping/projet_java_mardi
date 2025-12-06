@@ -121,4 +121,22 @@ public class RevenusDAOImpl implements RevenusDao {
                 .idCabinet(rs.getInt("idCabinet"))
                 .build();
     }
+    public Long get_last_id() {
+        Long lastId = 00000L;
+        String sql = "SELECT MAX(idRev) AS last_id FROM Revenus"; // ou le nom exact de ta table
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                lastId = rs.getLong("last_id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération du dernier ID : " + e.getMessage());
+        }
+
+        return lastId;
+    }
 }

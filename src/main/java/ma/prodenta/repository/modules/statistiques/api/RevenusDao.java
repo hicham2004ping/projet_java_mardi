@@ -6,6 +6,6 @@ import ma.prodenta.repository.common.CrudRepository;
 import java.util.List;
 
 public interface RevenusDao extends CrudRepository<Revenus, Long> {
-
+    public Long get_last_id();
 
 }

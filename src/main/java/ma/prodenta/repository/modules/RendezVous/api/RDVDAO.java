@@ -11,4 +11,5 @@ public interface RDVDAO extends CrudRepository<RDV,Integer> {
     List<RDV> FindByDay(Date DateTime) throws Exception;
     boolean existsById(Integer id);
     Integer count();
+    int get_last_id();
 }

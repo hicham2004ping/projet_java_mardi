@@ -163,4 +163,24 @@ public class RDVDAOImpl implements RDVDAO {
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
     }
+    public int get_last_id() {
+        int lastId = 0;
+        String sql = "SELECT MAX(idRDV) AS last_id FROM RDV"; // ou le nom exact de ta table
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                lastId = rs.getInt("last_id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération du dernier ID : " + e.getMessage());
+        }
+
+        return lastId;
+    }
 }
+
+
