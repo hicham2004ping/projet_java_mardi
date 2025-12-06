@@ -246,6 +246,7 @@ public class Antecedent_patient_impl implements Antecedent_patient {
         return Optional.empty();
     }
 
+    @Override
     public boolean ajouter_antecedent_patient(Patient patient,Antecedent antecedent)throws SQLException {
         String requete= """
                 insert into patient_antecedent values(?,?,?)
@@ -261,7 +262,7 @@ public class Antecedent_patient_impl implements Antecedent_patient {
             return pst.executeUpdate() > 0;
         }
     }
-
+    @Override
     public boolean supprimer_antecedent_patient(Patient p,Antecedent antecedent)throws SQLException {
         String requete= """
                 delete from patient_antecedent where id_patient=? and id_antecedent=?

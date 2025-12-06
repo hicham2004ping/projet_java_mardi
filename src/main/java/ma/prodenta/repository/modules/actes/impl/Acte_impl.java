@@ -157,17 +157,4 @@ public class Acte_impl implements Acte_api {
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
     }
-
-    public static void main(){
-        System.out.println("salut comment ca va");
-        Acte_impl acte = new Acte_impl();
-        try{
-            Acte a1=acte.findById(22);
-            int id=acte.get_last_id();
-            System.out.println("l'id c'est "+a1.getId()+" sa categorie est "+a1.getCategorie());
-        }
-        catch(Exception e ){
-            System.out.println(e.getMessage());
-        }
-    }
 }

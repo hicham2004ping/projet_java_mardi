@@ -157,7 +157,6 @@ public class Antecedent_impl implements Antecedent_api {
             pst.setString(2, objet.getCategorie());
             pst.setInt(3, map_to_int(objet.getNiveauRisque()));
             pst.setInt(4, objet.getIdAntecedent());
-
             pst.executeUpdate();
 
         } catch (Exception e) {
@@ -213,20 +212,9 @@ public class Antecedent_impl implements Antecedent_api {
             return id ;
         }
     }
-
     @Override
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
     }
-    public static void main(String[] args){
-        Antecedent_impl a = new Antecedent_impl();
-        try{
-            Antecedent a1 = new Antecedent();
-            a1=a.findById(1);
-            System.out.println("l'id de l'objet est "+a1.getIdAntecedent());
-            }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-    }
+
 }
