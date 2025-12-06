@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2025 at 12:29 PM
+-- Generation Time: Dec 05, 2025 at 08:57 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -594,7 +594,7 @@ ALTER TABLE `forme`
 --
 ALTER TABLE `intervention_medcin`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_acte` (`id_acte`);
+  ADD KEY `intervention_medcin_ibfk_1` (`id_acte`);
 
 --
 -- Indexes for table `medecin`
@@ -635,8 +635,8 @@ ALTER TABLE `patient`
 --
 ALTER TABLE `patient_antecedent`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_antecedent` (`id_antecedent`),
-  ADD KEY `patient_antecedent_ibfk_1` (`id_patient`);
+  ADD KEY `patient_antecedent_ibfk_1` (`id_patient`),
+  ADD KEY `patient_antecedent_ibfk_2` (`id_antecedent`);
 
 --
 -- Indexes for table `prescription`
@@ -852,122 +852,122 @@ ALTER TABLE `utilisateur`
 -- Constraints for table `antecedent`
 --
 ALTER TABLE `antecedent`
-  ADD CONSTRAINT `antecedent_ibfk_1` FOREIGN KEY (`idRisque`) REFERENCES `niveaurisque` (`idRisque`);
+  ADD CONSTRAINT `antecedent_ibfk_1` FOREIGN KEY (`idRisque`) REFERENCES `niveaurisque` (`idRisque`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `certificat`
 --
 ALTER TABLE `certificat`
-  ADD CONSTRAINT `certificat_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`);
+  ADD CONSTRAINT `certificat_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `charges`
 --
 ALTER TABLE `charges`
-  ADD CONSTRAINT `charges_ibfk_1` FOREIGN KEY (`idCabinet`) REFERENCES `cabinetmedical` (`idCabinet`);
+  ADD CONSTRAINT `charges_ibfk_1` FOREIGN KEY (`idCabinet`) REFERENCES `cabinetmedical` (`idCabinet`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `consultation`
 --
 ALTER TABLE `consultation`
-  ADD CONSTRAINT `consultation_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`),
-  ADD CONSTRAINT `consultation_ibfk_2` FOREIGN KEY (`idStatut`) REFERENCES `statutconsultation` (`idStatut`);
+  ADD CONSTRAINT `consultation_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE,
+  ADD CONSTRAINT `consultation_ibfk_2` FOREIGN KEY (`idStatut`) REFERENCES `statutconsultation` (`idStatut`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `dossiermedical`
 --
 ALTER TABLE `dossiermedical`
-  ADD CONSTRAINT `dossiermedical_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`),
-  ADD CONSTRAINT `dossiermedical_ibfk_2` FOREIGN KEY (`idMedecin`) REFERENCES `medecin` (`idUser`);
+  ADD CONSTRAINT `dossiermedical_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE,
+  ADD CONSTRAINT `dossiermedical_ibfk_2` FOREIGN KEY (`idMedecin`) REFERENCES `medecin` (`idUser`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `facture`
 --
 ALTER TABLE `facture`
-  ADD CONSTRAINT `facture_ibfk_1` FOREIGN KEY (`idSF`) REFERENCES `situationfinanciere` (`idSF`);
+  ADD CONSTRAINT `facture_ibfk_1` FOREIGN KEY (`idSF`) REFERENCES `situationfinanciere` (`idSF`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `intervention_medcin`
 --
 ALTER TABLE `intervention_medcin`
-  ADD CONSTRAINT `intervention_medcin_ibfk_1` FOREIGN KEY (`id_acte`) REFERENCES `acte` (`id`);
+  ADD CONSTRAINT `intervention_medcin_ibfk_1` FOREIGN KEY (`id_acte`) REFERENCES `acte` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `medecin`
 --
 ALTER TABLE `medecin`
-  ADD CONSTRAINT `medecin_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`idUser`);
+  ADD CONSTRAINT `medecin_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`idUser`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `medicament`
 --
 ALTER TABLE `medicament`
-  ADD CONSTRAINT `medicament_ibfk_1` FOREIGN KEY (`idForme`) REFERENCES `forme` (`idForme`);
+  ADD CONSTRAINT `medicament_ibfk_1` FOREIGN KEY (`idForme`) REFERENCES `forme` (`idForme`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `ordonnance`
 --
 ALTER TABLE `ordonnance`
-  ADD CONSTRAINT `ordonnance_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`);
+  ADD CONSTRAINT `ordonnance_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `patient`
 --
 ALTER TABLE `patient`
-  ADD CONSTRAINT `patient_ibfk_1` FOREIGN KEY (`idSexe`) REFERENCES `sexe` (`idSexe`),
-  ADD CONSTRAINT `patient_ibfk_2` FOREIGN KEY (`idAssurance`) REFERENCES `assurance` (`idAssurance`);
+  ADD CONSTRAINT `patient_ibfk_1` FOREIGN KEY (`idSexe`) REFERENCES `sexe` (`idSexe`) ON DELETE CASCADE,
+  ADD CONSTRAINT `patient_ibfk_2` FOREIGN KEY (`idAssurance`) REFERENCES `assurance` (`idAssurance`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `patient_antecedent`
 --
 ALTER TABLE `patient_antecedent`
-  ADD CONSTRAINT `patient_antecedent_ibfk_1` FOREIGN KEY (`id_patient`) REFERENCES `patient` (`idPatient`),
-  ADD CONSTRAINT `patient_antecedent_ibfk_2` FOREIGN KEY (`id_antecedent`) REFERENCES `antecedent` (`idAntecedent`);
+  ADD CONSTRAINT `patient_antecedent_ibfk_1` FOREIGN KEY (`id_patient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE,
+  ADD CONSTRAINT `patient_antecedent_ibfk_2` FOREIGN KEY (`id_antecedent`) REFERENCES `antecedent` (`idAntecedent`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `prescription`
 --
 ALTER TABLE `prescription`
-  ADD CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`idOrd`) REFERENCES `ordonnance` (`idOrd`),
-  ADD CONSTRAINT `prescription_ibfk_2` FOREIGN KEY (`idMed`) REFERENCES `medicament` (`idMed`);
+  ADD CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`idOrd`) REFERENCES `ordonnance` (`idOrd`) ON DELETE CASCADE,
+  ADD CONSTRAINT `prescription_ibfk_2` FOREIGN KEY (`idMed`) REFERENCES `medicament` (`idMed`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `rdv`
 --
 ALTER TABLE `rdv`
-  ADD CONSTRAINT `rdv_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`);
+  ADD CONSTRAINT `rdv_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `revenus`
 --
 ALTER TABLE `revenus`
-  ADD CONSTRAINT `revenus_ibfk_1` FOREIGN KEY (`idCabinet`) REFERENCES `cabinetmedical` (`idCabinet`);
+  ADD CONSTRAINT `revenus_ibfk_1` FOREIGN KEY (`idCabinet`) REFERENCES `cabinetmedical` (`idCabinet`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `secretaire`
 --
 ALTER TABLE `secretaire`
-  ADD CONSTRAINT `secretaire_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`idUser`);
+  ADD CONSTRAINT `secretaire_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`idUser`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `situationfinanciere`
 --
 ALTER TABLE `situationfinanciere`
-  ADD CONSTRAINT `situationfinanciere_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`);
+  ADD CONSTRAINT `situationfinanciere_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `staff`
 --
 ALTER TABLE `staff`
-  ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`idMedecin`) REFERENCES `medecin` (`idUser`),
-  ADD CONSTRAINT `staff_ibfk_2` FOREIGN KEY (`idSecretaire`) REFERENCES `secretaire` (`idUser`);
+  ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`idMedecin`) REFERENCES `medecin` (`idUser`) ON DELETE CASCADE,
+  ADD CONSTRAINT `staff_ibfk_2` FOREIGN KEY (`idSecretaire`) REFERENCES `secretaire` (`idUser`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `role` (`idRole`),
-  ADD CONSTRAINT `utilisateur_ibfk_2` FOREIGN KEY (`idSexe`) REFERENCES `sexe` (`idSexe`);
+  ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `role` (`idRole`) ON DELETE CASCADE,
+  ADD CONSTRAINT `utilisateur_ibfk_2` FOREIGN KEY (`idSexe`) REFERENCES `sexe` (`idSexe`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

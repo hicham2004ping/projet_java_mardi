@@ -72,7 +72,7 @@ public final class SessionFactory {
         if (driver != null && !driver.isBlank()) {
             try {
                 Class.forName(driver);
-                System.out.println(" Driver JDBC chargé avec succès : " + driver);
+            //    System.out.println(" Driver JDBC chargé avec succès : " + driver);
             } catch (ClassNotFoundException e) {
                 System.err.println(" Driver JDBC introuvable : " + driver);
             }
@@ -109,7 +109,7 @@ public final class SessionFactory {
     public synchronized Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed() || !isValid(connection)) {
             connection = DriverManager.getConnection(url, user, password);
-            System.out.println(" Nouvelle connexion JDBC établie avec succès !");
+        //    System.out.println(" Nouvelle connexion JDBC établie avec succès !");
         }
         return connection;
     }
@@ -135,7 +135,7 @@ public final class SessionFactory {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                System.out.println("Connexion JDBC fermée proprement.");
+        //        System.out.println("Connexion JDBC fermée proprement.");
             }
         } catch (SQLException e) {
             System.err.println("Erreur lors de la fermeture de la connexion : " + e.getMessage());

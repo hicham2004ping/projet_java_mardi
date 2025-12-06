@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import ma.prodenta.entities.Enum.Sexe;
+import ma.prodenta.repository.modules.antecedent_patient.impl.Antecedent_patient_impl;
+import javax.xml.transform.Result;
+
 @Data @NoArgsConstructor
 public class Patient_impl implements PatientDao  {
     public static  Connextion_db connetion_base;
@@ -31,6 +34,22 @@ public class Patient_impl implements PatientDao  {
     }
     @Override
     public Patient findByEmail(String email) {
+        try (Connection conn = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword())) {
+
+            String sql = "SELECT * FROM patient WHERE email = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToPatient(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -41,37 +60,89 @@ public class Patient_impl implements PatientDao  {
 
     @Override
     public List<Patient> searchByNomPrenom(String keyword) {
-        return List.of();
+        List<Patient> patients = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword())) {
+
+            String sql = """
+                SELECT * FROM patient
+                WHERE nom LIKE ? OR prenom LIKE ?
+                """;
+
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, "%" + keyword + "%");
+            pst.setString(2, "%" + keyword + "%");
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                patients.add(mapResultSetToPatient(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return patients;
     }
 
     @Override
     public boolean existsById(Long id) {
+        try (Connection conn = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword())) {
+
+            String sql = "SELECT 1 FROM patient WHERE idpatient=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setLong(1, id);
+            return pst.executeQuery().next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 
     @Override
     public long count() {
+        try (Connection conn = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword())) {
+
+            String sql = "SELECT COUNT(*) FROM patient";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return 0;
     }
+
 
     @Override
     public Patient mapResultSetToPatient(ResultSet rs) throws SQLException {
         Patient patient = new Patient();
-
+        Antecedent_patient_impl antecedent=new Antecedent_patient_impl();
+        List<Antecedent> liste=new ArrayList<>();
         patient.setId(rs.getInt("idpatient"));
-
         Date dateNaissanceSql = rs.getDate("datenaissance");
         if (dateNaissanceSql != null) {
             patient.setDateNaissance(dateNaissanceSql.toLocalDate());
         }
-
         patient.setNom(rs.getString("nom"));
         patient.setPrenom(rs.getString("prenom"));
         patient.setAdresse(rs.getString("adresse"));
         patient.setTelephone(rs.getString("telephone"));
         patient.setEmail(rs.getString("email"));
-
-        // Gestion du sexe
         int id_sexe = rs.getInt("idsexe");
         if (id_sexe == 1) {
             patient.setSexe(Sexe.Homme);
@@ -79,7 +150,6 @@ public class Patient_impl implements PatientDao  {
             patient.setSexe(Sexe.Femme);
         }
 
-        // Gestion de l'assurance
         int id_assurance = rs.getInt("idassurance");
         switch (id_assurance) {
             case 1 -> patient.setAssurance(Assurance.CNOPS);
@@ -87,13 +157,15 @@ public class Patient_impl implements PatientDao  {
             case 3 -> patient.setAssurance(Assurance.RAMED);
             default -> patient.setAssurance(Assurance.Aucune);
         }
-
-        // Initialisation d'une liste vide d'antécédents
-        patient.setAntecedents(new ArrayList<>());
-
+        try{
+            liste=antecedent.find_antecedent_by_patient(patient);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        patient.setAntecedents(liste);
         return patient;
     }
-
 
     @Override
     public List<Patient> findPage(int limit, int offset) {
@@ -130,7 +202,7 @@ public class Patient_impl implements PatientDao  {
         Patient patient=new Patient();
         try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
             String requete= """
-                    select * from patient 
+                    select * from patient
                     """;
             PreparedStatement stmt=conn.prepareStatement(requete);
             ResultSet rs=stmt.executeQuery();
@@ -168,15 +240,35 @@ public class Patient_impl implements PatientDao  {
     }
 
     @Override
-    public Patient findById(Long aLong) throws Exception {
+    public Patient findById(Integer id) throws Exception {
+        try (Connection conn = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword())) {
+
+            String sql = "SELECT * FROM patient WHERE idpatient=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, id);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToPatient(rs);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return null;
     }
 
     @Override
     public boolean create(Patient objet) throws SQLException {
+        List<Antecedent> liste=objet.getAntecedents();
+        Antecedent_patient_impl antecedent_patient_impl=new Antecedent_patient_impl();
+        boolean flag;
         try(Connection con=DriverManager.getConnection(new Connextion_db().getUrl(), new Connextion_db().getUsername(),new Connextion_db().getPassword())){
             String requete= """
-                    insert into patient 
+                    insert into patient
                     (nom,datenaissance,adresse,telephone,idsexe,idassurance,prenom,email)
                     values
                     (?,?,?,?,?,?,?,?)
@@ -189,15 +281,13 @@ public class Patient_impl implements PatientDao  {
             else{
                 id_sexe=2;
             }
-            System.out.println("l'id du sexe est "+id_sexe);
             if (objet.getAssurance().name().equals("CNOPS")){
                 id_assurance=1;
             }
             else{
                 id_assurance=2;
             }
-            System.out.println("l'id du assurance est "+id_assurance);
-            PreparedStatement prp=con.prepareStatement(requete);
+            PreparedStatement prp=con.prepareStatement(requete,Statement.RETURN_GENERATED_KEYS);
             prp.setString(1,objet.getNom());
             prp.setDate(2,java.sql.Date.valueOf(objet.getDateNaissance()));
             prp.setString(3,objet.getAdresse());
@@ -207,7 +297,19 @@ public class Patient_impl implements PatientDao  {
             prp.setString(7,objet.getPrenom());
             prp.setString(8,objet.getEmail());
             int nombre_lignes=prp.executeUpdate();
-            return  (nombre_lignes>0);
+            ResultSet rs=prp.getGeneratedKeys();
+            if(nombre_lignes==0){return false;}
+            if(rs.next()){
+                objet.setId(rs.getInt(1));
+            }
+            System.out.println("lid du patient c'est "+objet.getId());
+            if (liste!=null && !liste.isEmpty()){
+                flag=antecedent_patient_impl.create(objet);
+                return (nombre_lignes>0 && flag);
+            }
+            else{
+                return  (nombre_lignes>0);
+            }
         }
         catch(SQLException ex){
             System.err.println(ex.getMessage());
@@ -218,40 +320,75 @@ public class Patient_impl implements PatientDao  {
     }
 
     @Override
-    public void update(Patient objet) {
+    public void update(Patient objet) throws SQLException {
+        Antecedent_patient_impl antecedent_patient_impl=new Antecedent_patient_impl();
+        List<Antecedent> liste=objet.getAntecedents();
+        List<Antecedent> liste1=antecedent_patient_impl.find_antecedent_by_patient(objet);
 
+        for(Antecedent antecedent:liste1){
+            if(!liste.contains(antecedent)){
+              boolean flag = antecedent_patient_impl.supprimer_antecedent_patient(objet,antecedent);
+            }
+        }
+
+        for(Antecedent antecedent:liste){
+            if(!liste1.contains(antecedent)){
+             boolean flag =   antecedent_patient_impl.ajouter_antecedent_patient(objet,antecedent);
+            }
+        }
+        try (Connection con = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword())) {
+
+            String sql = """
+                UPDATE patient
+                SET nom=?,prenom=?,datenaissance=?,adresse=?,telephone=?,email=?,idsexe=?,idassurance=?
+                WHERE idpatient=?
+                """;
+            PreparedStatement pst = con.prepareStatement(sql);
+
+            pst.setString(1, objet.getNom());
+            pst.setString(2, objet.getPrenom());
+            pst.setDate(3, java.sql.Date.valueOf(objet.getDateNaissance()));
+            pst.setString(4, objet.getAdresse());
+            pst.setString(5, objet.getTelephone());
+            pst.setString(6, objet.getEmail());
+            pst.setInt(7, objet.getSexe() == Sexe.Homme ? 1 : 2);
+            int assuranceId = switch (objet.getAssurance()) {
+                case CNOPS -> 1;
+                case CNSS -> 2;
+                case RAMED -> 3;
+                default -> 4;
+            };
+            pst.setInt(8, assuranceId);
+            pst.setInt(9, objet.getId());
+            pst.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
-    public boolean delete(Patient objet) throws SQLException {
-        return false;
+    public boolean delete(Patient objet) throws SQLException, IOException {
+        return deleteById(objet.getId());
     }
 
     @Override
-    public boolean deleteById(Long aLong) throws SQLException {
-        return false;
+    public boolean deleteById(Integer objet) throws SQLException, IOException {
+        try (Connection con = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword())) {
+            String sql = "DELETE FROM patient WHERE idpatient=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, objet);
+            return pst.executeUpdate() > 0;
+        }
     }
 
     @Override
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
-    }
-    public static void main(String[] args) {
-        LocalDate date=LocalDate.of(2024,9,27);
-        ArrayList<Antecedent> listeAntecedents=new ArrayList<>();
-        Patient patient=new Patient("nascerallah",3,"hassan",date,"Beirut","hezbollah@gmail.com","0777181657",Sexe.Femme,Assurance.CNOPS,listeAntecedents);
-        try{
-            Patient_impl p=new Patient_impl();
-           boolean flag = p.create(patient);
-           if(flag==true){
-               System.out.println("le patient a ete creer ");
-           }
-           else{
-               System.out.println("le patient a ete supprimer ");
-           }
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
     }
 }

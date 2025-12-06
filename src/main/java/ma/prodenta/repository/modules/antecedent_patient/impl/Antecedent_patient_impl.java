@@ -2,9 +2,7 @@ package ma.prodenta.repository.modules.antecedent_patient.impl;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
-import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.NiveauRisque;
-import ma.prodenta.entities.Enum.Sexe;
 import ma.prodenta.repository.modules.antecedent_patient.api.Antecedent_patient;
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
 import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
@@ -13,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +36,7 @@ public class Antecedent_patient_impl implements Antecedent_patient {
             antecedent.setIdAntecedent(rs.getInt("id_antecedent"));
             antecedent.setNom(rs.getString("nom"));
             antecedent.setCategorie(rs.getString("categorie"));
-            id_risuqe=rs.getInt("id_risuqe");
+            id_risuqe=rs.getInt("idRisque");
             NiveauRisque n=antecedent_impl.map_to_enum(id_risuqe);
             antecedent.setNiveauRisque(n);
             antecedents.add(antecedent);
@@ -70,7 +67,7 @@ public class Antecedent_patient_impl implements Antecedent_patient {
             }
 
         } catch (SQLException e) {
-            throw e;
+            System.out.println(e.getMessage());
         }
 
         return patients;
@@ -91,23 +88,20 @@ public class Antecedent_patient_impl implements Antecedent_patient {
         return 0;
     }
 
-
     @Override
     public boolean supprimer_antecedent_par_patient(Patient patient) throws SQLException {
         String requete = "delete from patient_antecedent where id_patient = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement pst = conn.prepareStatement(requete)) {
-
             pst.setInt(1, patient.getId());
             int rows = pst.executeUpdate();
             return rows > 0;
 
         } catch (SQLException e) {
-            throw e;
+            System.out.println(e.getMessage());
         }
-
+        return false;
     }
-
     @Override
     public int get_last_id() {
         String requete= """
@@ -130,12 +124,53 @@ public class Antecedent_patient_impl implements Antecedent_patient {
 
     @Override
     public List<Patient> findAll() throws Exception {
-        return List.of();
+        List<Patient> patients = new ArrayList<>();
+
+        String requete = """
+        SELECT DISTINCT p.*
+        FROM patient p
+        JOIN patient_antecedent pa ON p.id = pa.id_patient;
+    """;
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement pst = conn.prepareStatement(requete)) {
+
+            ResultSet rs = pst.executeQuery();
+            Patient_impl patientImpl = new Patient_impl();
+
+            while (rs.next()) {
+                Patient p = patientImpl.mapResultSetToPatient(rs);
+
+                p.setAntecedents(find_antecedent_by_patient(p));
+
+                patients.add(p);
+            }
+        }
+
+        return patients;
+
     }
 
     @Override
     public Patient findById(Integer integer) throws Exception {
-        return null;
+        String requete = "SELECT * FROM patient WHERE id = ?";
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement pst = conn.prepareStatement(requete)) {
+
+            pst.setInt(1, integer);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Patient_impl patientImpl = new Patient_impl();
+                Patient patient = patientImpl.mapResultSetToPatient(rs);
+
+                patient.setAntecedents(find_antecedent_by_patient(patient));
+
+                return patient;
+            }
+            return null;
+        }
     }
 
     @Override
@@ -170,53 +205,75 @@ public class Antecedent_patient_impl implements Antecedent_patient {
     public void update(Patient objet) {
 
     }
+    public boolean modifier(Patient objet){
+        boolean flag = false;
+
+        try{
+            flag=supprimer_antecedent_par_patient(objet);
+            if(flag){
+                flag=this.create(objet);
+                return true;
+            }
+            return false;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 
     @Override
     public boolean delete(Patient objet) throws SQLException {
-        return false;
+        boolean flag = false;
+         flag= deleteById(objet.getId());
+        return flag;
     }
 
     @Override
-    public boolean deleteById(Integer integer) throws SQLException {
-        return false;
+    public boolean deleteById(Integer id) throws SQLException {
+        boolean flag=false;
+        String requete = "DELETE FROM patient_antecedent WHERE id_patient = ?";
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement pst = conn.prepareStatement(requete)) {
+            pst.setInt(1, id);
+            flag= pst.executeUpdate() > 0;
+            return flag;
+        }
     }
 
     @Override
-    public Optional<Antecedent> findByNom(String nom) {
+    public Optional<Antecedent> findByNom(String nom)  {
         return Optional.empty();
     }
 
-     static void main() {
-         Antecedent_patient_impl a = new Antecedent_patient_impl();
-         Patient_impl p = new Patient_impl();
-         Patient patient = new Patient();
-         Antecedent_impl a1 = new Antecedent_impl();
-         List<Antecedent> liste = new ArrayList<>();
-         try {
-             for (int i = 1; i <= 5; i++) {
-                 liste.add(a1.findById(i));
-             }
-             patient.setId(p.get_last_id());
-             patient.setNom("safiyeddine");
-             patient.setPrenom("hachem");
-             patient.setDateNaissance(LocalDate.of(2024, 10, 3));
-             patient.setAdresse("Dahia");
-             patient.setTelephone("0777181657");
-             patient.setSexe(Sexe.Homme);
-             patient.setEmail("hezbollah");
-             patient.setAssurance(Assurance.CNSS);
-             p.create(patient);
-             patient.setAntecedents(liste);
-             System.out.println("l'id du patient est " + patient.getId());
-             boolean flag = a.create(patient);
-             if (flag) {
-                 System.out.println("valider");
-             } else {
-                 System.out.println("erreur");
-             }
-             System.out.println("le nom du patient c'est" + patient.getNom());
-         } catch (Exception e) {
-             System.out.println(e.getMessage());
-         }
-     }
+    public boolean ajouter_antecedent_patient(Patient patient,Antecedent antecedent)throws SQLException {
+        String requete= """
+                insert into patient_antecedent values(?,?,?)
+                """;
+        int id=0;
+        id=get_last_id();
+        try(Connection conn= SessionFactory.getInstance().getConnection();
+        PreparedStatement pst=conn.prepareStatement(requete))
+        {
+            pst.setInt(1,id);
+            pst.setInt(2,patient.getId());
+            pst.setInt(3,antecedent.getIdAntecedent());
+            return pst.executeUpdate() > 0;
+        }
+    }
+
+    public boolean supprimer_antecedent_patient(Patient p,Antecedent antecedent)throws SQLException {
+        String requete= """
+                delete from patient_antecedent where id_patient=? and id_antecedent=?
+                """;
+        int id=0;
+        id=get_last_id();
+        try(Connection conn= SessionFactory.getInstance().getConnection();
+            PreparedStatement pst=conn.prepareStatement(requete))
+        {
+            pst.setInt(1,p.getId());
+            pst.setInt(2,antecedent.getIdAntecedent());
+            return pst.executeUpdate() > 0;
+        }
+    }
 }

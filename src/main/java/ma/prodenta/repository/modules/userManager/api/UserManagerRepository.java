@@ -1,8 +1,6 @@
 // repository/modules/UserManager/api/UserManagerRepository.java
 package ma.prodenta.repository.modules.userManager.api;
-
 import ma.prodenta.entities.En.UserManager;
-
 import java.util.List;
 
 public interface UserManagerRepository {

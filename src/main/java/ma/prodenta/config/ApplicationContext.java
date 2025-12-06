@@ -6,15 +6,13 @@ import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalControll
 import ma.prodenta.mvc.controllers.modules.patient.api.PatientController;
 import ma.prodenta.repository.modules.patient.api.PatientDao;
 import ma.prodenta.service.modules.patient.api.PatientService;
-import ma.prodenta.mvc.controllers.modules.admin.AdminAuthController;
 
 import ma.prodenta.repository.common.AdminRepository;
-import ma.prodenta.repository.modules.admin.AdminRepositoryImpl;
+import ma.prodenta.repository.modules.admin.implementation.Admin_impl;
 import ma.prodenta.service.common.AdminService;
 import ma.prodenta.service.modules.admin.AdminServiceImpl;
 import ma.prodenta.repository.modules.dossierMedical.implementation.DossierMedicalRepositoryImpl;
 import ma.prodenta.repository.common.DossierMedicalRepository;
-import ma.prodenta.repository.modules.dossierMedical.impl.DossierMedicalRepositoryImpl;
 import ma.prodenta.service.common.DossierMedicalService;
 import ma.prodenta.service.modules.dossierMedical.DossierMedicalServiceImpl;
 
@@ -86,33 +84,33 @@ public class ApplicationContext {
         sessionFactory = new SessionFactory();
     }
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
+    //public static SessionFactory getSessionFactory() {
+      //  return sessionFactory;
+    //}
 
     // ================== ADMIN BEANS ==================
-    public static AdminRepository getAdminRepository() {
-        return new AdminRepositoryImpl(getSessionFactory());
-    }
+    //public static AdminRepository getAdminRepository() {
+      //  return new AdminRepositoryImpl(getSessionFactory());
+   // }
 
-    public static AdminService getAdminService() {
-        return new AdminServiceImpl(getAdminRepository());
-    }
+    //public static AdminService getAdminService() {
+       // return new AdminServiceImpl(getAdminRepository());
+    //}
 
-    public static AdminAuthController getAdminAuthController() {
-        return new AdminAuthController(getAdminService());
-    }
+    //public static AdminAuthController getAdminAuthController() {
+    //    return new AdminAuthController(getAdminService());
+    //}
 
     // ================== DOSSIER MEDICAL BEANS ==================
-    public static DossierMedicalRepository getDossierMedicalRepository() {
-        return new DossierMedicalRepositoryImpl(getSessionFactory());
-    }
+  //  public static DossierMedicalRepository getDossierMedicalRepository() {
+    //    return new DossierMedicalRepositoryImpl(getSessionFactory());
+   // }
 
-    public static DossierMedicalService getDossierMedicalService() {
-        return new DossierMedicalServiceImpl(getDossierMedicalRepository());
-    }
+    //public static DossierMedicalService getDossierMedicalService() {
+      //  return new DossierMedicalServiceImpl(getDossierMedicalRepository());
+    //}
 
-    public static DossierMedicalController getDossierMedicalController() {
-        return new DossierMedicalController(getDossierMedicalService());
-    }
+    //public static DossierMedicalController getDossierMedicalController() {
+     //   return new DossierMedicalController(getDossierMedicalService());
+    //}
 }
