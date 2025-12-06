@@ -18,7 +18,7 @@ import ma.prodenta.service.modules.admin.AdminServiceImpl;
 import ma.prodenta.repository.common.DossierMedicalRepository;
 import ma.prodenta.repository.modules.dossierMedical.DossierMedicalRepositoryImpl;
 import ma.prodenta.service.common.DossierMedicalService;
-import ma.prodenta.service.modules.dossierMedical.DossierMedicalServiceImpl;
+import ma.prodenta.service.modules.dossierMedical.impl.DossierMedicalServiceImpl;
 
 public class ApplicationContext {
 
