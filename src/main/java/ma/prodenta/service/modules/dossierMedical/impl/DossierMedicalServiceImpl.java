@@ -1,4 +1,4 @@
-package ma.prodenta.service.modules.dossierMedical;
+package ma.prodenta.service.modules.dossierMedical.impl;
 
 import ma.prodenta.entities.En.DossierMedical;
 import ma.prodenta.mvc.dto.dossiermedical.DossierMedicalDto;
