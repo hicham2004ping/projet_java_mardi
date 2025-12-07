@@ -1,28 +1,26 @@
 package ma.prodenta.repository.test_repository;
+import ma.prodenta.entities.En.*;
 import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.NiveauRisque;
 import ma.prodenta.entities.Enum.Sexe;
+import ma.prodenta.repository.modules.ordonnance.impl.OrdonnanceDaoImpl;
 import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
-import ma.prodenta.entities.En.Medicament;
 import ma.prodenta.repository.modules.medicament.fileBase_implementation.MedicamentDAOImpl;
-import ma.prodenta.repository.modules.antecedent_patient.impl.Antecedent_patient_impl;
-import ma.prodenta.entities.En.Patient;
-import ma.prodenta.entities.En.Antecedent;
-
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import ma.prodenta.entities.En.Acte;
+import ma.prodenta.entities.En.Sexe_c;
+import ma.prodenta.repository.modules.sexe.impl.Sexe_impl;
 import ma.prodenta.repository.modules.actes.impl.Acte_impl;
-import ma.prodenta.entities.En.Forme;
 import ma.prodenta.repository.modules.forme.impl.Forme_impl;
 import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl;
-import ma.prodenta.entities.En.Intervention;
-
+import ma.prodenta.repository.modules.assurance.implement.Assurance_impl;
+import ma.prodenta.entities.En.DossierMedical;
+import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_Medical_Impl;
 public class Test_globale {
     //partie test patient
+
     public static void test_Patient_antecedent() {
         //pour la declaration
         LocalDate date_naissance=LocalDate.now();
@@ -313,7 +311,82 @@ public class Test_globale {
         }
     }
 
+    public static void test_assurance(){
+        Assurance_c assurance=new Assurance_c();
+        Assurance_impl assurance_impl=new Assurance_impl();
+        List<Assurance_c> liste_assurances=new ArrayList<>();
+        try{
+            System.out.println("********LECTURE***********\n");
+            assurance=assurance_impl.find_by_name("cops");
+            System.out.println("l'id de l'assurance cnops est "+assurance.getId());
+            System.out.println("\t********FINDALL***********\n");
+            liste_assurances=assurance_impl.findAll();
+            for(Assurance_c assurance2:liste_assurances){
+                System.out.println("le libelle de l'assurance est "+assurance2.getLibelle()+" et son id est "+assurance2.getId());
+            }
+            System.out.println("\t********FINDBYID***********\n");
+            System.out.println("le libelle de l'assurance d'id 1 c'est "+assurance_impl.findById(1).getLibelle());
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void test_consultation(){
+    }
+    public static void test_sexe(){
+        List<Sexe_c> list_sexe=new ArrayList<>();
+        Sexe_c sexe=new Sexe_c();
+        Sexe_impl sexe_impl=new Sexe_impl();
+        try{
+            list_sexe=sexe_impl.findAll();
+            System.out.println("********LETURE***********\n");
+            sexe=sexe_impl.findBylibelle("femme");
+            if(sexe !=null){
+                System.out.println("l'id du sexe femme  est "+sexe.getId());
+            }
+            else System.out.println("erreur dans la lecture ");
+            System.out.println("*********LECTURE-LISTE***********\n");
+            for(Sexe_c sexe2:list_sexe){
+                System.out.println("le libelle de l'sexe est "+sexe2.getLibelle()+" et son id est "+sexe2.getId());
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void test_ordonance(){
+        Patient patient=new Patient();
+        Patient_impl patient_impl=new Patient_impl();
+        DossierMedical dossierMedical=new DossierMedical();
+        Dossier_Medical_Impl dossierMedical_impl=new Dossier_Medical_Impl();
+        Ordonnance ordonnance=new Ordonnance();
+        OrdonnanceDaoImpl ordonance_impl=new OrdonnanceDaoImpl();
+        int id;
+        try{
+            System.out.println("*******CREATION***********\n");
+            patient=patient_impl.findById(33);
+            dossierMedical=dossierMedical_impl.find_patient(patient);
+            DossierMedical ds=dossierMedical_impl.findById(1);
+            System.out.println("l'id du dossier c'est "+ds.getIdDossier());
+            ordonnance.setDateOrd(LocalDate.now());
+            ordonnance.setIdDossier(dossierMedical.getIdDossier());
+            boolean flag=ordonance_impl.create(ordonnance);
+            if(flag){
+                System.out.println("creation avec succes de l'rodonance");
+            }
+            else{
+                System.out.println("erreur lors de la creation ");
+            }
+        }
+        catch (Exception e){
+                System.out.println(e.getMessage());
+        }
+    }
+
+
     public static void main(){
-        test_intervention_medcin();
+        test_ordonance();
     }
 }

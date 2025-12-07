@@ -23,7 +23,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
                 if (rs.next()) {
                     return new Ordonnance(
                             rs.getLong("idOrd"),
-                            rs.getDate("dateOrd"),
+                            rs.getDate("dateOrd").toLocalDate(),
                             rs.getInt("idDossier")
                     );
                 }
@@ -44,7 +44,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
             while (rs.next()) {
                 liste.add(new Ordonnance(
                         rs.getLong("idOrd"),
-                        rs.getDate("dateOrd"),
+                        rs.getDate("dateOrd").toLocalDate(),
                         rs.getInt("idDossier")
                 ));
             }
@@ -59,10 +59,8 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setDate(1, new java.sql.Date(ord.getDateOrd().getTime()));
+            stmt.setDate(1,Date.valueOf(ord.getDateOrd()));
             stmt.setInt(2, ord.getIdDossier());
-
             n = stmt.executeUpdate();
         }
 
@@ -76,7 +74,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setDate(1, new java.sql.Date(ord.getDateOrd().getTime()));
+            stmt.setDate(1,Date.valueOf(ord.getDateOrd()));
             stmt.setInt(2, ord.getIdDossier());
             stmt.setLong(3, ord.getIdOrd());
 

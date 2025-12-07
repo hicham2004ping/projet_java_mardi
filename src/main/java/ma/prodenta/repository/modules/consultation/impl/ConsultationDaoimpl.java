@@ -1,9 +1,7 @@
 package ma.prodenta.repository.modules.consultation.impl;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Consultation;
 import ma.prodenta.repository.modules.consultation.api.ConsultationDao;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 public class DossierMedical implements Serializable {
     private Integer idDossier;
-    private Date dateCreation;
+    private LocalDate dateCreation;
     private Integer idPatient;
     private Integer idMedecin;
     public void setIdDossier(long aLong) {
@@ -32,6 +32,7 @@ public class DossierMedical implements Serializable {
     public String getNotes() {
         return "";
     }
+
     public String getDossier() {
         return "";
     }
