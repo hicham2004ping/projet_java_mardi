@@ -2,6 +2,7 @@ package ma.prodenta.repository.modules.medicament.fileBase_implementation;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Medicament;
 import ma.prodenta.config.SessionFactory;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.medicament.api.MedicamentDao;
 import java.sql.*;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
     }
 
     @Override
-    public void update(Medicament medicament) throws Exception {
+    public Utilisateur update(Medicament medicament) throws Exception {
         String sql = "UPDATE medicament SET nom = ?, laboratoire = ?, type = ?, remboursable = ?, " +
                 "prixUnit = ?, description = ?, idForme = ? WHERE idMed = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
@@ -101,6 +102,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
 
             stmt.executeUpdate();
         }
+        return null;
     }
 
     @Override

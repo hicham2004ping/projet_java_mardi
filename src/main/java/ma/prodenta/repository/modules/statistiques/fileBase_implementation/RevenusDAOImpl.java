@@ -2,6 +2,7 @@ package ma.prodenta.repository.modules.statistiques.fileBase_implementation;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Revenus;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.statistiques.api.RevenusDao;
 
 import java.io.IOException;
@@ -72,7 +73,7 @@ public class RevenusDAOImpl implements RevenusDao {
     }
 
     @Override
-    public void update(Revenus revenu) throws SQLException, Exception , IOException {
+    public Utilisateur update(Revenus revenu) throws SQLException, Exception , IOException {
         String sql = "UPDATE revenus SET type = ?, description = ?, montant = ?, dateRev = ?, idCabinet = ? WHERE idRev = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -85,6 +86,7 @@ public class RevenusDAOImpl implements RevenusDao {
 
             stmt.executeUpdate();
         }
+        return null;
     }
 
     @Override

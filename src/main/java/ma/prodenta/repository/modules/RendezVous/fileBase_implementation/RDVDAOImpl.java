@@ -2,6 +2,7 @@ package ma.prodenta.repository.modules.RendezVous.fileBase_implementation;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.RDV;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.RendezVous.api.RDVDAO;
 import java.sql.*;
 import java.util.ArrayList;
@@ -120,7 +121,7 @@ public class RDVDAOImpl implements RDVDAO {
 
 
     @Override
-    public void update(RDV rdv) {
+    public Utilisateur update(RDV rdv) {
 
         String sql = "UPDATE RDV SET dateRDV = ?, heure = ?, motif = ?, noteMedecin = ?, idPatient = ? " +
                 "WHERE idRDV = ?";
@@ -139,6 +140,7 @@ public class RDVDAOImpl implements RDVDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
 

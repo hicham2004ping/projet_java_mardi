@@ -2,6 +2,7 @@ package ma.prodenta.repository.modules.actes.impl;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Acte;
 import ma.prodenta.entities.En.Antecedent;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.actes.api.Acte_api;
 import java.io.IOException;
 import java.sql.Connection;
@@ -113,7 +114,7 @@ public class Acte_impl implements Acte_api {
     }
 
     @Override
-    public void update(Acte objet) throws SQLException, IOException, Exception {
+    public Utilisateur update(Acte objet) throws SQLException, IOException, Exception {
         String requete = """
                 update acte
                 set categorie = ?,
@@ -132,6 +133,7 @@ public class Acte_impl implements Acte_api {
 
             pst.executeUpdate();
         }
+        return null;
     }
 
     @Override

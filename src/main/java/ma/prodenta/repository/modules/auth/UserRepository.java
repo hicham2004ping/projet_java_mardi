@@ -1,8 +1,10 @@
 package ma.prodenta.repository.modules.auth;
+
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.repository.common.CrudRepository;
 import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.config.util.DBConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +12,10 @@ import java.util.Optional;
 
 public class UserRepository implements CrudRepository <Utilisateur, Integer> {
 
-    public boolean save(Utilisateur user) {
+    @Override
+    public Utilisateur save(Utilisateur user) {
         String sql = "INSERT INTO utilisateur(login, motdepasse, idRole) VALUES(?,?,?)";
-        int n;
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -20,23 +23,23 @@ public class UserRepository implements CrudRepository <Utilisateur, Integer> {
             stmt.setString(2, user.getMotdepasse());
             stmt.setString(3, user.getIdRole().toString());
 
-            n=stmt.executeUpdate();
+            stmt.executeUpdate();
 
             ResultSet keys = stmt.getGeneratedKeys();
             if (keys.next()) {
                 user.setIdUser(keys.getInt(1));
             }
 
-            return n>0;
+            return user;
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
     @Override
-    public void update(Utilisateur user) {
+    public Utilisateur update(Utilisateur user) {
         String sql = "UPDATE utilisateur SET login=?, motdepasse=?, idRole=? WHERE idUser=?";
 
         try (Connection conn = DBConnection.getConnection();
@@ -48,14 +51,18 @@ public class UserRepository implements CrudRepository <Utilisateur, Integer> {
             stmt.setInt(4, user.getIdUser());
 
             stmt.executeUpdate();
-
+            return user;
 
         } catch (Exception e) {
             e.printStackTrace();
-
+            return null;
         }
     }
 
+    @Override
+    public boolean delete(Utilisateur objet) throws SQLException {
+        return false;
+    }
 
     @Override
     public boolean deleteById(Integer integer) throws SQLException {
@@ -68,13 +75,13 @@ public class UserRepository implements CrudRepository <Utilisateur, Integer> {
     }
 
     @Override
-    public boolean delete(Utilisateur objet) {
+    public boolean delete(Integer id) {
         String sql = "DELETE FROM utilisateur WHERE idUser=?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, objet.getIdUser());
+            stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
 
         } catch (Exception e) {
@@ -156,11 +163,4 @@ public class UserRepository implements CrudRepository <Utilisateur, Integer> {
     }
 
     private Utilisateur mapToUtilisateur(ResultSet rs) throws Exception {
-        Utilisateur u = new Utilisateur();
-        u.setIdUser(rs.getInt("id"));
-        u.setLogin(rs.getString("login"));
-        u.setMotdepasse(rs.getString("motdepasse"));
-        u.setIdRole((rs.getInt("idRole")));
-        return u;
-    }
-}
+    a

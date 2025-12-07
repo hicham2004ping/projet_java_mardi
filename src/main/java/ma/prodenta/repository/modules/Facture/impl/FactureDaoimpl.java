@@ -3,6 +3,7 @@ package ma.prodenta.repository.modules.Facture.impl;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Facture;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.Facture.api.FactureDao;
 
 import java.sql.*;
@@ -62,7 +63,7 @@ public class FactureDaoimpl implements FactureDao {
     }
 
     @Override
-    public void update(Facture facture) throws SQLException {
+    public Utilisateur update(Facture facture) throws SQLException {
         String sql = "UPDATE Facture SET total = ?, totalpaye = ?, reste = ?, statut = ?, dateFact = ?, idSF = ? WHERE idFact = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -77,6 +78,7 @@ public class FactureDaoimpl implements FactureDao {
 
             stmt.executeUpdate();
         }
+        return null;
     }
 
     @Override

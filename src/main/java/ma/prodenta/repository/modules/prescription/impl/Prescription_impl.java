@@ -3,6 +3,7 @@ import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Ordonnance;
 import ma.prodenta.entities.En.Prescription;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.prescription.api.Prescription_api;
 import java.io.IOException;
 import java.sql.*;
@@ -79,7 +80,7 @@ public class Prescription_impl implements Prescription_api {
     }
 
     @Override
-    public void update(Prescription presc) throws SQLException, IOException, Exception {
+    public Utilisateur update(Prescription presc) throws SQLException, IOException, Exception {
         String sql = "UPDATE Prescription SET quantite = ?, frequence = ?, dureeEnJours = ?, idOrd = ?, idMed = ? WHERE idPr = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -93,6 +94,7 @@ public class Prescription_impl implements Prescription_api {
 
             stmt.executeUpdate();
         }
+        return null;
     }
 
     @Override

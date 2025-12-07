@@ -2,6 +2,7 @@ package ma.prodenta.repository.modules.forme.impl;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Forme;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.forme.api.Forme_api;
 import java.io.IOException;
 import java.sql.Connection;
@@ -102,7 +103,7 @@ public class Forme_impl implements Forme_api {
     }
 
     @Override
-    public void update(Forme objet) throws SQLException, IOException {
+    public Utilisateur update(Forme objet) throws SQLException, IOException {
         String requete = "UPDATE forme SET libelle = ? WHERE idforme = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(requete)) {
@@ -110,6 +111,7 @@ public class Forme_impl implements Forme_api {
             ps.setInt(2, objet.getId());
             ps.executeUpdate();
         }
+        return null;
     }
 
 

@@ -3,6 +3,7 @@ package ma.prodenta.repository.modules.statistiques.fileBase_implementation;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Charges;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.statistiques.api.ChargesDao;
 
 import java.io.IOException;
@@ -73,7 +74,7 @@ public class ChargesDAOImpl implements ChargesDao {
     }
 
     @Override
-    public void update(Charges charge) throws Exception {
+    public Utilisateur update(Charges charge) throws Exception {
         String sql = "UPDATE charges SET titre = ?, description = ?, montant = ?, dateCharge = ?, idCabinet = ? WHERE idCharge = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -87,6 +88,7 @@ public class ChargesDAOImpl implements ChargesDao {
 
             stmt.executeUpdate();
         }
+        return null;
     }
 
     @Override

@@ -2,6 +2,7 @@ package ma.prodenta.repository.modules.SituationFinanciere.impl;
 
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.SituationFinanciere;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.SituationFinanciere.api.SituationFinancierDao;
 import ma.prodenta.config.SessionFactory;
 
@@ -71,7 +72,7 @@ public class SituationFinanciereDaoImpl implements SituationFinancierDao {
     }
 
     @Override
-    public void update(SituationFinanciere sf) throws Exception {
+    public Utilisateur update(SituationFinanciere sf) throws Exception {
         String sql = """
             UPDATE SituationFinanciere
             SET totalActes=?, totalPaye=?, credit=?, statut=?, enPromo=?, idPatient=?
@@ -91,6 +92,7 @@ public class SituationFinanciereDaoImpl implements SituationFinancierDao {
 
             ps.executeUpdate();
         }
+        return null;
     }
 
     @Override

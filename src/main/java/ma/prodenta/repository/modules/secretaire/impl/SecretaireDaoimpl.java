@@ -2,7 +2,7 @@ package ma.prodenta.repository.modules.secretaire.impl;
 
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Secretaire;
-import ma.prodenta.repository.common.CrudRepository;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.secretaire.api.SecretaireDao;
 
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class SecretaireDaoimpl implements SecretaireDao {
     }
 
     @Override
-    public void update(Secretaire secretaire) throws SQLException, IOException, Exception {
+    public Utilisateur update(Secretaire secretaire) throws SQLException, IOException, Exception {
         String sql = "UPDATE Secretaire SET numCNSS = ?, commission = ? WHERE idUser = ?";
 
         try (Connection c = SessionFactory.getInstance().getConnection();
@@ -84,6 +84,7 @@ public class SecretaireDaoimpl implements SecretaireDao {
 
             ps.executeUpdate();
         }
+        return null;
     }
 
     @Override

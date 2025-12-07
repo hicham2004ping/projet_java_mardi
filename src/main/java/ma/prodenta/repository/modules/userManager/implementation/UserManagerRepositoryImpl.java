@@ -1,7 +1,9 @@
 // repository/modules/UserManager/implementation/UserManagerRepositoryImpl.java
 package ma.prodenta.repository.modules.userManager.implementation;
+
 import ma.prodenta.entities.En.UserManager;
 import ma.prodenta.repository.modules.userManager.api.UserManagerRepository;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

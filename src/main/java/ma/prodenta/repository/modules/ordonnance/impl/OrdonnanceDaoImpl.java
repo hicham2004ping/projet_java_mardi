@@ -3,6 +3,7 @@ import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Medicament;
 import ma.prodenta.entities.En.Ordonnance;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.ordonnance.api.Ordonance_api;
 import java.sql.*;
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
     }
 
     @Override
-    public void update(Ordonnance ord) throws Exception {
+    public Utilisateur update(Ordonnance ord) throws Exception {
         String sql = "UPDATE Ordonnance SET dateOrd = ?, idDossier = ? WHERE idOrd = ?";
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
@@ -80,6 +81,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
 
             stmt.executeUpdate();
         }
+        return null;
     }
 
     @Override

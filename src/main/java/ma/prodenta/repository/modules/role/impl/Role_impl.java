@@ -1,6 +1,7 @@
 package ma.prodenta.repository.modules.role.impl;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Role;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.role.api.Role_api;
 import java.io.IOException;
 import java.sql.Connection;
@@ -90,7 +91,7 @@ public class Role_impl implements Role_api {
     }
 
     @Override
-    public void update(Role objet) {
+    public Utilisateur update(Role objet) {
         String sql = "UPDATE role SET libelle = ? WHERE id_role = ?";
 
         try(Connection conn = SessionFactory.getInstance().getConnection();
@@ -104,6 +105,7 @@ public class Role_impl implements Role_api {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     @Override
