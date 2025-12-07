@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 05, 2025 at 08:57 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Hôte : 127.0.0.1:3307
+-- Généré le : dim. 07 déc. 2025 à 13:52
+-- Version du serveur : 8.0.43
+-- Version de PHP : 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,955 +18,990 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `cabinet_medical`
+-- Base de données : `cabinet_medical`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `acte`
+-- Structure de la table `acte`
 --
 
 CREATE TABLE `acte` (
-  `id` int(11) NOT NULL,
-  `categorie` varchar(30) DEFAULT NULL,
-  `libelle` varchar(30) DEFAULT NULL,
-  `prix_de_base` int(11) DEFAULT NULL
+                        `id` int NOT NULL,
+                        `categorie` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                        `libelle` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                        `prix_de_base` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `acte`
+-- Déchargement des données de la table `acte`
 --
 
 INSERT INTO `acte` (`id`, `categorie`, `libelle`, `prix_de_base`) VALUES
-(1, 'Consultation', 'Consultation simple', 80),
-(2, 'Consultation', 'Contrôle de routine', 60),
-(3, 'Soins', 'Détartrage', 150),
-(4, 'Soins', 'Polissage dent', 70),
-(5, 'Soins', 'Traitement carie simple', 200),
-(6, 'Soins', 'Plombage composite', 250),
-(7, 'Radiologie', 'Radio panoramique', 180),
-(8, 'Radiologie', 'Radio dentaire', 90),
-(9, 'Chirurgie', 'Extraction dent simple', 300),
-(10, 'Chirurgie', 'Extraction dent de sagesse', 600),
-(11, 'Prothèse', 'Couronne céramique', 2200),
-(12, 'Prothèse', 'Bridge 3 éléments', 4200),
-(13, 'Prothèse', 'Prothèse amovible partielle', 3000),
-(14, 'Esthétique', 'Blanchiment dentaire', 1800),
-(15, 'Esthétique', 'Facette dentaire', 2500),
-(16, 'Orthodontie', 'Pose bagues métalliques', 4500),
-(17, 'Orthodontie', 'Réglage appareil', 300),
-(18, 'Hygiène', 'Nettoyage complet', 120),
-(19, 'Hygiène', 'Application fluor', 90),
-(20, 'Urgence', 'Traitement douleur dentaire', 150),
-(21, 'ibrahim', 'akil', 1000),
-(22, 'ibrahim', 'akil', 1000);
+                                                                      (1, 'Consultation', 'Consultation simple', 80),
+                                                                      (2, 'Consultation', 'Contrôle de routine', 60),
+                                                                      (3, 'Soins', 'Détartrage', 150),
+                                                                      (4, 'Soins', 'Polissage dent', 70),
+                                                                      (5, 'Soins', 'Traitement carie simple', 200),
+                                                                      (6, 'Soins', 'Plombage composite', 250),
+                                                                      (7, 'Radiologie', 'Radio panoramique', 180),
+                                                                      (8, 'Radiologie', 'Radio dentaire', 90),
+                                                                      (9, 'Chirurgie', 'Extraction dent simple', 300),
+                                                                      (10, 'Chirurgie', 'Extraction dent de sagesse', 600),
+                                                                      (11, 'Prothèse', 'Couronne céramique', 2200),
+                                                                      (12, 'Prothèse', 'Bridge 3 éléments', 4200),
+                                                                      (13, 'Prothèse', 'Prothèse amovible partielle', 3000),
+                                                                      (14, 'Esthétique', 'Blanchiment dentaire', 1800),
+                                                                      (15, 'Esthétique', 'Facette dentaire', 2500),
+                                                                      (16, 'Orthodontie', 'Pose bagues métalliques', 4500),
+                                                                      (17, 'Orthodontie', 'Réglage appareil', 300),
+                                                                      (18, 'Hygiène', 'Nettoyage complet', 120),
+                                                                      (19, 'Hygiène', 'Application fluor', 90),
+                                                                      (20, 'Urgence', 'Traitement douleur dentaire', 150),
+                                                                      (21, 'ibrahim', 'akil', 1000),
+                                                                      (22, 'ibrahim', 'akil', 1000);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `antecedent`
+-- Structure de la table `antecedent`
 --
 
 CREATE TABLE `antecedent` (
-  `idAntecedent` int(11) NOT NULL,
-  `nom` varchar(150) DEFAULT NULL,
-  `categorie` varchar(100) DEFAULT NULL,
-  `idRisque` int(11) DEFAULT NULL
+                              `idAntecedent` int NOT NULL,
+                              `nom` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                              `categorie` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                              `idRisque` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `antecedent`
+-- Déchargement des données de la table `antecedent`
 --
 
 INSERT INTO `antecedent` (`idAntecedent`, `nom`, `categorie`, `idRisque`) VALUES
-(1, 'Hypertension artérielle', 'Maladie chronique', 4),
-(2, 'Diabète de type 2', 'Maladie chronique', 3),
-(3, 'Allergie sévère au pollen', 'Allergie', 1),
-(4, 'Antécédent d’AVC', 'Neurologique', 2),
-(5, 'Asthme modéré', 'Respiratoire', 3),
-(6, 'Crise cardiaque (Infarctus)', 'Cardiaque', 2),
-(7, 'Anémie', 'Hématologique', 4),
-(8, 'Intolérance au lactose', 'Allergie / Digestif', 4),
-(9, 'Insuffisance rénale', 'Rénal', 2),
-(10, 'Tabagisme chronique', 'Habitude de vie', 1),
-(11, 'Chirurgie récente', 'Chirurgical', 3),
-(12, 'Antécédent familial de diabète', 'Familial', 4),
-(13, 'Obésité sévère', 'Métabolique', 2),
-(14, 'Epilepsie', 'Neurologique', 2),
-(15, 'Hypertension légère', 'Cardiaque', 4);
+                                                                              (1, 'Hypertension artérielle', 'Maladie chronique', 4),
+                                                                              (2, 'Diabète de type 2', 'Maladie chronique', 3),
+                                                                              (3, 'Allergie sévère au pollen', 'Allergie', 1),
+                                                                              (4, 'Antécédent d’AVC', 'Neurologique', 2),
+                                                                              (5, 'Asthme modéré', 'Respiratoire', 3),
+                                                                              (6, 'Crise cardiaque (Infarctus)', 'Cardiaque', 2),
+                                                                              (7, 'Anémie', 'Hématologique', 4),
+                                                                              (8, 'Intolérance au lactose', 'Allergie / Digestif', 4),
+                                                                              (9, 'Insuffisance rénale', 'Rénal', 2),
+                                                                              (10, 'Tabagisme chronique', 'Habitude de vie', 1),
+                                                                              (11, 'Chirurgie récente', 'Chirurgical', 3),
+                                                                              (12, 'Antécédent familial de diabète', 'Familial', 4),
+                                                                              (13, 'Obésité sévère', 'Métabolique', 2),
+                                                                              (14, 'Epilepsie', 'Neurologique', 2),
+                                                                              (15, 'Hypertension légère', 'Cardiaque', 4);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `assurance`
+-- Structure de la table `assurance`
 --
 
 CREATE TABLE `assurance` (
-  `idAssurance` int(11) NOT NULL,
-  `libelle` enum('cmss','cnops','ramed','privée','aucune') NOT NULL
+                             `idAssurance` int NOT NULL,
+                             `libelle` enum('cmss','cnops','ramed','privée','aucune') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `assurance`
+-- Déchargement des données de la table `assurance`
 --
 
 INSERT INTO `assurance` (`idAssurance`, `libelle`) VALUES
-(1, 'cnops'),
-(2, 'cmss'),
-(3, 'ramed'),
-(4, 'aucune');
+                                                       (1, 'cnops'),
+                                                       (2, 'cmss'),
+                                                       (3, 'ramed'),
+                                                       (4, 'aucune');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cabinetmedical`
+-- Structure de la table `cabinetmedical`
 --
 
 CREATE TABLE `cabinetmedical` (
-  `idCabinet` int(11) NOT NULL,
-  `nom` varchar(150) DEFAULT NULL,
-  `email` varchar(150) DEFAULT NULL,
-  `logo` varchar(150) DEFAULT NULL,
-  `adresse` varchar(200) DEFAULT NULL,
-  `tel1` varchar(20) DEFAULT NULL,
-  `tel2` varchar(20) DEFAULT NULL,
-  `siteweb` varchar(100) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `instagram` varchar(100) DEFAULT NULL,
-  `facebook` varchar(100) DEFAULT NULL
+                                  `idCabinet` int NOT NULL,
+                                  `nom` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `email` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `logo` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `adresse` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `tel1` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `tel2` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `siteweb` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `description` text COLLATE utf8mb4_general_ci,
+                                  `instagram` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                  `facebook` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `certificat`
+-- Structure de la table `certificat`
 --
 
 CREATE TABLE `certificat` (
-  `idCert` int(11) NOT NULL,
-  `dateDebut` date DEFAULT NULL,
-  `dateFin` date DEFAULT NULL,
-  `nature` varchar(200) DEFAULT NULL,
-  `noteMedecin` text DEFAULT NULL,
-  `idDossier` int(11) DEFAULT NULL
+                              `idCert` int NOT NULL,
+                              `dateDebut` date DEFAULT NULL,
+                              `dateFin` date DEFAULT NULL,
+                              `nature` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                              `noteMedecin` text COLLATE utf8mb4_general_ci,
+                              `idDossier` int DEFAULT NULL,
+                              `idConsult` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `certificat`
+--
+
+INSERT INTO `certificat` (`idCert`, `dateDebut`, `dateFin`, `nature`, `noteMedecin`, `idDossier`, `idConsult`) VALUES
+                                                                                                                   (1, '2025-01-15', '2025-01-17', 'Arrêt maladie', 'Fièvre 38°C', 1, 1),
+                                                                                                                   (2, '2025-01-20', '2025-01-22', 'Arrêt maladie', 'Douleurs dorsales', 1, 2),
+                                                                                                                   (3, '2025-01-18', '2025-01-19', 'Allergie saisonnière', 'Antihistaminiques', 2, 3);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `charges`
+-- Structure de la table `charges`
 --
 
 CREATE TABLE `charges` (
-  `idCharge` int(11) NOT NULL,
-  `titre` varchar(150) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `montant` double DEFAULT NULL,
-  `dateCharge` datetime DEFAULT NULL,
-  `idCabinet` int(11) DEFAULT NULL
+                           `idCharge` int NOT NULL,
+                           `titre` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `description` text COLLATE utf8mb4_general_ci,
+                           `montant` double DEFAULT NULL,
+                           `dateCharge` datetime DEFAULT NULL,
+                           `idCabinet` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `consultation`
+-- Structure de la table `consultation`
 --
 
 CREATE TABLE `consultation` (
-  `idConsult` int(11) NOT NULL,
-  `dateConsult` date DEFAULT NULL,
-  `observationMedecin` text DEFAULT NULL,
-  `idDossier` int(11) DEFAULT NULL,
-  `idStatut` int(11) DEFAULT NULL
+                                `idConsult` int NOT NULL,
+                                `dateConsult` date DEFAULT NULL,
+                                `observationMedecin` text COLLATE utf8mb4_general_ci,
+                                `idDossier` int DEFAULT NULL,
+                                `idStatut` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `consultation`
+--
+
+INSERT INTO `consultation` (`idConsult`, `dateConsult`, `observationMedecin`, `idDossier`, `idStatut`) VALUES
+                                                                                                           (1, '2025-01-15', 'Grippe légère, fièvre 38°C', 1, 1),
+                                                                                                           (2, '2025-01-20', 'Douleurs musculaires au dos', 1, 2),
+                                                                                                           (3, '2025-01-18', 'Allergie saisonnière', 2, 1),
+                                                                                                           (4, '2025-01-22', 'Contrôle général — RAS', 3, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dossiermedical`
+-- Structure de la table `dossiermedical`
 --
 
 CREATE TABLE `dossiermedical` (
-  `idDossier` int(11) NOT NULL,
-  `dateCreation` date DEFAULT NULL,
-  `idPatient` int(11) DEFAULT NULL,
-  `idMedecin` int(11) DEFAULT NULL
+                                  `idDossier` int NOT NULL,
+                                  `dateCreation` date DEFAULT NULL,
+                                  `idPatient` int DEFAULT NULL,
+                                  `idMedecin` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `dossiermedical`
+--
+
+INSERT INTO `dossiermedical` (`idDossier`, `dateCreation`, `idPatient`, `idMedecin`) VALUES
+                                                                                         (1, '2025-01-01', 1, 1),
+                                                                                         (2, '2025-01-10', 2, 3),
+                                                                                         (3, '2025-01-12', 3, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `facture`
+-- Structure de la table `facture`
 --
 
 CREATE TABLE `facture` (
-  `idFact` int(11) NOT NULL,
-  `total` double DEFAULT NULL,
-  `totalpaye` double DEFAULT NULL,
-  `reste` double DEFAULT NULL,
-  `statut` enum('payee','non payee','en attente','annulé') DEFAULT NULL,
-  `dateFact` datetime DEFAULT NULL,
-  `idSF` int(11) DEFAULT NULL
+                           `idFact` int NOT NULL,
+                           `total` double DEFAULT NULL,
+                           `totalpaye` double DEFAULT NULL,
+                           `reste` double DEFAULT NULL,
+                           `statut` enum('payee','non payee','en attente','annulé') COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `dateFact` datetime DEFAULT NULL,
+                           `idSF` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forme`
+-- Structure de la table `forme`
 --
 
 CREATE TABLE `forme` (
-  `idForme` int(11) NOT NULL,
-  `libelle` enum('Comprimé','Gelule','Sirop','Pommade','Injection') NOT NULL
+                         `idForme` int NOT NULL,
+                         `libelle` enum('Comprimé','Gelule','Sirop','Pommade','Injection') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `intervention_medcin`
+-- Structure de la table `intervention_medcin`
 --
 
 CREATE TABLE `intervention_medcin` (
-  `id` int(11) NOT NULL,
-  `numero_dent` int(11) DEFAULT NULL,
-  `prix_patient` int(11) DEFAULT NULL,
-  `id_acte` int(11) DEFAULT NULL
+                                       `id` int NOT NULL,
+                                       `numero_dent` int DEFAULT NULL,
+                                       `prix_patient` int DEFAULT NULL,
+                                       `id_acte` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `medecin`
+-- Structure de la table `medecin`
 --
 
 CREATE TABLE `medecin` (
-  `idUser` int(11) NOT NULL,
-  `specialite` varchar(100) DEFAULT NULL,
-  `agendaMensuel` text DEFAULT NULL
+                           `idUser` int NOT NULL,
+                           `specialite` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `agendaMensuel` text COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `medecin`
+--
+
+INSERT INTO `medecin` (`idUser`, `specialite`, `agendaMensuel`) VALUES
+                                                                    (1, 'Cardiologie', 'Lundi 9-12, Mardi 14-17'),
+                                                                    (3, 'Dermatologie', 'Mercredi 10-13, Jeudi 15-18');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `medicament`
+-- Structure de la table `medicament`
 --
 
 CREATE TABLE `medicament` (
-  `idMed` int(11) NOT NULL,
-  `nom` varchar(100) DEFAULT NULL,
-  `laboratoire` varchar(100) DEFAULT NULL,
-  `type` varchar(100) DEFAULT NULL,
-  `remboursable` tinyint(1) DEFAULT NULL,
-  `prixUnit` double DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `idForme` int(11) DEFAULT NULL
+                              `idMed` int NOT NULL,
+                              `nom` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                              `laboratoire` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                              `type` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                              `remboursable` tinyint(1) DEFAULT NULL,
+                              `prixUnit` double DEFAULT NULL,
+                              `description` text COLLATE utf8mb4_general_ci,
+                              `idForme` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `niveaurisque`
+-- Structure de la table `niveaurisque`
 --
 
 CREATE TABLE `niveaurisque` (
-  `idRisque` int(11) NOT NULL,
-  `libelle` enum('Faible','Modéré','Dangereux','Très dangereux') NOT NULL
+                                `idRisque` int NOT NULL,
+                                `libelle` enum('Faible','Modéré','Dangereux','Très dangereux') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `niveaurisque`
+-- Déchargement des données de la table `niveaurisque`
 --
 
 INSERT INTO `niveaurisque` (`idRisque`, `libelle`) VALUES
-(1, 'Dangereux'),
-(2, 'Très dangereux'),
-(3, 'Modéré'),
-(4, 'Faible');
+                                                       (1, 'Dangereux'),
+                                                       (2, 'Très dangereux'),
+                                                       (3, 'Modéré'),
+                                                       (4, 'Faible');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ordonnance`
+-- Structure de la table `ordonnance`
 --
 
 CREATE TABLE `ordonnance` (
-  `idOrd` int(11) NOT NULL,
-  `dateOrd` date DEFAULT NULL,
-  `idDossier` int(11) DEFAULT NULL
+                              `idOrd` int NOT NULL,
+                              `dateOrd` date DEFAULT NULL,
+                              `idDossier` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `patient`
+-- Structure de la table `patient`
 --
 
 CREATE TABLE `patient` (
-  `idPatient` int(11) NOT NULL,
-  `nom` varchar(100) DEFAULT NULL,
-  `dateNaissance` date DEFAULT NULL,
-  `adresse` varchar(200) DEFAULT NULL,
-  `telephone` varchar(20) DEFAULT NULL,
-  `idSexe` int(11) DEFAULT NULL,
-  `idAssurance` int(11) DEFAULT NULL,
-  `prenom` varchar(30) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL
+                           `idPatient` int NOT NULL,
+                           `nom` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `dateNaissance` date DEFAULT NULL,
+                           `adresse` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `telephone` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `idSexe` int DEFAULT NULL,
+                           `idAssurance` int DEFAULT NULL,
+                           `prenom` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `email` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `patient`
+-- Déchargement des données de la table `patient`
 --
 
 INSERT INTO `patient` (`idPatient`, `nom`, `dateNaissance`, `adresse`, `telephone`, `idSexe`, `idAssurance`, `prenom`, `email`) VALUES
-(1, 'ibrahim', '2024-09-20', 'beirut', '021831241', 1, 2, NULL, NULL),
-(2, 'nascerallah', '2024-09-20', 'beirut', '021831241', 1, 1, NULL, NULL),
-(3, 'hassan', '2024-09-27', 'Beirut', '0777181657', 2, 1, 'nascerallah', 'hezbollah@gmail.com'),
-(13, 'safiyeddine', '2024-10-03', 'Dahia', '0777181657', 1, 2, 'hachem', 'hezbollah'),
-(14, 'safiyeddine', '2024-10-03', 'Dahia', '0777181657', 1, 2, 'hachem', 'hezbollah'),
-(15, 'safiyeddine', '2024-10-03', 'Dahia', '0777181657', 1, 2, 'hachem', 'hezbollah'),
-(16, 'safiyeddine', '2024-10-03', 'Dahia', '0777181657', 1, 2, 'hachem', 'hezbollah');
+                                                                                                                                    (1, 'Bennani', '1998-06-12', 'Rabat, Agdal', '0611223344', 1, 1, 'Omar', 'omar.bennani@gmail.com'),
+                                                                                                                                    (2, 'El Fassi', '2000-09-22', 'Casablanca, Maarif', '0677889900', 2, 2, 'Salma', 'salma.elfassi@gmail.com'),
+                                                                                                                                    (3, 'Hassan', '1995-01-05', 'Fès, Centre Ville', '0655667788', 1, 1, 'Youssef', 'youssef.hassan@gmail.com');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `patient_antecedent`
+-- Structure de la table `patient_antecedent`
 --
 
 CREATE TABLE `patient_antecedent` (
-  `id` int(11) NOT NULL,
-  `id_patient` int(11) DEFAULT NULL,
-  `id_antecedent` int(11) DEFAULT NULL
+                                      `id` int NOT NULL,
+                                      `id_patient` int DEFAULT NULL,
+                                      `id_antecedent` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `patient_antecedent`
---
-
-INSERT INTO `patient_antecedent` (`id`, `id_patient`, `id_antecedent`) VALUES
-(1, 15, 1),
-(2, 15, 2),
-(3, 15, 3),
-(4, 15, 4),
-(5, 15, 5);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `prescription`
+-- Structure de la table `prescription`
 --
 
 CREATE TABLE `prescription` (
-  `idPr` int(11) NOT NULL,
-  `quantite` int(11) DEFAULT NULL,
-  `frequence` varchar(50) DEFAULT NULL,
-  `dureeEnJours` int(11) DEFAULT NULL,
-  `idOrd` int(11) DEFAULT NULL,
-  `idMed` int(11) DEFAULT NULL
+                                `idPr` int NOT NULL,
+                                `quantite` int DEFAULT NULL,
+                                `frequence` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                `dureeEnJours` int DEFAULT NULL,
+                                `idOrd` int DEFAULT NULL,
+                                `idMed` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rdv`
+-- Structure de la table `rdv`
 --
 
 CREATE TABLE `rdv` (
-  `idRDV` int(11) NOT NULL,
-  `dateRDV` date DEFAULT NULL,
-  `heure` time DEFAULT NULL,
-  `motif` varchar(150) DEFAULT NULL,
-  `noteMedecin` text DEFAULT NULL,
-  `idPatient` int(11) DEFAULT NULL
+                       `idRDV` int NOT NULL,
+                       `dateRDV` date DEFAULT NULL,
+                       `heure` time DEFAULT NULL,
+                       `motif` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                       `noteMedecin` text COLLATE utf8mb4_general_ci,
+                       `idPatient` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `revenus`
+-- Structure de la table `revenus`
 --
 
 CREATE TABLE `revenus` (
-  `idRev` int(11) NOT NULL,
-  `type` varchar(100) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `montant` double DEFAULT NULL,
-  `dateRev` datetime DEFAULT NULL,
-  `idCabinet` int(11) DEFAULT NULL
+                           `idRev` int NOT NULL,
+                           `type` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `description` text COLLATE utf8mb4_general_ci,
+                           `montant` double DEFAULT NULL,
+                           `dateRev` datetime DEFAULT NULL,
+                           `idCabinet` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `role`
+-- Structure de la table `role`
 --
 
 CREATE TABLE `role` (
-  `idRole` int(11) NOT NULL,
-  `libelle` varchar(50) NOT NULL
+                        `idRole` int NOT NULL,
+                        `libelle` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `role`
+-- Déchargement des données de la table `role`
 --
 
 INSERT INTO `role` (`idRole`, `libelle`) VALUES
-(1, 'Medecin'),
-(2, 'Secretaire');
+                                             (1, 'Medecin'),
+                                             (2, 'Secretaire');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `secretaire`
+-- Structure de la table `secretaire`
 --
 
 CREATE TABLE `secretaire` (
-  `idUser` int(11) NOT NULL,
-  `numCNSS` varchar(30) DEFAULT NULL,
-  `commission` double DEFAULT NULL
+                              `idUser` int NOT NULL,
+                              `numCNSS` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                              `commission` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sexe`
+-- Structure de la table `sexe`
 --
 
 CREATE TABLE `sexe` (
-  `idSexe` int(11) NOT NULL,
-  `libelle` enum('homme','femme') NOT NULL
+                        `idSexe` int NOT NULL,
+                        `libelle` enum('homme','femme') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `sexe`
+-- Déchargement des données de la table `sexe`
 --
 
 INSERT INTO `sexe` (`idSexe`, `libelle`) VALUES
-(1, 'homme'),
-(2, 'femme');
+                                             (1, 'homme'),
+                                             (2, 'femme');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `situationfinanciere`
+-- Structure de la table `situationfinanciere`
 --
 
 CREATE TABLE `situationfinanciere` (
-  `idSF` int(11) NOT NULL,
-  `totalActes` double DEFAULT NULL,
-  `totalPaye` double DEFAULT NULL,
-  `credit` double DEFAULT NULL,
-  `statut` enum('payee','non payee','en attente','annulé') DEFAULT NULL,
-  `enPromo` enum('Oui','Non') DEFAULT NULL,
-  `idPatient` int(11) DEFAULT NULL
+                                       `idSF` int NOT NULL,
+                                       `totalActes` double DEFAULT NULL,
+                                       `totalPaye` double DEFAULT NULL,
+                                       `credit` double DEFAULT NULL,
+                                       `statut` enum('payee','non payee','en attente','annulé') COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                       `enPromo` enum('Oui','Non') COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                       `idPatient` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `staff`
+-- Structure de la table `staff`
 --
 
 CREATE TABLE `staff` (
-  `idStaff` int(11) NOT NULL,
-  `salaire` double DEFAULT NULL,
-  `prime` double DEFAULT NULL,
-  `dateRecrutement` date DEFAULT NULL,
-  `soldeConge` int(11) DEFAULT NULL,
-  `idMedecin` int(11) DEFAULT NULL,
-  `idSecretaire` int(11) DEFAULT NULL
+                         `idStaff` int NOT NULL,
+                         `salaire` double DEFAULT NULL,
+                         `prime` double DEFAULT NULL,
+                         `dateRecrutement` date DEFAULT NULL,
+                         `soldeConge` int DEFAULT NULL,
+                         `idMedecin` int DEFAULT NULL,
+                         `idSecretaire` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `statutconsultation`
+-- Structure de la table `statutconsultation`
 --
 
 CREATE TABLE `statutconsultation` (
-  `idStatut` int(11) NOT NULL,
-  `libelle` enum('En cours','Terminé','Annulé') NOT NULL
+                                      `idStatut` int NOT NULL,
+                                      `libelle` enum('En cours','Terminée','Annulé','En attente') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `statutconsultation`
+--
+
+INSERT INTO `statutconsultation` (`idStatut`, `libelle`) VALUES
+                                                             (1, 'En attente'),
+                                                             (2, 'Terminée'),
+                                                             (3, 'Annulé'),
+                                                             (4, 'En cours');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `utilisateur`
+-- Structure de la table `utilisateur`
 --
 
 CREATE TABLE `utilisateur` (
-  `idUser` int(11) NOT NULL,
-  `nom` varchar(100) DEFAULT NULL,
-  `email` varchar(150) DEFAULT NULL,
-  `adresse` varchar(200) DEFAULT NULL,
-  `cin` varchar(20) DEFAULT NULL,
-  `tel` varchar(20) DEFAULT NULL,
-  `idSexe` int(11) DEFAULT NULL,
-  `login` varchar(50) DEFAULT NULL,
-  `motdepasse` varchar(255) DEFAULT NULL,
-  `dateNaissance` date DEFAULT NULL,
-  `lastLoginDate` datetime DEFAULT NULL,
-  `idRole` int(11) DEFAULT NULL
+                               `idUser` int NOT NULL,
+                               `nom` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                               `email` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                               `adresse` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                               `cin` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                               `tel` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                               `idSexe` int DEFAULT NULL,
+                               `login` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                               `motdepasse` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                               `dateNaissance` date DEFAULT NULL,
+                               `lastLoginDate` datetime DEFAULT NULL,
+                               `idRole` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `utilisateur`
+-- Déchargement des données de la table `utilisateur`
 --
 
 INSERT INTO `utilisateur` (`idUser`, `nom`, `email`, `adresse`, `cin`, `tel`, `idSexe`, `login`, `motdepasse`, `dateNaissance`, `lastLoginDate`, `idRole`) VALUES
-(1, 'Karim El Mansouri', 'karim.mansouri@example.com', '12 Rue Al Qods, Casablanca', 'J123456', '0612345678', 1, 'karim_m', '1234@Pass', '1998-05-12', '2025-11-15 14:32:10', 1),
-(2, 'sara', 'ilyasmoulragouba@gmail.com', 'rabat', 'Fjfajf', '0281938192', 2, 'salut', 'Pass@1234', '1995-09-20', NULL, 2);
+                                                                                                                                                               (1, 'Karim El Mansouri', 'karim.mansouri@example.com', '12 Rue Al Qods, Casablanca', 'J123456', '0612345678', 1, 'karim_m', '1234@Pass', '1998-05-12', '2025-11-15 14:32:10', 1),
+                                                                                                                                                               (2, 'Sara Ilyas', 'ilyasmoulragouba@gmail.com', 'Rabat', 'Fjfajf', '0281938192', 2, 'salut', 'Pass@1234', '1995-09-20', NULL, 2),
+                                                                                                                                                               (3, 'Nabil Zaki', 'nabil.zaki@example.com', 'Casablanca', 'K987654', '0655123456', 1, 'nabil_z', 'Pass@2025', '1990-02-10', NULL, 1);
 
 --
--- Indexes for dumped tables
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `acte`
+-- Index pour la table `acte`
 --
 ALTER TABLE `acte`
-  ADD PRIMARY KEY (`id`);
+    ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `antecedent`
+-- Index pour la table `antecedent`
 --
 ALTER TABLE `antecedent`
-  ADD PRIMARY KEY (`idAntecedent`),
+    ADD PRIMARY KEY (`idAntecedent`),
   ADD KEY `idRisque` (`idRisque`);
 
 --
--- Indexes for table `assurance`
+-- Index pour la table `assurance`
 --
 ALTER TABLE `assurance`
-  ADD PRIMARY KEY (`idAssurance`);
+    ADD PRIMARY KEY (`idAssurance`);
 
 --
--- Indexes for table `cabinetmedical`
+-- Index pour la table `cabinetmedical`
 --
 ALTER TABLE `cabinetmedical`
-  ADD PRIMARY KEY (`idCabinet`);
+    ADD PRIMARY KEY (`idCabinet`);
 
 --
--- Indexes for table `certificat`
+-- Index pour la table `certificat`
 --
 ALTER TABLE `certificat`
-  ADD PRIMARY KEY (`idCert`),
-  ADD KEY `idDossier` (`idDossier`);
+    ADD PRIMARY KEY (`idCert`),
+  ADD KEY `idDossier` (`idDossier`),
+  ADD KEY `idConsult` (`idConsult`);
 
 --
--- Indexes for table `charges`
+-- Index pour la table `charges`
 --
 ALTER TABLE `charges`
-  ADD PRIMARY KEY (`idCharge`),
+    ADD PRIMARY KEY (`idCharge`),
   ADD KEY `idCabinet` (`idCabinet`);
 
 --
--- Indexes for table `consultation`
+-- Index pour la table `consultation`
 --
 ALTER TABLE `consultation`
-  ADD PRIMARY KEY (`idConsult`),
+    ADD PRIMARY KEY (`idConsult`),
   ADD KEY `idDossier` (`idDossier`),
   ADD KEY `idStatut` (`idStatut`);
 
 --
--- Indexes for table `dossiermedical`
+-- Index pour la table `dossiermedical`
 --
 ALTER TABLE `dossiermedical`
-  ADD PRIMARY KEY (`idDossier`),
+    ADD PRIMARY KEY (`idDossier`),
   ADD KEY `idPatient` (`idPatient`),
   ADD KEY `idMedecin` (`idMedecin`);
 
 --
--- Indexes for table `facture`
+-- Index pour la table `facture`
 --
 ALTER TABLE `facture`
-  ADD PRIMARY KEY (`idFact`),
+    ADD PRIMARY KEY (`idFact`),
   ADD KEY `idSF` (`idSF`);
 
 --
--- Indexes for table `forme`
+-- Index pour la table `forme`
 --
 ALTER TABLE `forme`
-  ADD PRIMARY KEY (`idForme`);
+    ADD PRIMARY KEY (`idForme`);
 
 --
--- Indexes for table `intervention_medcin`
+-- Index pour la table `intervention_medcin`
 --
 ALTER TABLE `intervention_medcin`
-  ADD PRIMARY KEY (`id`),
+    ADD PRIMARY KEY (`id`),
   ADD KEY `intervention_medcin_ibfk_1` (`id_acte`);
 
 --
--- Indexes for table `medecin`
+-- Index pour la table `medecin`
 --
 ALTER TABLE `medecin`
-  ADD PRIMARY KEY (`idUser`);
+    ADD PRIMARY KEY (`idUser`);
 
 --
--- Indexes for table `medicament`
+-- Index pour la table `medicament`
 --
 ALTER TABLE `medicament`
-  ADD PRIMARY KEY (`idMed`),
+    ADD PRIMARY KEY (`idMed`),
   ADD KEY `idForme` (`idForme`);
 
 --
--- Indexes for table `niveaurisque`
+-- Index pour la table `niveaurisque`
 --
 ALTER TABLE `niveaurisque`
-  ADD PRIMARY KEY (`idRisque`);
+    ADD PRIMARY KEY (`idRisque`);
 
 --
--- Indexes for table `ordonnance`
+-- Index pour la table `ordonnance`
 --
 ALTER TABLE `ordonnance`
-  ADD PRIMARY KEY (`idOrd`),
+    ADD PRIMARY KEY (`idOrd`),
   ADD KEY `idDossier` (`idDossier`);
 
 --
--- Indexes for table `patient`
+-- Index pour la table `patient`
 --
 ALTER TABLE `patient`
-  ADD PRIMARY KEY (`idPatient`),
+    ADD PRIMARY KEY (`idPatient`),
   ADD KEY `idSexe` (`idSexe`),
   ADD KEY `idAssurance` (`idAssurance`);
 
 --
--- Indexes for table `patient_antecedent`
+-- Index pour la table `patient_antecedent`
 --
 ALTER TABLE `patient_antecedent`
-  ADD PRIMARY KEY (`id`),
+    ADD PRIMARY KEY (`id`),
   ADD KEY `patient_antecedent_ibfk_1` (`id_patient`),
   ADD KEY `patient_antecedent_ibfk_2` (`id_antecedent`);
 
 --
--- Indexes for table `prescription`
+-- Index pour la table `prescription`
 --
 ALTER TABLE `prescription`
-  ADD PRIMARY KEY (`idPr`),
+    ADD PRIMARY KEY (`idPr`),
   ADD KEY `idOrd` (`idOrd`),
   ADD KEY `idMed` (`idMed`);
 
 --
--- Indexes for table `rdv`
+-- Index pour la table `rdv`
 --
 ALTER TABLE `rdv`
-  ADD PRIMARY KEY (`idRDV`),
+    ADD PRIMARY KEY (`idRDV`),
   ADD KEY `idPatient` (`idPatient`);
 
 --
--- Indexes for table `revenus`
+-- Index pour la table `revenus`
 --
 ALTER TABLE `revenus`
-  ADD PRIMARY KEY (`idRev`),
+    ADD PRIMARY KEY (`idRev`),
   ADD KEY `idCabinet` (`idCabinet`);
 
 --
--- Indexes for table `role`
+-- Index pour la table `role`
 --
 ALTER TABLE `role`
-  ADD PRIMARY KEY (`idRole`);
+    ADD PRIMARY KEY (`idRole`);
 
 --
--- Indexes for table `secretaire`
+-- Index pour la table `secretaire`
 --
 ALTER TABLE `secretaire`
-  ADD PRIMARY KEY (`idUser`);
+    ADD PRIMARY KEY (`idUser`);
 
 --
--- Indexes for table `sexe`
+-- Index pour la table `sexe`
 --
 ALTER TABLE `sexe`
-  ADD PRIMARY KEY (`idSexe`);
+    ADD PRIMARY KEY (`idSexe`);
 
 --
--- Indexes for table `situationfinanciere`
+-- Index pour la table `situationfinanciere`
 --
 ALTER TABLE `situationfinanciere`
-  ADD PRIMARY KEY (`idSF`),
+    ADD PRIMARY KEY (`idSF`),
   ADD KEY `idPatient` (`idPatient`);
 
 --
--- Indexes for table `staff`
+-- Index pour la table `staff`
 --
 ALTER TABLE `staff`
-  ADD PRIMARY KEY (`idStaff`),
+    ADD PRIMARY KEY (`idStaff`),
   ADD KEY `idMedecin` (`idMedecin`),
   ADD KEY `idSecretaire` (`idSecretaire`);
 
 --
--- Indexes for table `statutconsultation`
+-- Index pour la table `statutconsultation`
 --
 ALTER TABLE `statutconsultation`
-  ADD PRIMARY KEY (`idStatut`);
+    ADD PRIMARY KEY (`idStatut`);
 
 --
--- Indexes for table `utilisateur`
+-- Index pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  ADD PRIMARY KEY (`idUser`),
+    ADD PRIMARY KEY (`idUser`),
   ADD UNIQUE KEY `login` (`login`),
   ADD KEY `idRole` (`idRole`),
   ADD KEY `idSexe` (`idSexe`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT for table `antecedent`
+-- AUTO_INCREMENT pour la table `antecedent`
 --
 ALTER TABLE `antecedent`
-  MODIFY `idAntecedent` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+    MODIFY `idAntecedent` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `assurance`
+-- AUTO_INCREMENT pour la table `assurance`
 --
 ALTER TABLE `assurance`
-  MODIFY `idAssurance` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+    MODIFY `idAssurance` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `cabinetmedical`
+-- AUTO_INCREMENT pour la table `cabinetmedical`
 --
 ALTER TABLE `cabinetmedical`
-  MODIFY `idCabinet` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idCabinet` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `certificat`
+-- AUTO_INCREMENT pour la table `certificat`
 --
 ALTER TABLE `certificat`
-  MODIFY `idCert` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idCert` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `charges`
+-- AUTO_INCREMENT pour la table `charges`
 --
 ALTER TABLE `charges`
-  MODIFY `idCharge` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idCharge` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `consultation`
+-- AUTO_INCREMENT pour la table `consultation`
 --
 ALTER TABLE `consultation`
-  MODIFY `idConsult` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idConsult` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `dossiermedical`
+-- AUTO_INCREMENT pour la table `dossiermedical`
 --
 ALTER TABLE `dossiermedical`
-  MODIFY `idDossier` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idDossier` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `facture`
+-- AUTO_INCREMENT pour la table `facture`
 --
 ALTER TABLE `facture`
-  MODIFY `idFact` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idFact` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `forme`
+-- AUTO_INCREMENT pour la table `forme`
 --
 ALTER TABLE `forme`
-  MODIFY `idForme` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idForme` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `medicament`
+-- AUTO_INCREMENT pour la table `medicament`
 --
 ALTER TABLE `medicament`
-  MODIFY `idMed` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idMed` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `niveaurisque`
+-- AUTO_INCREMENT pour la table `niveaurisque`
 --
 ALTER TABLE `niveaurisque`
-  MODIFY `idRisque` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+    MODIFY `idRisque` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `ordonnance`
+-- AUTO_INCREMENT pour la table `ordonnance`
 --
 ALTER TABLE `ordonnance`
-  MODIFY `idOrd` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idOrd` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `patient`
+-- AUTO_INCREMENT pour la table `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `idPatient` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+    MODIFY `idPatient` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `prescription`
+-- AUTO_INCREMENT pour la table `prescription`
 --
 ALTER TABLE `prescription`
-  MODIFY `idPr` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idPr` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `rdv`
+-- AUTO_INCREMENT pour la table `rdv`
 --
 ALTER TABLE `rdv`
-  MODIFY `idRDV` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idRDV` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `revenus`
+-- AUTO_INCREMENT pour la table `revenus`
 --
 ALTER TABLE `revenus`
-  MODIFY `idRev` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idRev` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `role`
+-- AUTO_INCREMENT pour la table `role`
 --
 ALTER TABLE `role`
-  MODIFY `idRole` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+    MODIFY `idRole` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `sexe`
+-- AUTO_INCREMENT pour la table `sexe`
 --
 ALTER TABLE `sexe`
-  MODIFY `idSexe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+    MODIFY `idSexe` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `situationfinanciere`
+-- AUTO_INCREMENT pour la table `situationfinanciere`
 --
 ALTER TABLE `situationfinanciere`
-  MODIFY `idSF` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idSF` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `staff`
+-- AUTO_INCREMENT pour la table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `idStaff` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idStaff` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `statutconsultation`
+-- AUTO_INCREMENT pour la table `statutconsultation`
 --
 ALTER TABLE `statutconsultation`
-  MODIFY `idStatut` int(11) NOT NULL AUTO_INCREMENT;
+    MODIFY `idStatut` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `utilisateur`
+-- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+    MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- Constraints for dumped tables
+-- Contraintes pour les tables déchargées
 --
 
 --
--- Constraints for table `antecedent`
+-- Contraintes pour la table `antecedent`
 --
 ALTER TABLE `antecedent`
-  ADD CONSTRAINT `antecedent_ibfk_1` FOREIGN KEY (`idRisque`) REFERENCES `niveaurisque` (`idRisque`) ON DELETE CASCADE;
+    ADD CONSTRAINT `antecedent_ibfk_1` FOREIGN KEY (`idRisque`) REFERENCES `niveaurisque` (`idRisque`) ON DELETE CASCADE;
 
 --
--- Constraints for table `certificat`
+-- Contraintes pour la table `certificat`
 --
 ALTER TABLE `certificat`
-  ADD CONSTRAINT `certificat_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE;
+    ADD CONSTRAINT `certificat_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE,
+  ADD CONSTRAINT `certificat_ibfk_2` FOREIGN KEY (`idConsult`) REFERENCES `consultation` (`idConsult`) ON DELETE CASCADE;
 
 --
--- Constraints for table `charges`
+-- Contraintes pour la table `charges`
 --
 ALTER TABLE `charges`
-  ADD CONSTRAINT `charges_ibfk_1` FOREIGN KEY (`idCabinet`) REFERENCES `cabinetmedical` (`idCabinet`) ON DELETE CASCADE;
+    ADD CONSTRAINT `charges_ibfk_1` FOREIGN KEY (`idCabinet`) REFERENCES `cabinetmedical` (`idCabinet`) ON DELETE CASCADE;
 
 --
--- Constraints for table `consultation`
+-- Contraintes pour la table `consultation`
 --
 ALTER TABLE `consultation`
-  ADD CONSTRAINT `consultation_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE,
+    ADD CONSTRAINT `consultation_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE,
   ADD CONSTRAINT `consultation_ibfk_2` FOREIGN KEY (`idStatut`) REFERENCES `statutconsultation` (`idStatut`) ON DELETE CASCADE;
 
 --
--- Constraints for table `dossiermedical`
+-- Contraintes pour la table `dossiermedical`
 --
 ALTER TABLE `dossiermedical`
-  ADD CONSTRAINT `dossiermedical_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE,
+    ADD CONSTRAINT `dossiermedical_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE,
   ADD CONSTRAINT `dossiermedical_ibfk_2` FOREIGN KEY (`idMedecin`) REFERENCES `medecin` (`idUser`) ON DELETE CASCADE;
 
 --
--- Constraints for table `facture`
+-- Contraintes pour la table `facture`
 --
 ALTER TABLE `facture`
-  ADD CONSTRAINT `facture_ibfk_1` FOREIGN KEY (`idSF`) REFERENCES `situationfinanciere` (`idSF`) ON DELETE CASCADE;
+    ADD CONSTRAINT `facture_ibfk_1` FOREIGN KEY (`idSF`) REFERENCES `situationfinanciere` (`idSF`) ON DELETE CASCADE;
 
 --
--- Constraints for table `intervention_medcin`
+-- Contraintes pour la table `intervention_medcin`
 --
 ALTER TABLE `intervention_medcin`
-  ADD CONSTRAINT `intervention_medcin_ibfk_1` FOREIGN KEY (`id_acte`) REFERENCES `acte` (`id`) ON DELETE CASCADE;
+    ADD CONSTRAINT `intervention_medcin_ibfk_1` FOREIGN KEY (`id_acte`) REFERENCES `acte` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `medecin`
+-- Contraintes pour la table `medecin`
 --
 ALTER TABLE `medecin`
-  ADD CONSTRAINT `medecin_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`idUser`) ON DELETE CASCADE;
+    ADD CONSTRAINT `medecin_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`idUser`) ON DELETE CASCADE;
 
 --
--- Constraints for table `medicament`
+-- Contraintes pour la table `medicament`
 --
 ALTER TABLE `medicament`
-  ADD CONSTRAINT `medicament_ibfk_1` FOREIGN KEY (`idForme`) REFERENCES `forme` (`idForme`) ON DELETE CASCADE;
+    ADD CONSTRAINT `medicament_ibfk_1` FOREIGN KEY (`idForme`) REFERENCES `forme` (`idForme`) ON DELETE CASCADE;
 
 --
--- Constraints for table `ordonnance`
+-- Contraintes pour la table `ordonnance`
 --
 ALTER TABLE `ordonnance`
-  ADD CONSTRAINT `ordonnance_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE;
+    ADD CONSTRAINT `ordonnance_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE;
 
 --
--- Constraints for table `patient`
+-- Contraintes pour la table `patient`
 --
 ALTER TABLE `patient`
-  ADD CONSTRAINT `patient_ibfk_1` FOREIGN KEY (`idSexe`) REFERENCES `sexe` (`idSexe`) ON DELETE CASCADE,
+    ADD CONSTRAINT `patient_ibfk_1` FOREIGN KEY (`idSexe`) REFERENCES `sexe` (`idSexe`) ON DELETE CASCADE,
   ADD CONSTRAINT `patient_ibfk_2` FOREIGN KEY (`idAssurance`) REFERENCES `assurance` (`idAssurance`) ON DELETE CASCADE;
 
 --
--- Constraints for table `patient_antecedent`
+-- Contraintes pour la table `patient_antecedent`
 --
 ALTER TABLE `patient_antecedent`
-  ADD CONSTRAINT `patient_antecedent_ibfk_1` FOREIGN KEY (`id_patient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE,
+    ADD CONSTRAINT `patient_antecedent_ibfk_1` FOREIGN KEY (`id_patient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE,
   ADD CONSTRAINT `patient_antecedent_ibfk_2` FOREIGN KEY (`id_antecedent`) REFERENCES `antecedent` (`idAntecedent`) ON DELETE CASCADE;
 
 --
--- Constraints for table `prescription`
+-- Contraintes pour la table `prescription`
 --
 ALTER TABLE `prescription`
-  ADD CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`idOrd`) REFERENCES `ordonnance` (`idOrd`) ON DELETE CASCADE,
+    ADD CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`idOrd`) REFERENCES `ordonnance` (`idOrd`) ON DELETE CASCADE,
   ADD CONSTRAINT `prescription_ibfk_2` FOREIGN KEY (`idMed`) REFERENCES `medicament` (`idMed`) ON DELETE CASCADE;
 
 --
--- Constraints for table `rdv`
+-- Contraintes pour la table `rdv`
 --
 ALTER TABLE `rdv`
-  ADD CONSTRAINT `rdv_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE;
+    ADD CONSTRAINT `rdv_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE;
 
 --
--- Constraints for table `revenus`
+-- Contraintes pour la table `revenus`
 --
 ALTER TABLE `revenus`
-  ADD CONSTRAINT `revenus_ibfk_1` FOREIGN KEY (`idCabinet`) REFERENCES `cabinetmedical` (`idCabinet`) ON DELETE CASCADE;
+    ADD CONSTRAINT `revenus_ibfk_1` FOREIGN KEY (`idCabinet`) REFERENCES `cabinetmedical` (`idCabinet`) ON DELETE CASCADE;
 
 --
--- Constraints for table `secretaire`
+-- Contraintes pour la table `secretaire`
 --
 ALTER TABLE `secretaire`
-  ADD CONSTRAINT `secretaire_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`idUser`) ON DELETE CASCADE;
+    ADD CONSTRAINT `secretaire_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`idUser`) ON DELETE CASCADE;
 
 --
--- Constraints for table `situationfinanciere`
+-- Contraintes pour la table `situationfinanciere`
 --
 ALTER TABLE `situationfinanciere`
-  ADD CONSTRAINT `situationfinanciere_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE;
+    ADD CONSTRAINT `situationfinanciere_ibfk_1` FOREIGN KEY (`idPatient`) REFERENCES `patient` (`idPatient`) ON DELETE CASCADE;
 
 --
--- Constraints for table `staff`
+-- Contraintes pour la table `staff`
 --
 ALTER TABLE `staff`
-  ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`idMedecin`) REFERENCES `medecin` (`idUser`) ON DELETE CASCADE,
+    ADD CONSTRAINT `staff_ibfk_1` FOREIGN KEY (`idMedecin`) REFERENCES `medecin` (`idUser`) ON DELETE CASCADE,
   ADD CONSTRAINT `staff_ibfk_2` FOREIGN KEY (`idSecretaire`) REFERENCES `secretaire` (`idUser`) ON DELETE CASCADE;
 
 --
--- Constraints for table `utilisateur`
+-- Contraintes pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `role` (`idRole`) ON DELETE CASCADE,
+    ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `role` (`idRole`) ON DELETE CASCADE,
   ADD CONSTRAINT `utilisateur_ibfk_2` FOREIGN KEY (`idSexe`) REFERENCES `sexe` (`idSexe`) ON DELETE CASCADE;
 COMMIT;
 

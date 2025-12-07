@@ -15,4 +15,5 @@ public class Certificat implements Serializable {
     private String nature;
     private String noteMedecin;
     private Integer idDossier;
+    private Integer idConsult;
 }

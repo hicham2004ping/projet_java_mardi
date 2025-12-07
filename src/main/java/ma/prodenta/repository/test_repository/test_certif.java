@@ -22,6 +22,7 @@ public class test_certif {
                     .nature("Repos maladie")
                     .noteMedecin("Patient à reposer")
                     .idDossier(1)
+                    .idConsult(1) // Associer à une consultation existante
                     .build();
 
             boolean created = certDAO.create(cert);
@@ -37,7 +38,8 @@ public class test_certif {
             System.out.println("\n--- Lecture Certificat ---");
             Certificat certLu = certDAO.findById(lastId);
             if (certLu != null) {
-                System.out.println("Certificat lu : " + certLu.getNature() + " - " + certLu.getNoteMedecin());
+                System.out.println("Certificat lu : " + certLu.getNature() + " - " + certLu.getNoteMedecin()
+                        + " | Consultation ID : " + certLu.getIdConsult());
             } else {
                 System.out.println("Certificat introuvable");
             }
@@ -50,7 +52,8 @@ public class test_certif {
 
             // Lecture après modification
             Certificat certUpdated = certDAO.findById(lastId);
-            System.out.println("Certificat modifié : " + certUpdated.getNature() + " - " + certUpdated.getNoteMedecin());
+            System.out.println("Certificat modifié : " + certUpdated.getNature() + " - " + certUpdated.getNoteMedecin()
+                    + " | Consultation ID : " + certUpdated.getIdConsult());
 
             // --- Lecture de tous les certificats ---
             System.out.println("\n--- Liste de tous les certificats ---");
@@ -59,7 +62,8 @@ public class test_certif {
                 System.out.println("[ID " + c.getIdCert() + "] Dossier " + c.getIdDossier()
                         + " | " + c.getDateDebut() + " → " + c.getDateFin()
                         + " | Nature : " + c.getNature()
-                        + " | Note : " + c.getNoteMedecin());
+                        + " | Note : " + c.getNoteMedecin()
+                        + " | Consultation ID : " + c.getIdConsult());
             }
 
             // --- Suppression ---

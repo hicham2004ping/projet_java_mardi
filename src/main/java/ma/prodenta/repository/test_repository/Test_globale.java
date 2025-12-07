@@ -174,7 +174,7 @@ public class Test_globale {
     }
 
     public static void main(){
-        test_acte();
+        test_Patient_antecedent();
     }
 
 
