@@ -1,11 +1,9 @@
 package ma.prodenta.repository.modules.prescription.impl;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Ordonnance;
 import ma.prodenta.entities.En.Prescription;
 import ma.prodenta.repository.modules.prescription.api.Prescription_api;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;

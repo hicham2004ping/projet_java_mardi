@@ -8,7 +8,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 public class Medicament implements Serializable {
-    private Long idMed;
+    private int idMed;
     private String nom;
     private String laboratoire;
     private String type;

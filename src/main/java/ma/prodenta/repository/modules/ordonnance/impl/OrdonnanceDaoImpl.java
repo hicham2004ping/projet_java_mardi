@@ -136,7 +136,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     medicaments.add(new Medicament(
-                            rs.getLong("idMed"),
+                            rs.getInt("idMed"),
                             rs.getString("nom"),
                             rs.getString("laboratoire"),
                             rs.getString("type"),

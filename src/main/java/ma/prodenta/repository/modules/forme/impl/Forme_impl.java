@@ -1,10 +1,8 @@
 package ma.prodenta.repository.modules.forme.impl;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Forme;
 import ma.prodenta.repository.modules.forme.api.Forme_api;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,6 +45,11 @@ public class Forme_impl implements Forme_api {
     }
 
     @Override
+    public Forme map_resultset_to_forme(ResultSet rs) throws SQLException {
+        return null;
+    }
+
+    @Override
     public List<Forme> findAll() throws SQLException {
         List<Forme> formes = new ArrayList<>();
         String requete = "SELECT * FROM forme";
@@ -67,7 +70,7 @@ public class Forme_impl implements Forme_api {
     @Override
     public Forme findById(Integer integer) throws Exception {
       String  requete= """
-                select * from forme where id=?
+                select * from forme where idforme=?
                 """;
       Forme forme=new Forme();
       try(Connection conn=SessionFactory.getInstance().getConnection();
@@ -85,15 +88,14 @@ public class Forme_impl implements Forme_api {
     @Override
     public boolean create(Forme objet) throws SQLException, IOException {
         String requete= """
-                insert into forme values (?,?)
+                insert into forme (libelle) values (?)
                 """;
         int last_id=get_last_id()+1;
         int n=0;
         try(Connection conn= SessionFactory.getInstance().getConnection();
             PreparedStatement pst= conn.prepareStatement(requete);)
         {
-                pst.setInt(1,last_id);
-                pst.setString(2, objet.getLibelle());
+                pst.setString(1, objet.getLibelle());
                 n=pst.executeUpdate();
         }
         return n>0;
@@ -118,7 +120,7 @@ public class Forme_impl implements Forme_api {
 
     @Override
     public boolean deleteById(Integer id) throws SQLException {
-        String requete = "DELETE FROM forme WHERE idforme = ?";
+        String requete = "DELETE FROM forme WHERE idForme = ?";
         int n;
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(requete)) {
@@ -127,9 +129,25 @@ public class Forme_impl implements Forme_api {
         }
         return n > 0;
     }
-
     @Override
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
+    }
+    public Forme findbynom(String nom) throws SQLException {
+        String requete= """
+                select * from forme where libelle like ?
+                """;
+        Forme forme=new Forme();
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement ps=conn.prepareStatement(requete);)
+        {
+            ps.setString(1, "%"+nom+"%");
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                forme.setLibelle(rs.getString("libelle"));
+                forme.setId(rs.getInt("idforme"));
+            }
+            return forme;
+        }
     }
 }

@@ -157,4 +157,23 @@ public class Acte_impl implements Acte_api {
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
     }
+    public Acte findbynom(String nom) {
+        String requete= """
+                select * from acte where libelle like ?;
+                """;
+        Acte acte=new Acte();
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement pst=conn.prepareStatement(requete))
+        {
+            pst.setString(1,"%"+nom+"%");
+            ResultSet rs=pst.executeQuery();
+            if(rs.next()){
+                acte=mapResultSetToActe(rs);
+            }
+            return acte;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
