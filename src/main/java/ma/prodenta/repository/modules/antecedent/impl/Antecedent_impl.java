@@ -1,4 +1,5 @@
 package ma.prodenta.repository.modules.antecedent.impl;
+
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.Enum.NiveauRisque;
 import ma.prodenta.repository.common.Connextion_db;
@@ -8,15 +9,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import ma.prodenta.config.SessionFactory;
 
 public class Antecedent_impl implements Antecedent_api {
 
     Connextion_db connetion;
+
     public int id_par_nom(String nom) throws SQLException, ClassNotFoundException ,IOException{
         int id=0;
-        try(Connection conn= DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
+        try(Connection conn = SessionFactory.getInstance().getConnection()){
             PreparedStatement prs=conn.prepareStatement("select idantecedent from Antecedent where nom like ? ");
-            prs.setString(1,'%'+nom+'%');
+            prs.setString(1, '%' + nom + '%');
             ResultSet rs=prs.executeQuery();
             if(rs.next()){
                 id=rs.getInt("idAntecedent");
@@ -49,41 +52,38 @@ public class Antecedent_impl implements Antecedent_api {
     public List<Antecedent> findAll() throws Exception,IOException ,SQLException {
         List<Antecedent> list = new ArrayList<>();
         Antecedent antecedent = new Antecedent();
-        try(Connection conn= DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
-                PreparedStatement pst=conn.prepareStatement("select * from antecedent");
-                ResultSet rs=pst.executeQuery();
-                while(rs.next()){
-                    antecedent.setIdAntecedent(rs.getInt("idantecedent"));
-                    antecedent.setCategorie(rs.getString("categorie"));
-                    antecedent.setNom(rs.getString("nom"));
-                    int id_risque;
-                    id_risque=rs.getInt("idrisque");
-                    if(id_risque==1){
-                        antecedent.setNiveauRisque(NiveauRisque.Dangereux);
-                    }
-                    else if(id_risque==2){
-                        antecedent.setNiveauRisque(NiveauRisque.Trèsdangereux);
-                    }
-                    else if(id_risque==3){
-                        antecedent.setNiveauRisque(NiveauRisque.Modéré);
-                    }
-                    else{
-                        antecedent.setNiveauRisque(NiveauRisque.Faible);
-                    }
-                    list.add(antecedent);
-                    antecedent=new Antecedent();
+        try(Connection conn = SessionFactory.getInstance().getConnection()){
+            PreparedStatement pst=conn.prepareStatement("select * from antecedent");
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                antecedent.setIdAntecedent(rs.getInt("idantecedent"));
+                antecedent.setCategorie(rs.getString("categorie"));
+                antecedent.setNom(rs.getString("nom"));
+                int id_risque;
+                id_risque=rs.getInt("idrisque");
+                if(id_risque==1){
+                    antecedent.setNiveauRisque(NiveauRisque.Dangereux);
                 }
-                return list;
+                else if(id_risque==2){
+                    antecedent.setNiveauRisque(NiveauRisque.Trèsdangereux);
+                }
+                else if(id_risque==3){
+                    antecedent.setNiveauRisque(NiveauRisque.Modéré);
+                }
+                else{
+                    antecedent.setNiveauRisque(NiveauRisque.Faible);
+                }
+                list.add(antecedent);
+                antecedent=new Antecedent();
+            }
+            return list;
         }
     }
 
     @Override
     public Antecedent findById(Integer id) throws Exception {
         Antecedent antecedent = null;
-        try (Connection conn = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword())) {
+        try (Connection conn = SessionFactory.getInstance().getConnection()) {
 
             PreparedStatement pst =
                     conn.prepareStatement("SELECT * FROM antecedent WHERE idantecedent = ?");
@@ -118,7 +118,7 @@ public class Antecedent_impl implements Antecedent_api {
 
     @Override
     public boolean create(Antecedent objet) throws SQLException, IOException {
-        try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
+        try(Connection conn = SessionFactory.getInstance().getConnection()){
             int id =this.get_last_id()+1;
             int id_risque=0;
             PreparedStatement stmt=conn.prepareStatement("insert into antecedent values(?,?,?,?)");
@@ -138,7 +138,7 @@ public class Antecedent_impl implements Antecedent_api {
                 id_risque=1;
             }
             stmt.setInt(4,id_risque);
-             int rs=stmt.executeUpdate();
+            int rs=stmt.executeUpdate();
             return rs>0;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -147,15 +147,16 @@ public class Antecedent_impl implements Antecedent_api {
 
     @Override
     public void update(Antecedent objet) {
-        try (Connection conn = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword())) {
+        try (Connection conn = SessionFactory.getInstance().getConnection()) {
             PreparedStatement pst = conn.prepareStatement(
                     "UPDATE antecedent SET nom = ?, categorie = ?, idrisque = ? WHERE idantecedent = ?");
             pst.setString(1, objet.getNom());
             pst.setString(2, objet.getCategorie());
-            pst.setInt(3, map_to_int(objet.getNiveauRisque()));
+            try {
+                pst.setInt(3, map_to_int(objet.getNiveauRisque()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             pst.setInt(4, objet.getIdAntecedent());
             pst.executeUpdate();
 
@@ -172,10 +173,7 @@ public class Antecedent_impl implements Antecedent_api {
 
     @Override
     public boolean deleteById(Integer integer) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword())) {
+        try (Connection conn = SessionFactory.getInstance().getConnection()) {
 
             PreparedStatement pst =
                     conn.prepareStatement("DELETE FROM antecedent WHERE idantecedent = ?");
@@ -191,7 +189,7 @@ public class Antecedent_impl implements Antecedent_api {
     }
     public List<String> find_all_names() throws SQLException, ClassNotFoundException, IOException{
         List<String> list=new ArrayList<>();
-        try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
+        try(Connection conn = SessionFactory.getInstance().getConnection()){
             PreparedStatement stmt=conn.prepareStatement("select nom from Antecedent");
             ResultSet rs=stmt.executeQuery();
             while(rs.next()){
@@ -203,7 +201,7 @@ public class Antecedent_impl implements Antecedent_api {
 
     public int get_last_id() throws SQLException, ClassNotFoundException, IOException{
         int id=0;
-        try(Connection conn=DriverManager.getConnection(new Connextion_db().getUrl(),new Connextion_db().getUsername(),new Connextion_db().getPassword())){
+        try(Connection conn = SessionFactory.getInstance().getConnection()){
             PreparedStatement stmt=conn.prepareStatement("select max(idantecedent) from Antecedent");
             ResultSet rs=stmt.executeQuery();
             if (rs.next()) {

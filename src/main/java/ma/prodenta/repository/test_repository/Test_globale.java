@@ -9,6 +9,8 @@ import ma.prodenta.repository.modules.medicament.fileBase_implementation.Medicam
 import ma.prodenta.repository.modules.antecedent_patient.impl.Antecedent_patient_impl;
 import ma.prodenta.entities.En.Patient;
 import ma.prodenta.entities.En.Antecedent;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ import ma.prodenta.entities.En.Acte;
 import ma.prodenta.repository.modules.actes.impl.Acte_impl;
 import ma.prodenta.entities.En.Forme;
 import ma.prodenta.repository.modules.forme.impl.Forme_impl;
+import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl;
+import ma.prodenta.entities.En.Intervention;
 
 public class Test_globale {
     //partie test patient
@@ -264,9 +268,52 @@ public class Test_globale {
         }
     }
 
-   // public static void test_
+    public static void test_intervention_medcin(){
+        Intervention intervention=new Intervention();
+        Intervention_impl intervention_impl=new Intervention_impl();
+        Acte acte=new Acte();
+        Acte_impl acte_impl=new Acte_impl();
+        int id;
+        try{
+            System.out.println("********Intervention**********\n");
+            System.out.println("********CREATION**********\n");
+            acte=acte_impl.findbynom("Consultation simple");
+            if(acte !=null){
+                intervention.setActe(acte);
+                intervention.setPrix_patient(-1);
+                intervention.setNumero_dent(23);
+             //boolean flag=intervention_impl.create(intervention);
+            // if(flag){
+              //   System.out.println("creation avec success");
+            // }
+             //else{
+               //  System.out.println("echec lors de la creation");
+             //}
+             System.out.println("***********LECTURE**********\n");
+             id=intervention_impl.get_last_id();
+             System.out.println("la derniere id c'est "+id);
+             Intervention intervention2=intervention_impl.findById(id);
+             System.out.println("l'id de cette intervention est "+intervention2.getId()+" son prix est "+intervention2.getPrix_patient()+" et l'acte de cette intervention est "+intervention2.getActe().getLibelle());
+             System.out.println("*************MODIFICATION**********\n");
+             intervention2.setPrix_patient(190);
+             intervention_impl.update(intervention2);
+             System.out.println("le prix de l'intervention maintenant est "+intervention_impl.findById(intervention2.getId()).getPrix_patient());
+             System.out.println("*************SUPPRESSION**********\n");
+             boolean flag1=intervention_impl.deleteById(id);
+             if(flag1){
+                 System.out.println("suppression avec success");
+             }
+             else{
+                 System.out.println("echec lors de la suppression");
+             }
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public static void main(){
-        test_Patient_antecedent();
+        test_intervention_medcin();
     }
 }

@@ -1,11 +1,9 @@
 package ma.prodenta.repository.modules.ordonnance.impl;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Medicament;
 import ma.prodenta.entities.En.Ordonnance;
 import ma.prodenta.repository.modules.ordonnance.api.Ordonance_api;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
