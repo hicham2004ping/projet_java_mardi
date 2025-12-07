@@ -163,11 +163,4 @@ public class UserRepository implements CrudRepository <Utilisateur, Integer> {
     }
 
     private Utilisateur mapToUtilisateur(ResultSet rs) throws Exception {
-        Utilisateur u = new Utilisateur();
-        u.setIdUser(rs.getInt("id"));
-        u.setLogin(rs.getString("login"));
-        u.setMotdepasse(rs.getString("motdepasse"));
-        u.setIdRole(Utilisateur.idRole.valueOf(rs.getString("idRole")));
-        return u;
-    }
-}
+    a

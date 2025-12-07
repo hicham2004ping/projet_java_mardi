@@ -1,12 +1,11 @@
 package ma.prodenta.repository.modules.patient.patient_impl;
-import com.mysql.cj.protocol.Resultset;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.repository.common.Connextion_db;
-import ma.prodenta.repository.common.CrudRepository;
 import ma.prodenta.repository.modules.patient.api.PatientDao;
 import java.io.IOException;
 import java.sql.*;
@@ -218,8 +217,9 @@ public class Patient_impl implements PatientDao  {
     }
 
     @Override
-    public void update(Patient objet) {
+    public Utilisateur update(Patient objet) {
 
+        return null;
     }
 
     @Override

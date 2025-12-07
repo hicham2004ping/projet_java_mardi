@@ -7,7 +7,6 @@ import ma.prodenta.repository.modules.auth.api.AuthDao;
 
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -162,7 +161,7 @@ public class Auth_impl implements AuthDao {
 
     // --------------------------------------------
     @Override
-    public void update(Utilisateur u) {
+    public Utilisateur update(Utilisateur u) {
         String sql = """
             UPDATE utilisateur SET nom=?,email=?,adresse=?,cin=?,tel=?,idSexe=?,login=?,motdepasse=?,dateNaissance=?,lastLoginDate=?,idRole=?
             WHERE idUser=?
@@ -186,6 +185,7 @@ public class Auth_impl implements AuthDao {
             pr.executeUpdate();
         }
         catch(Exception ignored) {}
+        return u;
     }
 
     // --------------------------------------------

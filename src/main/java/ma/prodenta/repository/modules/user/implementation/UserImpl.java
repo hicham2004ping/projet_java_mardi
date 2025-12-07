@@ -147,8 +147,9 @@ public class UserImpl implements user_dao {
         return true;
     }
     @Override
-    public void update(Utilisateur objet) {
+    public Utilisateur update(Utilisateur objet) {
 
+        return objet;
     }
 
     @Override

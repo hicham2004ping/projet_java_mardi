@@ -2,7 +2,7 @@
 package ma.prodenta.repository.modules.userManager.implementation;
 
 import ma.prodenta.entities.En.UserManager;
-import ma.prodenta.repository.modules.UserManager.api.UserManagerRepository;
+import ma.prodenta.repository.modules.userManager.api.UserManagerRepository;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -2,6 +2,7 @@ package ma.prodenta.repository.modules.antecedent_patient.impl;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.NiveauRisque;
 import ma.prodenta.entities.Enum.Sexe;
@@ -167,8 +168,9 @@ public class Antecedent_patient_impl implements Antecedent_patient {
     }
 
     @Override
-    public void update(Patient objet) {
+    public Utilisateur update(Patient objet) {
 
+        return null;
     }
 
     @Override

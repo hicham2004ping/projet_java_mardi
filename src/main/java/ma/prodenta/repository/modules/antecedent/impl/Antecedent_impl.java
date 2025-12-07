@@ -1,5 +1,6 @@
 package ma.prodenta.repository.modules.antecedent.impl;
 import ma.prodenta.entities.En.Antecedent;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.entities.Enum.NiveauRisque;
 import ma.prodenta.repository.common.Connextion_db;
 import ma.prodenta.repository.modules.antecedent.api.Antecedent_api;
@@ -146,7 +147,7 @@ public class Antecedent_impl implements Antecedent_api {
     }
 
     @Override
-    public void update(Antecedent objet) {
+    public Utilisateur update(Antecedent objet) {
         try (Connection conn = DriverManager.getConnection(
                 new Connextion_db().getUrl(),
                 new Connextion_db().getUsername(),
@@ -164,6 +165,7 @@ public class Antecedent_impl implements Antecedent_api {
             e.printStackTrace();
         }
 
+        return null;
     }
 
     @Override

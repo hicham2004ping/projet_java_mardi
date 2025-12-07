@@ -159,7 +159,7 @@ public class Admin_impl implements AdminDao {
     }
 
     @Override
-    public void update(Admin a) {
+    public Utilisateur update(Admin a) {
         String sql = """
             UPDATE admin SET username=?, nom=?, password_hash=?, email=?, role=?, lastLoginDate=?, idRole=? 
             WHERE id = ?
@@ -179,6 +179,7 @@ public class Admin_impl implements AdminDao {
             pr.executeUpdate();
         }
         catch(Exception ignored) {}
+        return null;
     }
 
     @Override

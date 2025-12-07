@@ -1,5 +1,6 @@
 package ma.prodenta.repository.modules.assurance.implement;
 import ma.prodenta.entities.En.Antecedent;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.common.Connextion_db;
 import ma.prodenta.entities.Enum.Assurance;
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class Assurance_impl implements  Assurance_api {
     }
 
     @Override
-    public void update(Assurance_c objet) {
+    public Utilisateur update(Assurance_c objet) {
 
         try (Connection conn = DriverManager.getConnection(
                 new Connextion_db().getUrl(),
@@ -83,6 +84,7 @@ public class Assurance_impl implements  Assurance_api {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 
