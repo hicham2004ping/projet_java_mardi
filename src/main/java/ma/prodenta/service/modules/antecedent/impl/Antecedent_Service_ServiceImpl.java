@@ -11,27 +11,32 @@ public class Antecedent_Service_ServiceImpl implements Antecedent_Service_api {
 
     @Override
     public boolean create(Antecedent antecedent) throws Exception {
-
+        Antecedent_impl antecedent_impl = new Antecedent_impl();
+        return antecedent_impl.create(antecedent);
     }
 
     @Override
     public void update(Antecedent antecedent) throws Exception {
-
+        Antecedent_impl antecedent_impl = new Antecedent_impl();
+        antecedent_impl.update(antecedent);
     }
 
     @Override
     public boolean delete(Antecedent antecedent) throws Exception {
-        return false;
+        Antecedent_impl antecedent_impl = new Antecedent_impl();
+        return antecedent_impl.delete(antecedent);
     }
 
     @Override
     public boolean deleteById(Integer id) throws Exception {
-        return false;
+        Antecedent_impl antecedent_impl = new Antecedent_impl();
+        return antecedent_impl.deleteById(id);
     }
 
     @Override
     public Antecedent findById(Integer id) throws Exception {
-        return null;
+        Antecedent_impl antecedent_impl = new Antecedent_impl();
+        return antecedent_impl.findById(id);
     }
 
     @Override
@@ -41,7 +46,8 @@ public class Antecedent_Service_ServiceImpl implements Antecedent_Service_api {
 
     @Override
     public List<Antecedent> findAll() throws Exception {
-        return List.of();
+        Antecedent_impl antecedent_impl = new Antecedent_impl();
+        return antecedent_impl.findAll();
     }
 
     @Override
