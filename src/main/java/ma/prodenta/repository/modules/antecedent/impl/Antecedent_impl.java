@@ -118,8 +118,13 @@ public class Antecedent_impl implements Antecedent_api {
 
     @Override
     public boolean create(Antecedent objet) throws SQLException, IOException {
+        int id = 0;
+        try {
+            id = this.get_last_id()+1;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try(Connection conn = SessionFactory.getInstance().getConnection()){
-            int id =this.get_last_id()+1;
             int id_risque=0;
             PreparedStatement stmt=conn.prepareStatement("insert into antecedent values(?,?,?,?)");
             stmt.setInt(1,id);
@@ -140,8 +145,6 @@ public class Antecedent_impl implements Antecedent_api {
             stmt.setInt(4,id_risque);
             int rs=stmt.executeUpdate();
             return rs>0;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -149,7 +152,7 @@ public class Antecedent_impl implements Antecedent_api {
     public void update(Antecedent objet) {
         try (Connection conn = SessionFactory.getInstance().getConnection()) {
             PreparedStatement pst = conn.prepareStatement(
-                    "UPDATE antecedent SET nom = ?, categorie = ?, idrisque = ? WHERE idantecedent = ?");
+                    "UPDATE antecedent SET nom = ? , categorie = ? , idrisque = ? WHERE idantecedent = ?");
             pst.setString(1, objet.getNom());
             pst.setString(2, objet.getCategorie());
             try {

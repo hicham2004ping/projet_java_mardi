@@ -18,8 +18,4 @@ public interface Antecedent_Service_api
     Optional<Antecedent> findByNom(String nom) throws Exception;
 
     List<Antecedent> findAll() throws Exception;
-
-    List<String> findAllNames() throws Exception;
-
-    int idParNom(String nom) throws Exception;
 }
