@@ -46,8 +46,8 @@ public class CertificatDaoimpl implements CertificatDao {
     @Override
     public boolean create(Certificat cert) throws SQLException, IOException {
         String sql = """
-            INSERT INTO Certificat(dateDebut, dateFin, nature, noteMedecin, idDossier)
-            VALUES(?,?,?,?,?)
+            INSERT INTO Certificat(dateDebut, dateFin, nature, noteMedecin, idDossier,id_consultation)
+            VALUES(?,?,?,?,?,?)
         """;
 
         try (Connection c = SessionFactory.getInstance().getConnection();
@@ -58,6 +58,7 @@ public class CertificatDaoimpl implements CertificatDao {
             ps.setString(3, cert.getNature());
             ps.setString(4, cert.getNoteMedecin());
             ps.setInt(5, cert.getIdDossier());
+            ps.setInt(6, cert.getIdConsult());
 
             int s = ps.executeUpdate();
 
@@ -72,10 +73,10 @@ public class CertificatDaoimpl implements CertificatDao {
     @Override
     public void update(Certificat cert) throws Exception {
         String sql = """
-            UPDATE Certificat
-            SET dateDebut=?, dateFin=?, nature=?, noteMedecin=?, idDossier=?
-            WHERE idCert=?
-        """;
+        UPDATE Certificat
+        SET dateDebut=?, dateFin=?, nature=?, noteMedecin=?, idDossier=?, id_consultation=?
+        WHERE idCert=?
+    """;
 
         try (Connection c = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -85,11 +86,13 @@ public class CertificatDaoimpl implements CertificatDao {
             ps.setString(3, cert.getNature());
             ps.setString(4, cert.getNoteMedecin());
             ps.setInt(5, cert.getIdDossier());
-            ps.setInt(6, cert.getIdCert());
+            ps.setInt(6, cert.getIdConsult());
+            ps.setInt(7, cert.getIdCert()); // ✅ Il manquait ça !
 
             ps.executeUpdate();
         }
     }
+
 
     @Override
     public boolean delete(Certificat cert) throws Exception {
@@ -122,6 +125,7 @@ public class CertificatDaoimpl implements CertificatDao {
                 .nature(rs.getString("nature"))
                 .noteMedecin(rs.getString("noteMedecin"))
                 .idDossier(rs.getInt("idDossier"))
+                .idConsult(rs.getInt("id_consultation"))
                 .build();
     }
 

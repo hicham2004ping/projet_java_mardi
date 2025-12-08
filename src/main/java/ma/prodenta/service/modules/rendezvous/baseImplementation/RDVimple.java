@@ -58,7 +58,7 @@ public class RDVimple implements RDVI {
     }
 
     @Override
-    public void createRDV(RDV rdv) {
+    public boolean create(RDV rdv) {
         LocalDate ld = LocalDate.now();
         LocalDate dateRDV = rdv.getDateRDV().toInstant()
                 .atZone(ZoneId.systemDefault())
@@ -69,28 +69,36 @@ public class RDVimple implements RDVI {
             if (rdvPris.contains(heure)) {
                 try {
                     rdvDAO.create(rdv);
+                    return true;
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
+        return false;
     }
 
     @Override
-    public void updateRDV(RDV rdv) {
+    public boolean update(RDV rdv) {
         try {
             rdvDAO.update(rdv);
+            return true;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void deleteRDV(RDV rdv) {
+    public void delete(RDV rdv) {
         try {
             rdvDAO.delete(rdv);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public RDV find(Integer integer) {
+        return null;
     }
 
 

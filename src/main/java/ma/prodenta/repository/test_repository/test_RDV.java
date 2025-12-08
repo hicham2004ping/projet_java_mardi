@@ -1,26 +1,50 @@
 package ma.prodenta.repository.test_repository;
-import ma.prodenta.config.SessionFactory;
+
 import ma.prodenta.entities.En.RDV;
-import java.sql.Connection;
-import java.sql.SQLException;
+import ma.prodenta.repository.modules.RendezVous.fileBase_implementation.RDVDAOImpl;
+
 import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 public class test_RDV {
 
     public static void Testrdv() {
-        Date d = new Date(104, 8, 9); // 9 septembre 2004
-        RDV p1=new RDV();
-        int i=1;
-        Time t = Time.valueOf("14:30:45");
-        p1.setIdRDV(i);
-        p1.setIddossier(1);
-        p1.setDateRDV(d);
-        p1.setMotif("trois dent casse");
-        p1.setHeure(t);
-        p1.setNoteMedecin("trois dent casse");
+        try {
+            RDVDAOImpl rdvDAO = new RDVDAOImpl();
 
-}
+            // Création d'un RDV
+            Date dateRDV = new Date(104, 8, 9); // 9 septembre 2004
+            Time heure = Time.valueOf("14:30:45");
+
+            RDV rdv = new RDV();
+            rdv.setIddossier(1);
+            rdv.setDateRDV(dateRDV);
+            rdv.setHeure(heure);
+            rdv.setMotif("Trois dents cassées");
+            rdv.setNoteMedecin("Besoin d'une intervention rapide");
+
+            // Insertion dans la base
+            boolean success = rdvDAO.create(rdv);
+            if (success) {
+                System.out.println("RDV créé avec succès !");
+            } else {
+                System.out.println("Erreur lors de la création du RDV.");
+            }
+
+            // Affichage de tous les RDV
+            List<RDV> rdvs = rdvDAO.findAll();
+            System.out.println("Liste des RDV existants :");
+            for (RDV r : rdvs) {
+                System.out.println(r);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        Testrdv();
+    }
 }
