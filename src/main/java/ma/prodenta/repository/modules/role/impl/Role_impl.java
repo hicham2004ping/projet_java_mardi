@@ -17,21 +17,23 @@ public class Role_impl implements Role_api {
     public Role find_by_nom(String nom) {
         Role role = new Role();
         String requete= """
-                select * from role where libelle like ?
-                """;
-        try(Connection conn=SessionFactory.getInstance().getConnection();
-            PreparedStatement pst=conn.prepareStatement(requete);){
+            select * from role where libelle like ?
+            """;
+        try(Connection conn = SessionFactory.getInstance().getConnection();
+            PreparedStatement pst = conn.prepareStatement(requete)) {
+
             pst.setString(1,"%"+nom+"%");
-            ResultSet rs=pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             if(rs.next()){
                 role.setLibelle(rs.getString("libelle"));
-                role.setIdRole(rs.getInt("id_role"));
+                role.setIdRole(rs.getInt("idRole")); // << ici, changer id_role → idRole
             }
             return role;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     @Override
     public List<Role> findAll() throws Exception {
@@ -45,7 +47,7 @@ public class Role_impl implements Role_api {
 
             while (rs.next()) {
                 Role role = new Role();
-                role.setIdRole(rs.getInt("id_role"));
+                role.setIdRole(rs.getInt("idRole"));
                 role.setLibelle(rs.getString("libelle"));
                 roles.add(role);
             }
@@ -58,7 +60,7 @@ public class Role_impl implements Role_api {
     public Role findById(Integer id) throws Exception {
 
         Role role = null;
-        String sql = "SELECT * FROM role WHERE id_role = ?";
+        String sql = "SELECT * FROM role WHERE idRole = ?";
 
         try(Connection conn = SessionFactory.getInstance().getConnection();
             PreparedStatement pst = conn.prepareStatement(sql)) {
@@ -68,7 +70,7 @@ public class Role_impl implements Role_api {
 
             if (rs.next()) {
                 role = new Role();
-                role.setIdRole(rs.getInt("id_role"));
+                role.setIdRole(rs.getInt("idRole"));
                 role.setLibelle(rs.getString("libelle"));
             }
         }
@@ -92,7 +94,7 @@ public class Role_impl implements Role_api {
 
     @Override
     public void update(Role objet) {
-        String sql = "UPDATE role SET libelle = ? WHERE id_role = ?";
+        String sql = "UPDATE role SET libelle = ? WHERE idRole = ?";
 
         try(Connection conn = SessionFactory.getInstance().getConnection();
             PreparedStatement pst = conn.prepareStatement(sql)) {
@@ -115,7 +117,7 @@ public class Role_impl implements Role_api {
     @Override
     public boolean deleteById(Integer id) throws SQLException {
 
-        String sql = "DELETE FROM role WHERE id_role = ?";
+        String sql = "DELETE FROM role WHERE idRole = ?";
 
         try(Connection conn = SessionFactory.getInstance().getConnection();
             PreparedStatement pst = conn.prepareStatement(sql)) {

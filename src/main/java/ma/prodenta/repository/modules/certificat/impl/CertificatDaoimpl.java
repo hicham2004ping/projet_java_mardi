@@ -46,7 +46,7 @@ public class CertificatDaoimpl implements CertificatDao {
     @Override
     public boolean create(Certificat cert) throws SQLException, IOException {
         String sql = """
-            INSERT INTO Certificat(dateDebut, dateFin, nature, noteMedecin, idDossier,idConsult)
+            INSERT INTO Certificat(dateDebut, dateFin, nature, noteMedecin, idDossier,id_consultation)
             VALUES(?,?,?,?,?,?)
         """;
 
@@ -74,7 +74,7 @@ public class CertificatDaoimpl implements CertificatDao {
     public void update(Certificat cert) throws Exception {
         String sql = """
         UPDATE Certificat
-        SET dateDebut=?, dateFin=?, nature=?, noteMedecin=?, idDossier=?, idConsult=?
+        SET dateDebut=?, dateFin=?, nature=?, noteMedecin=?, idDossier=?, id_consultation=?
         WHERE idCert=?
     """;
 
@@ -125,7 +125,7 @@ public class CertificatDaoimpl implements CertificatDao {
                 .nature(rs.getString("nature"))
                 .noteMedecin(rs.getString("noteMedecin"))
                 .idDossier(rs.getInt("idDossier"))
-                .idConsult(rs.getInt("idConsult"))
+                .idConsult(rs.getInt("id_consultation"))
                 .build();
     }
 

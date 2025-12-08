@@ -93,7 +93,7 @@ public class RDVDAOImpl implements RDVDAO {
                 .heure(rs.getTime("heure"))
                 .motif(rs.getString("motif"))
                 .noteMedecin(rs.getString("noteMedecin"))
-                .iddossier(rs.getInt("idPatient"))
+                .iddossier(rs.getInt("id_dossier"))
                 .build();
     }
 
