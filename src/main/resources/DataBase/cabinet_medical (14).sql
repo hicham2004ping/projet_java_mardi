@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2025 at 02:56 PM
+-- Generation Time: Dec 08, 2025 at 04:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -181,14 +181,6 @@ CREATE TABLE `consultation` (
   `id_medecin` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `consultation`
---
-
-INSERT INTO `consultation` (`idConsult`, `dateConsult`, `observationMedecin`, `idDossier`, `idStatut`, `id_rdv`, `id_medecin`) VALUES
-(3, '2025-12-08', 'tout ira mieux demain', 2, 1, 1, 1),
-(4, '2025-12-08', 'tout ira mieux demain', 2, 1, 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -207,7 +199,6 @@ CREATE TABLE `dossiermedical` (
 --
 
 INSERT INTO `dossiermedical` (`idDossier`, `dateCreation`, `idPatient`, `idMedecin`) VALUES
-(2, '2025-12-07', 33, 1),
 (6, '2025-12-07', 16, 1);
 
 -- --------------------------------------------------------
@@ -262,14 +253,6 @@ CREATE TABLE `intervention_medcin` (
   `id_acte` int(11) DEFAULT NULL,
   `id_consultation` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `intervention_medcin`
---
-
-INSERT INTO `intervention_medcin` (`id`, `numero_dent`, `prix_patient`, `id_acte`, `id_consultation`) VALUES
-(4, 23, 80, 1, 3),
-(5, 23, 190, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -359,15 +342,6 @@ CREATE TABLE `ordonnance` (
   `id_conultation` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `ordonnance`
---
-
-INSERT INTO `ordonnance` (`idOrd`, `dateOrd`, `idDossier`, `id_conultation`) VALUES
-(1, '2025-12-07', 2, NULL),
-(2, '2025-12-08', 2, 4),
-(3, '2025-12-08', 2, 4);
-
 -- --------------------------------------------------------
 
 --
@@ -394,11 +368,10 @@ INSERT INTO `patient` (`idPatient`, `nom`, `dateNaissance`, `adresse`, `telephon
 (1, 'ibrahim', '2024-09-20', 'beirut', '021831241', 1, 2, NULL, NULL),
 (2, 'nascerallah', '2024-09-20', 'beirut', '021831241', 1, 1, NULL, NULL),
 (3, 'hassan', '2024-09-27', 'Beirut', '0777181657', 2, 1, 'nascerallah', 'hezbollah@gmail.com'),
-(13, 'safiyeddine', '2024-10-03', 'Dahia', '0777181657', 1, 2, 'hachem', 'hezbollah'),
 (14, 'safiyeddine', '2024-10-03', 'Dahia', '0777181657', 1, 2, 'hachem', 'hezbollah'),
 (15, 'safiyeddine', '2024-10-03', 'Dahia', '0777181657', 1, 2, 'hachem', 'hezbollah'),
 (16, 'safiyeddine', '2024-10-03', 'Dahia', '0777181657', 1, 2, 'hachem', 'hezbollah'),
-(33, 'akil', '2025-12-06', 'alkhiyam', '06xxxxxx', 1, 1, 'ibrahim', 'email@domaine');
+(34, 'akil', '2025-12-06', 'alkhiyam', '06xxxxxx', 1, 1, 'ibrahim', 'email@domaine');
 
 -- --------------------------------------------------------
 
@@ -422,12 +395,12 @@ INSERT INTO `patient_antecedent` (`id`, `id_patient`, `id_antecedent`) VALUES
 (3, 15, 3),
 (4, 15, 4),
 (5, 15, 5),
-(6, 33, 5),
-(7, 33, 6),
-(8, 33, 7),
-(9, 33, 8),
-(10, 33, 9),
-(11, 33, 10);
+(12, 34, 5),
+(13, 34, 6),
+(14, 34, 7),
+(15, 34, 8),
+(16, 34, 9),
+(17, 34, 10);
 
 -- --------------------------------------------------------
 
@@ -852,7 +825,7 @@ ALTER TABLE `consultation`
 -- AUTO_INCREMENT for table `dossiermedical`
 --
 ALTER TABLE `dossiermedical`
-  MODIFY `idDossier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idDossier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `facture`
@@ -894,7 +867,7 @@ ALTER TABLE `ordonnance`
 -- AUTO_INCREMENT for table `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `idPatient` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `idPatient` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `prescription`
@@ -999,7 +972,7 @@ ALTER TABLE `facture`
 -- Constraints for table `intervention_medcin`
 --
 ALTER TABLE `intervention_medcin`
-  ADD CONSTRAINT `fk_consultation` FOREIGN KEY (`id_consultation`) REFERENCES `consultation` (`idConsult`),
+  ADD CONSTRAINT `fk_consultation` FOREIGN KEY (`id_consultation`) REFERENCES `consultation` (`idConsult`) ON DELETE CASCADE,
   ADD CONSTRAINT `intervention_medcin_ibfk_1` FOREIGN KEY (`id_acte`) REFERENCES `acte` (`id`) ON DELETE CASCADE;
 
 --
@@ -1018,7 +991,7 @@ ALTER TABLE `medicament`
 -- Constraints for table `ordonnance`
 --
 ALTER TABLE `ordonnance`
-  ADD CONSTRAINT `fk_consultation2` FOREIGN KEY (`id_conultation`) REFERENCES `consultation` (`idConsult`),
+  ADD CONSTRAINT `fk_consultation2` FOREIGN KEY (`id_conultation`) REFERENCES `consultation` (`idConsult`) ON DELETE CASCADE,
   ADD CONSTRAINT `ordonnance_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE;
 
 --
@@ -1041,12 +1014,6 @@ ALTER TABLE `patient_antecedent`
 ALTER TABLE `prescription`
   ADD CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`idOrd`) REFERENCES `ordonnance` (`idOrd`) ON DELETE CASCADE,
   ADD CONSTRAINT `prescription_ibfk_2` FOREIGN KEY (`idMed`) REFERENCES `medicament` (`idMed`) ON DELETE CASCADE;
-
---
--- Constraints for table `rdv`
---
-ALTER TABLE `rdv`
-  ADD CONSTRAINT `fk_dossier_medical` FOREIGN KEY (`id_dossier`) REFERENCES `dossiermedical` (`idDossier`);
 
 --
 -- Constraints for table `revenus`

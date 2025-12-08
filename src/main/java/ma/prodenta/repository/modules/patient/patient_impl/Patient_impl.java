@@ -75,7 +75,6 @@ public class Patient_impl implements PatientDao {
     public List<Patient> searchByNomPrenom(String keyword) {
 
         List<Patient> patients = new ArrayList<>();
-
         String sql = """
             SELECT * FROM patient
             WHERE nom LIKE ? OR prenom LIKE ?

@@ -76,7 +76,6 @@ public class Dossier_medical_impl implements DossierMedicalRepository {
         }
 
     }
-
     @Override
     public boolean create(DossierMedical objet) throws SQLException, IOException {
         String requete= """
