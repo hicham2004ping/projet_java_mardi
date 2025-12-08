@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2025 at 04:22 PM
+-- Generation Time: Dec 08, 2025 at 09:45 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -91,7 +91,7 @@ INSERT INTO `antecedent` (`idAntecedent`, `nom`, `categorie`, `idRisque`) VALUES
 (11, 'Chirurgie récente', 'Chirurgical', 3),
 (12, 'Antécédent familial de diabète', 'Familial', 4),
 (13, 'Obésité sévère', 'Métabolique', 2),
-(14, 'Epilepsie', 'Neurologique', 2);
+(14, 'blessure_au_jambe', 'allergie', 1);
 
 -- --------------------------------------------------------
 
@@ -394,13 +394,7 @@ INSERT INTO `patient_antecedent` (`id`, `id_patient`, `id_antecedent`) VALUES
 (2, 15, 2),
 (3, 15, 3),
 (4, 15, 4),
-(5, 15, 5),
-(12, 34, 5),
-(13, 34, 6),
-(14, 34, 7),
-(15, 34, 8),
-(16, 34, 9),
-(17, 34, 10);
+(5, 15, 5);
 
 -- --------------------------------------------------------
 
