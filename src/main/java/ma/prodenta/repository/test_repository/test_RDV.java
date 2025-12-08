@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.util.Date;
 
 public class test_RDV {
+
     public static void Testrdv() {
         Date d = new Date(104, 8, 9); // 9 septembre 2004
         RDV p1=new RDV();

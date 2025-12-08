@@ -3,17 +3,12 @@ import ma.prodenta.entities.En.*;
 import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.NiveauRisque;
 import ma.prodenta.entities.Enum.Sexe;
-import ma.prodenta.repository.modules.RendezVous.fileBase_implementation.RDVDAOImpl;
-import ma.prodenta.repository.modules.consultation.impl.ConsultationDaoimpl;
 import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_medical_impl;
-import ma.prodenta.repository.modules.ordonnance.impl.OrdonnanceDaoImpl;
 import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
 import ma.prodenta.repository.modules.medicament.fileBase_implementation.MedicamentDAOImpl;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import ma.prodenta.entities.En.Sexe_c;
 import ma.prodenta.repository.modules.sexe.impl.Sexe_impl;
@@ -22,8 +17,6 @@ import ma.prodenta.repository.modules.forme.impl.Forme_impl;
 import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl;
 import ma.prodenta.repository.modules.assurance.implement.Assurance_impl;
 import ma.prodenta.entities.En.DossierMedical;
-import ma.prodenta.entities.En.Prescription;
-import ma.prodenta.repository.modules.prescription.impl.Prescription_impl;
 
 public class Test_globale {
     //partie test patient
@@ -282,19 +275,18 @@ public class Test_globale {
         try{
             System.out.println("********Intervention**********\n");
             System.out.println("********CREATION**********\n");
-            acte=acte_impl.findbynom("Contrôle de routine");
+            acte=acte_impl.findbynom("Consultation simple");
             if(acte !=null){
                 intervention.setActe(acte);
                 intervention.setPrix_patient(-1);
                 intervention.setNumero_dent(23);
-                intervention.setId_consultation(3);
-             boolean flag=intervention_impl.create(intervention);
-             if(flag){
-                 System.out.println("creation avec success");
-             }
-             else{
-                 System.out.println("echec lors de la creation");
-             }
+             //boolean flag=intervention_impl.create(intervention);
+            // if(flag){
+              //   System.out.println("creation avec success");
+            // }
+             //else{
+               //  System.out.println("echec lors de la creation");
+             //}
              System.out.println("***********LECTURE**********\n");
              id=intervention_impl.get_last_id();
              System.out.println("la derniere id c'est "+id);
@@ -305,13 +297,13 @@ public class Test_globale {
              intervention_impl.update(intervention2);
              System.out.println("le prix de l'intervention maintenant est "+intervention_impl.findById(intervention2.getId()).getPrix_patient());
              System.out.println("*************SUPPRESSION**********\n");
-            /* boolean flag1=intervention_impl.deleteById(id);
+             boolean flag1=intervention_impl.deleteById(id);
              if(flag1){
                  System.out.println("suppression avec success");
              }
              else{
                  System.out.println("echec lors de la suppression");
-             }*/
+             }
             }
         }
         catch(Exception e){
@@ -340,6 +332,8 @@ public class Test_globale {
         }
     }
 
+    public static void test_consultation(){
+    }
     public static void test_sexe(){
         List<Sexe_c> list_sexe=new ArrayList<>();
         Sexe_c sexe=new Sexe_c();
@@ -363,51 +357,33 @@ public class Test_globale {
     }
 
     public static void test_ordonance(){
-        int id;
         Patient patient=new Patient();
         Patient_impl patient_impl=new Patient_impl();
         DossierMedical dossierMedical=new DossierMedical();
-        Consultation consultation=new Consultation();
-        ConsultationDaoimpl cs=new ConsultationDaoimpl();
-        Dossier_medical_impl dossierMedical_impl=new Dossier_medical_impl();
+       /* Dossier_Medical_Impl dossierMedical_impl=new Dossier_Medical_Impl();
         Ordonnance ordonnance=new Ordonnance();
-        int id1;
         OrdonnanceDaoImpl ordonance_impl=new OrdonnanceDaoImpl();
+        int id;
         try{
-          /*  id=dossierMedical_impl.get_last_id();
             System.out.println("*******CREATION***********\n");
             patient=patient_impl.findById(33);
             dossierMedical=dossierMedical_impl.find_patient(patient);
-            DossierMedical ds=dossierMedical_impl.findById(id);
-            id=cs.last_id();
-            consultation=cs.findById(id);
+            DossierMedical ds=dossierMedical_impl.findById(1);
             System.out.println("l'id du dossier c'est "+ds.getIdDossier());
+
             ordonnance.setDateOrd(LocalDate.now());
             ordonnance.setIdDossier(dossierMedical.getIdDossier());
-            ordonnance.setIdconsultation(consultation.getIdConsult());*/
-           /* boolean flag=ordonance_impl.create(ordonnance);
+            boolean flag=ordonance_impl.create(ordonnance);
             if(flag){
                 System.out.println("creation avec succes de l'rodonance");
             }
             else{
                 System.out.println("erreur lors de la creation ");
-            }*/
-            System.out.println("**********LECTURE*************\n");
-            Ordonnance ord=ordonance_impl.findById(3);
-            System.out.println("l'ordonance d'id 3 a ete creer le "+ord.getDateOrd());
-            id1=ordonance_impl.last_id();
-            System.out.println("la dernier id dans ordonance est "+id1);
-           /* boolean flag1=ordonance_impl.deleteById(id1);
-            if(flag1){
-                System.out.println("suppression avec success");
             }
-            else{
-                System.out.println("erreur lors de la suppression ");
-            }*/
         }
         catch (Exception e){
                 System.out.println(e.getMessage());
-        }
+        }*/
     }
 
     public static void test_dossier_medicale(){
@@ -451,93 +427,7 @@ public class Test_globale {
             System.out.println(e.getMessage());
         }
     }
-
-    public static void test_prescription(){
-        Prescription prescription=new Prescription();
-        Prescription_impl prescription_impl=new Prescription_impl();
-        Medicament medicament =new Medicament();
-        MedicamentDAOImpl medicament_impl=new MedicamentDAOImpl();
-        try{
-             /* System.out.println("********CREATION***********\n");
-              medicament = medicament_impl.findById(1);
-              prescription.setFrequence("2 fois par jour ");
-              prescription.setQuantite(3);
-              prescription.setDureeEnJours(5);
-              prescription.setIdOrd(1);
-              prescription.setIdMed(medicament.getIdMed());
-             boolean flag = prescription_impl.create(prescription);
-             if(flag){
-                 System.out.println("creation avec succes de l'prescription");
-             }
-             else{
-                 System.out.println("erreur lors de la creation ");
-             }*/
-             System.out.println("**********LECTURE***********\n");
-             Prescription prescription2=prescription_impl.findById(1);
-             System.out.println("la frequence de cette prescription est "+prescription2.getFrequence());
-
-             System.out.println("**********MODIFICATION***********\n");
-             prescription2.setDureeEnJours(7);
-             prescription_impl.update(prescription2);
-             System.out.println(prescription2.getDureeEnJours()+ prescription2.getFrequence()+ prescription2.getQuantite());
-             int id=prescription_impl.get_last_id();
-             boolean flag=prescription_impl.deleteById(id);
-             if(flag){
-                 System.out.println("suppression avec success");
-             }
-             else{
-                 System.out.println("echec lors de la suppression");
-             }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static void test_consultation(){
-        Consultation consultation=new Consultation();
-        ConsultationDaoimpl consultationDaoimpl=new ConsultationDaoimpl();
-        int id;
-    try {
-        System.out.println("********CREATION***********\n");
-        id=new RDVDAOImpl().get_last_id();
-        consultation.setDateConsult(new Date());
-        consultation.setId_medecin(1);
-        consultation.setIdDossier(2);
-        consultation.setIdStatut(1);
-        consultation.setId_rdv(1);
-        consultation.setObservationMedecin("tout ira mieux demain");
-        boolean flag=consultationDaoimpl.create(consultation);
-        if(flag){
-            System.out.println("creation avec du succes de l'objet cosultation");
-        }
-        else{
-            System.out.println("echec lors de la creation");
-
-        }
-        System.out.println("*************LECTURE***********\n");
-        id=consultationDaoimpl.last_id();
-        System.out.println(id);
-        Consultation cs=consultationDaoimpl.findById(id);
-        System.out.println("l'id de la derniere  consultation est "+cs.getIdConsult()+" effectuer par le medecin "+cs.getId_medecin());
-       /* System.out.println("************SUPPRESSION***********\n");
-        boolean flag1=consultationDaoimpl.deleteById(cs.getIdConsult());
-        if(flag1){
-            System.out.println("suppression avec success");
-        }
-        else{
-            System.out.println("echec lors de la suppression");
-
-        } */   }
-    catch(Exception e){
-        System.out.println(e.getMessage());
-    }
-
-    }
-
-
     public static void main(){
-      test_ordonance();
+        test_dossier_medicale();
     }
-
 }
