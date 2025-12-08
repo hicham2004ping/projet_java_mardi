@@ -91,7 +91,7 @@ public class Role_impl implements Role_api {
     }
 
     @Override
-    public Utilisateur update(Role objet) {
+    public void update(Role objet) {
         String sql = "UPDATE role SET libelle = ? WHERE id_role = ?";
 
         try(Connection conn = SessionFactory.getInstance().getConnection();
@@ -105,7 +105,6 @@ public class Role_impl implements Role_api {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     @Override

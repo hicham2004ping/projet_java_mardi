@@ -65,7 +65,7 @@ public class Assurance_impl implements  Assurance_api {
     }
 
     @Override
-    public Utilisateur update(Assurance_c objet) {
+    public void update(Assurance_c objet) {
 
         try (Connection conn = SessionFactory.getInstance().getConnection()) {
 
@@ -80,7 +80,6 @@ public class Assurance_impl implements  Assurance_api {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
 
 

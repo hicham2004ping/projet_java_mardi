@@ -1,3 +1,4 @@
+/*
 package ma.prodenta.service.modules.dossierMedical.impl;
 
 import ma.prodenta.entities.En.DossierMedical;
@@ -8,9 +9,11 @@ import ma.prodenta.service.common.DossierMedicalService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+*/
 /**
  logique métier pour les dossiers médicaux.
- */
+ *//*
+
 public class DossierMedicalServiceImpl implements DossierMedicalService {
 
     private final DossierMedicalRepository dossierRepository;
@@ -56,7 +59,8 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
         dossierRepository.delete(id);
     }
 
-    private DossierMedicalDto toDto(DossierMedical entity) {
+   */
+/* private DossierMedicalDto toDto(DossierMedical entity) {
         DossierMedicalDto dto = new DossierMedicalDto();
         dto.setId(entity.getId());
         dto.setPatientId(entity.getPatientId());
@@ -74,5 +78,7 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
         entity.setAntecedents(dto.getAntecedents());
         entity.setNotes(dto.getNotes());
         return entity;
-    }
+    }*//*
+
 }
+*/

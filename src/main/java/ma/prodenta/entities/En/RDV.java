@@ -1,10 +1,8 @@
 package ma.prodenta.entities.En;
-
 import lombok.*;
 import java.util.Date;
 import java.sql.Time;
 import java.io.Serializable;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,5 +13,5 @@ public class RDV implements Serializable {
     private Time heure;
     private String motif;
     private String noteMedecin;
-    private Integer idPatient;
+    private Integer iddossier;
 }

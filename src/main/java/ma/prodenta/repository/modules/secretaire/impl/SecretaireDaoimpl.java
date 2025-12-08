@@ -72,7 +72,7 @@ public class SecretaireDaoimpl implements SecretaireDao {
     }
 
     @Override
-    public Utilisateur update(Secretaire secretaire) throws SQLException, IOException, Exception {
+    public void update(Secretaire secretaire) throws SQLException, IOException, Exception {
         String sql = "UPDATE Secretaire SET numCNSS = ?, commission = ? WHERE idUser = ?";
 
         try (Connection c = SessionFactory.getInstance().getConnection();
@@ -84,7 +84,6 @@ public class SecretaireDaoimpl implements SecretaireDao {
 
             ps.executeUpdate();
         }
-        return null;
     }
 
     @Override

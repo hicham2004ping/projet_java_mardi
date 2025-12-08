@@ -5,15 +5,15 @@ import ma.prodenta.entities.En.Medicament;
 import ma.prodenta.entities.En.Ordonnance;
 import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.ordonnance.api.Ordonance_api;
+import java.net.Inet4Address;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class OrdonnanceDaoImpl implements Ordonance_api {
-
     @Override
-    public Ordonnance findById(Long idOrd) throws Exception {
+    public Ordonnance findById(Integer idOrd) throws Exception {
         String sql = "SELECT * FROM ordonnance WHERE idOrd = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -25,7 +25,8 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
                     return new Ordonnance(
                             rs.getLong("idOrd"),
                             rs.getDate("dateOrd").toLocalDate(),
-                            rs.getInt("idDossier")
+                            rs.getInt("idDossier"),
+                            rs.getInt("id_conultation")
                     );
                 }
             }
@@ -46,7 +47,8 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
                 liste.add(new Ordonnance(
                         rs.getLong("idOrd"),
                         rs.getDate("dateOrd").toLocalDate(),
-                        rs.getInt("idDossier")
+                        rs.getInt("idDossier"),
+                        rs.getInt("id_conultation")
                 ));
             }
         }
@@ -56,12 +58,13 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
     @Override
     public boolean create(Ordonnance ord) throws SQLException {
         int n = 0;
-        String sql = "INSERT INTO Ordonnance (dateOrd, idDossier) VALUES (?, ?)";
+        String sql = "INSERT INTO Ordonnance (dateOrd, idDossier,id_conultation) VALUES (?,?,?)";
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDate(1,Date.valueOf(ord.getDateOrd()));
             stmt.setInt(2, ord.getIdDossier());
+            stmt.setInt(3, ord.getIdconsultation());
             n = stmt.executeUpdate();
         }
 
@@ -69,7 +72,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
     }
 
     @Override
-    public Utilisateur update(Ordonnance ord) throws Exception {
+    public void update(Ordonnance ord) throws Exception {
         String sql = "UPDATE Ordonnance SET dateOrd = ?, idDossier = ? WHERE idOrd = ?";
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
@@ -81,7 +84,6 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
 
             stmt.executeUpdate();
         }
-        return null;
     }
 
     @Override
@@ -100,7 +102,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
     }
 
     @Override
-    public boolean deleteById(Long idOrd) throws Exception {
+    public boolean deleteById(Integer idOrd) throws Exception {
         int n = 0;
         String sql = "DELETE FROM Ordonnance WHERE idOrd = ?";
 
@@ -170,4 +172,22 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
         }
         return 0;
     }
+
+    public int last_id(){
+        String requete= """
+                select max(idOrd) from ordonnance;
+                """;
+        int id=0;
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement stmt = conn.prepareStatement(requete);){
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+            return  id;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

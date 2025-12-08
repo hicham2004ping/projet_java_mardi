@@ -85,7 +85,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
     }
 
     @Override
-    public Utilisateur update(Medicament medicament) throws Exception {
+    public void update(Medicament medicament) throws Exception {
         String sql = "UPDATE medicament SET nom = ?, laboratoire = ?, type = ?, remboursable = ?, " +
                 "prixUnit = ?, description = ?, idForme = ? WHERE idMed = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
@@ -102,7 +102,6 @@ public class MedicamentDAOImpl implements MedicamentDao {
 
             stmt.executeUpdate();
         }
-        return null;
     }
 
     @Override

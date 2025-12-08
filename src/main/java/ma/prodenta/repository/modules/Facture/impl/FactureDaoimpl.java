@@ -63,7 +63,7 @@ public class FactureDaoimpl implements FactureDao {
     }
 
     @Override
-    public Utilisateur update(Facture facture) throws SQLException {
+    public void update(Facture facture) throws SQLException {
         String sql = "UPDATE Facture SET total = ?, totalpaye = ?, reste = ?, statut = ?, dateFact = ?, idSF = ? WHERE idFact = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -78,7 +78,6 @@ public class FactureDaoimpl implements FactureDao {
 
             stmt.executeUpdate();
         }
-        return null;
     }
 
     @Override

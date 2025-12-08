@@ -74,7 +74,7 @@ public class ChargesDAOImpl implements ChargesDao {
     }
 
     @Override
-    public Utilisateur update(Charges charge) throws Exception {
+    public void update(Charges charge) throws Exception {
         String sql = "UPDATE charges SET titre = ?, description = ?, montant = ?, dateCharge = ?, idCabinet = ? WHERE idCharge = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -88,7 +88,6 @@ public class ChargesDAOImpl implements ChargesDao {
 
             stmt.executeUpdate();
         }
-        return null;
     }
 
     @Override

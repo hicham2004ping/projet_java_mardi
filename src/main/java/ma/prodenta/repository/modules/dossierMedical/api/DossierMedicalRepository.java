@@ -1,14 +1,11 @@
-
 package ma.prodenta.repository.modules.dossierMedical.api;
-
 import ma.prodenta.entities.En.DossierMedical;
+import ma.prodenta.entities.En.Patient;
+import ma.prodenta.repository.common.CrudRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public interface DossierMedicalRepository {
-    DossierMedical findById(Integer id) throws Exception;
-    List<DossierMedical> findAll() throws Exception;
-    DossierMedical save(DossierMedical dossier) throws Exception;   // insert
-    DossierMedical update(DossierMedical dossier) throws Exception; // update
-    void delete(Integer id) throws Exception;
+public interface DossierMedicalRepository extends CrudRepository<DossierMedical,Integer> {
+    public DossierMedical find_patient(Patient patient) throws SQLException ;
 }

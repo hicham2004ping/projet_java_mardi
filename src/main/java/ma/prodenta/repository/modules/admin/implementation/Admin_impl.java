@@ -9,9 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import ma.prodenta.config.SessionFactory;
 public class Admin_impl implements AdminDao {
-
     public static Connextion_db connetion_base;
 
     @Override
@@ -148,7 +147,7 @@ public class Admin_impl implements AdminDao {
 
 
     @Override
-    public Utilisateur update(Admin a) {
+    public void update(Admin a) {
         String sql = """
             UPDATE admin SET username=?, nom=?, password_hash=?, email=?, role=?, lastLoginDate=?, idRole=? 
             WHERE id = ?
@@ -168,7 +167,6 @@ public class Admin_impl implements AdminDao {
             pr.executeUpdate();
         }
         catch(Exception ignored) {}
-        return null;
     }
 
     @Override

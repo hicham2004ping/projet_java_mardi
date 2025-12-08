@@ -114,7 +114,7 @@ public class Acte_impl implements Acte_api {
     }
 
     @Override
-    public Utilisateur update(Acte objet) throws SQLException, IOException, Exception {
+    public void update(Acte objet) throws SQLException, IOException, Exception {
         String requete = """
                 update acte
                 set categorie = ?,
@@ -133,7 +133,6 @@ public class Acte_impl implements Acte_api {
 
             pst.executeUpdate();
         }
-        return null;
     }
 
     @Override

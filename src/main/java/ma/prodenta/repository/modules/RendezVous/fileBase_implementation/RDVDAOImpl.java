@@ -79,7 +79,7 @@ public class RDVDAOImpl implements RDVDAO {
     }
 
     @Override public boolean existsById(Integer id) {
-        String sql = "SELECT 1 FROM RDV WHERE id = ?";
+        String sql = "SELECT 1 FROM RDV WHERE idRDV=?";
         try (Connection c = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -93,25 +93,23 @@ public class RDVDAOImpl implements RDVDAO {
                 .heure(rs.getTime("heure"))
                 .motif(rs.getString("motif"))
                 .noteMedecin(rs.getString("noteMedecin"))
-                .idPatient(rs.getInt("idPatient"))
+                .iddossier(rs.getInt("idPatient"))
                 .build();
     }
 
 
     @Override
     public boolean create(RDV rdv){
-
-        String sql = "INSERT INTO RDV (dateRDV, heure, motif, noteMedecin, idPatient) " +
+        String sql = "INSERT INTO RDV (dateRDV, heure, motif, noteMedecin, id_dossier) " +
                 "VALUES (?, ?, ?, ?, ?)";
         int nombre =0;
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setDate(1, new java.sql.Date(rdv.getDateRDV().getTime()));
             stmt.setTime(2, rdv.getHeure());
             stmt.setString(3, rdv.getMotif());
             stmt.setString(4, rdv.getNoteMedecin());
-            stmt.setLong(5, rdv.getIdPatient());
+            stmt.setLong(5, rdv.getIddossier());
            nombre = stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -121,7 +119,7 @@ public class RDVDAOImpl implements RDVDAO {
 
 
     @Override
-    public Utilisateur update(RDV rdv) {
+    public void update(RDV rdv) {
 
         String sql = "UPDATE RDV SET dateRDV = ?, heure = ?, motif = ?, noteMedecin = ?, idPatient = ? " +
                 "WHERE idRDV = ?";
@@ -133,14 +131,14 @@ public class RDVDAOImpl implements RDVDAO {
             stmt.setTime(2, rdv.getHeure());
             stmt.setString(3, rdv.getMotif());
             stmt.setString(4, rdv.getNoteMedecin());
-            stmt.setLong(5, rdv.getIdPatient());
+            stmt.setLong(5, rdv.getIddossier());
             stmt.setLong(6, rdv.getIdRDV());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+
     }
 
 

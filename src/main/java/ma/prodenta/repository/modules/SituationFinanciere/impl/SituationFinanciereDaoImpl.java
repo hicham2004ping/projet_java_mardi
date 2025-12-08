@@ -72,7 +72,7 @@ public class SituationFinanciereDaoImpl implements SituationFinancierDao {
     }
 
     @Override
-    public Utilisateur update(SituationFinanciere sf) throws Exception {
+    public void update(SituationFinanciere sf) throws Exception {
         String sql = """
             UPDATE SituationFinanciere
             SET totalActes=?, totalPaye=?, credit=?, statut=?, enPromo=?, idPatient=?
@@ -92,7 +92,6 @@ public class SituationFinanciereDaoImpl implements SituationFinancierDao {
 
             ps.executeUpdate();
         }
-        return null;
     }
 
     @Override

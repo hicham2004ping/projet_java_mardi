@@ -20,6 +20,7 @@ public class Intervention_impl  implements Intervention_api {
         intervention.setId(resultSet.getInt("id"));
         intervention.setNumero_dent(resultSet.getInt("numero_dent"));
         intervention.setPrix_patient(resultSet.getInt("prix_patient"));
+        intervention.setId_consultation(resultSet.getInt("id_consultation"));
         int id =resultSet.getInt("id_acte");
         try{
             intervention.setActe(new Acte_impl().findById(id));
@@ -85,8 +86,8 @@ public class Intervention_impl  implements Intervention_api {
                 intervention.setId(rs.getInt("id_intervention"));
                 intervention.setNumero_dent(rs.getInt("numero_dent"));
                 intervention.setPrix_patient(rs.getInt("prix_patient"));
-                // acte laissé null -> à mapper si ton modèle le permet
-
+                intervention.setId_consultation(rs.getInt("id_consultation"));
+                intervention.setActe(new Acte_impl().findById(rs.getInt("id_acte")));
                 interventions.add(intervention);
             }
         }
@@ -95,34 +96,40 @@ public class Intervention_impl  implements Intervention_api {
 
     @Override
     public Intervention findById(Integer integer) throws Exception {
-        String sql = "SELECT * FROM intervention_medcin WHERE id = ?";
-        Acte_impl acte_impl=new Acte_impl();
-        try (
-                Connection conn = SessionFactory.getInstance().getConnection();
-                PreparedStatement pst = conn.prepareStatement(sql)
-        ) {
+        String sql = """
+        SELECT i.id AS i_id, i.numero_dent, i.prix_patient, i.id_consultation,
+               a.id AS a_id, a.libelle, a.prix_de_base
+        FROM intervention_medcin i
+        JOIN acte a ON i.id_acte = a.id
+        WHERE i.id = ?
+    """;
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, integer);
-
             try (ResultSet rs = pst.executeQuery()) {
-
                 if (rs.next()) {
+                    Acte acte = new Acte();
+                    acte.setId(rs.getInt("a_id"));
+                    acte.setLibelle(rs.getString("libelle"));
+                    acte.setPrix_de_base(rs.getInt("prix_de_base"));
+
                     Intervention intervention = new Intervention();
-                    intervention.setId(rs.getInt("id"));
+                    intervention.setId(rs.getInt("i_id"));
                     intervention.setNumero_dent(rs.getInt("numero_dent"));
                     intervention.setPrix_patient(rs.getInt("prix_patient"));
-                    intervention.setActe(acte_impl.findById(rs.getInt("id_acte")));
+                    intervention.setId_consultation(rs.getInt("id_consultation"));
+                    intervention.setActe(acte);
                     return intervention;
                 }
             }
         }
         return null;
-
     }
 
     @Override
     public boolean create(Intervention objet) throws SQLException, IOException {
        String   requete= """
-               insert into intervention_medcin (numero_dent,prix_patient,id_acte) values(?,?,?)
+               insert into intervention_medcin (numero_dent,prix_patient,id_acte,id_consultation) values(?,?,?,?)
                """;
        int n=0;
        int prix_patient = objet.getPrix_patient();
@@ -147,6 +154,7 @@ public class Intervention_impl  implements Intervention_api {
            pst.setInt(1,objet.getNumero_dent());
            pst.setInt(2,objet.getPrix_patient());
            pst.setInt(3,objet.getActe().getId());
+           pst.setInt(4,objet.getId_consultation());
            n=pst.executeUpdate();
        }
        return n>0;

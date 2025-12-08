@@ -1,10 +1,8 @@
 package ma.prodenta.repository.modules.sexe.impl;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Sexe_c;
 import ma.prodenta.repository.modules.sexe.api.Sexe_api;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

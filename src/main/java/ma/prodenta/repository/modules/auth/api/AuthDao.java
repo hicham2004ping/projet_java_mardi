@@ -9,7 +9,6 @@ public interface AuthDao extends CrudRepository<Utilisateur, Integer> {
 
     Optional<Utilisateur> findByLogin(String login) throws Exception;
     Optional<Utilisateur> findByEmail(String email) throws Exception;
-
     // Auth verification
     Optional<Utilisateur> login(String login, String motdepasse) throws Exception;
     boolean existsByLogin(String login);

@@ -73,7 +73,7 @@ public class RevenusDAOImpl implements RevenusDao {
     }
 
     @Override
-    public Utilisateur update(Revenus revenu) throws SQLException, Exception , IOException {
+    public void update(Revenus revenu) throws SQLException, Exception , IOException {
         String sql = "UPDATE revenus SET type = ?, description = ?, montant = ?, dateRev = ?, idCabinet = ? WHERE idRev = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -86,7 +86,6 @@ public class RevenusDAOImpl implements RevenusDao {
 
             stmt.executeUpdate();
         }
-        return null;
     }
 
     @Override

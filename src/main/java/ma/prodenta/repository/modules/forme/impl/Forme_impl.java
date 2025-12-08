@@ -103,7 +103,7 @@ public class Forme_impl implements Forme_api {
     }
 
     @Override
-    public Utilisateur update(Forme objet) throws SQLException, IOException {
+    public void update(Forme objet) throws SQLException, IOException {
         String requete = "UPDATE forme SET libelle = ? WHERE idforme = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(requete)) {
@@ -111,7 +111,7 @@ public class Forme_impl implements Forme_api {
             ps.setInt(2, objet.getId());
             ps.executeUpdate();
         }
-        return null;
+
     }
 
 
