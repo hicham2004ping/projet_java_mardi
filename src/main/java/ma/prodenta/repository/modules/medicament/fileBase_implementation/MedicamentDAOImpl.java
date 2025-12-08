@@ -2,16 +2,34 @@ package ma.prodenta.repository.modules.medicament.fileBase_implementation;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Medicament;
 import ma.prodenta.config.SessionFactory;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.medicament.api.MedicamentDao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import ma.prodenta.repository.modules.medicament.api.MedicamentDao;
 public class MedicamentDAOImpl implements MedicamentDao {
 
+    public int last_id() throws SQLException, ClassNotFoundException {
+        String requete= """
+                select max(idMed) from medicament
+                """;
+        Medicament medicament = new Medicament();
+        int id = 0;
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement stmt=conn.prepareStatement(requete);)
+        {
+                ResultSet rs=stmt.executeQuery();
+                if(rs.next()){
+                    id=rs.getInt(1);
+                }
+                return id;
+        }
+    }
+
     @Override
-    public Medicament findById(Long idMed) throws Exception {
+    public Medicament findById(Integer idMed) throws Exception {
         String sql = "SELECT * FROM medicament WHERE idMed = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -59,7 +77,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    medicament.setIdMed(rs.getLong(1));
+                    medicament.setIdMed(rs.getInt(1));
                 }
             }
         }
@@ -93,7 +111,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
 
 
     @Override
-    public boolean deleteById(Long idMed) throws Exception {
+    public boolean deleteById(Integer idMed) throws Exception {
         String sql = "DELETE FROM medicament WHERE idMed = ?";
         int n;
         try (Connection conn = SessionFactory.getInstance().getConnection();
@@ -112,7 +130,7 @@ public class MedicamentDAOImpl implements MedicamentDao {
 
     private Medicament mapResultSetToMedicament(ResultSet rs) throws SQLException {
         return new Medicament(
-                rs.getLong("idMed"),
+                rs.getInt("idMed"),
                 rs.getString("nom"),
                 rs.getString("laboratoire"),
                 rs.getString("type"),

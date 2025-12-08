@@ -1,5 +1,6 @@
 // repository/modules/Caisse/implementation/ChargesRepositoryImpl.java
-package ma.prodenta.repository.modules.Caisse.implementation;
+package ma.prodenta.repository.modules.caisse.implementation;
+
 
 import ma.prodenta.entities.En.Charges;
 import ma.prodenta.repository.modules.Caisse.api.ChargesRepository;

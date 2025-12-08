@@ -52,7 +52,7 @@ public class Antecedent_patient_impl implements Antecedent_patient {
         List<Patient> patients = new ArrayList<>();
         String requete = """
             select p.* from patient p
-            join patient_antecedent pa on pa.id_patient = p.id
+            join patient_antecedent pa on pa.id_patient = p.idPatient
             where pa.id_antecedent = ?
         """;
         try (Connection conn = SessionFactory.getInstance().getConnection();

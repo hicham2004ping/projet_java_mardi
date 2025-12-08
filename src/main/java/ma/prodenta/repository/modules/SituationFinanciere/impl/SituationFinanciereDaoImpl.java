@@ -2,6 +2,7 @@ package ma.prodenta.repository.modules.SituationFinanciere.impl;
 
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.SituationFinanciere;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.SituationFinanciere.api.SituationFinancierDao;
 import ma.prodenta.config.SessionFactory;
 

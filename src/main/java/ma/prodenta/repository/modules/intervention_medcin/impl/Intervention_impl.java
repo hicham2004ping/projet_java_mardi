@@ -20,6 +20,7 @@ public class Intervention_impl  implements Intervention_api {
         intervention.setId(resultSet.getInt("id"));
         intervention.setNumero_dent(resultSet.getInt("numero_dent"));
         intervention.setPrix_patient(resultSet.getInt("prix_patient"));
+        intervention.setId_consultation(resultSet.getInt("id_consultation"));
         int id =resultSet.getInt("id_acte");
         try{
             intervention.setActe(new Acte_impl().findById(id));
@@ -85,8 +86,8 @@ public class Intervention_impl  implements Intervention_api {
                 intervention.setId(rs.getInt("id_intervention"));
                 intervention.setNumero_dent(rs.getInt("numero_dent"));
                 intervention.setPrix_patient(rs.getInt("prix_patient"));
-                // acte laissé null -> à mapper si ton modèle le permet
-
+                intervention.setId_consultation(rs.getInt("id_consultation"));
+                intervention.setActe(new Acte_impl().findById(rs.getInt("id_acte")));
                 interventions.add(intervention);
             }
         }
@@ -95,45 +96,65 @@ public class Intervention_impl  implements Intervention_api {
 
     @Override
     public Intervention findById(Integer integer) throws Exception {
-        String sql = "SELECT * FROM intervention_medcin WHERE id_intervention = ?";
-
-        try (
-                Connection conn = SessionFactory.getInstance().getConnection();
-                PreparedStatement pst = conn.prepareStatement(sql)
-        ) {
+        String sql = """
+        SELECT i.id AS i_id, i.numero_dent, i.prix_patient, i.id_consultation,
+               a.id AS a_id, a.libelle, a.prix_de_base
+        FROM intervention_medcin i
+        JOIN acte a ON i.id_acte = a.id
+        WHERE i.id = ?
+    """;
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, integer);
-
             try (ResultSet rs = pst.executeQuery()) {
-
                 if (rs.next()) {
-                    Intervention intervention = new Intervention();
+                    Acte acte = new Acte();
+                    acte.setId(rs.getInt("a_id"));
+                    acte.setLibelle(rs.getString("libelle"));
+                    acte.setPrix_de_base(rs.getInt("prix_de_base"));
 
-                    intervention.setId(rs.getInt("id_intervention"));
+                    Intervention intervention = new Intervention();
+                    intervention.setId(rs.getInt("i_id"));
                     intervention.setNumero_dent(rs.getInt("numero_dent"));
                     intervention.setPrix_patient(rs.getInt("prix_patient"));
-                    // acte à compléter si nécessaire
-
+                    intervention.setId_consultation(rs.getInt("id_consultation"));
+                    intervention.setActe(acte);
                     return intervention;
                 }
             }
         }
         return null;
-
     }
 
     @Override
     public boolean create(Intervention objet) throws SQLException, IOException {
-       String  requete= """
-               insert into intervention_medcin values(?,?,?,?)
+       String   requete= """
+               insert into intervention_medcin (numero_dent,prix_patient,id_acte,id_consultation) values(?,?,?,?)
                """;
        int n=0;
+       int prix_patient = objet.getPrix_patient();
+       int prix_generale=(int)objet.getActe().getPrix_de_base();
+
+        if(objet.getNumero_dent()>32 || objet.getNumero_dent()<1){
+             return false;
+         }
+       System.out.println("la valeur apres le casting c'est "+prix_generale);
+
        try(Connection conn= SessionFactory.getInstance().getConnection();
            PreparedStatement pst= conn.prepareStatement(requete);)
        {
-           pst.setInt(1,objet.getId());
-           pst.setInt(2,objet.getNumero_dent());
-           pst.setInt(3,objet.getPrix_patient());
-           pst.setInt(4,objet.getActe().getId());
+           if (prix_patient == -1){
+               System.out.println("ca sera le prix par defaut");
+               objet.setPrix_patient(prix_generale);
+           }
+           else{
+               System.out.println("ca sera pas le prix par defaut");
+               objet.setPrix_patient(prix_patient);
+           }
+           pst.setInt(1,objet.getNumero_dent());
+           pst.setInt(2,objet.getPrix_patient());
+           pst.setInt(3,objet.getActe().getId());
+           pst.setInt(4,objet.getId_consultation());
            n=pst.executeUpdate();
        }
        return n>0;
@@ -141,25 +162,35 @@ public class Intervention_impl  implements Intervention_api {
 
     @Override
     public void update(Intervention objet) throws SQLException, IOException, Exception {
-
         String sql = """
                 UPDATE intervention_medcin
                 SET numero_dent = ?,
                     prix_patient = ?,
                     id_acte = ?
-                WHERE id_intervention = ?
+                WHERE id = ?
                 """;
-
+        int prix_patient = objet.getPrix_patient();
+        int prix_generale=(int)objet.getActe().getPrix_de_base();
+        if(objet.getNumero_dent()>32 || objet.getNumero_dent()<1){
+            System.out.println("impossible");
+            return ;
+        }
+        if(prix_patient == -1){
+            System.out.println("ca sera le prix par defaut");
+            objet.setPrix_patient(prix_generale);
+        }
+        else{
+            System.out.println("ca sera pas le prix par defaut");
+            objet.setPrix_patient(prix_patient);
+        }
         try (
                 Connection conn = SessionFactory.getInstance().getConnection();
                 PreparedStatement pst = conn.prepareStatement(sql)
         ) {
-
             pst.setInt(1, objet.getNumero_dent());
             pst.setInt(2, objet.getPrix_patient());
             pst.setInt(3, objet.getActe().getId());
             pst.setInt(4, objet.getId());
-
             pst.executeUpdate();
         }
     }
@@ -173,7 +204,7 @@ public class Intervention_impl  implements Intervention_api {
 
     @Override
     public boolean deleteById(Integer integer) throws SQLException, Exception {
-        String sql = "DELETE FROM intervention_medcin WHERE id_intervention = ?";
+        String sql = "DELETE FROM intervention_medcin WHERE id = ?";
 
         try (
                 Connection conn = SessionFactory.getInstance().getConnection();
@@ -188,5 +219,23 @@ public class Intervention_impl  implements Intervention_api {
     @Override
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
+    }
+    public int get_last_id() {
+        String requete= """
+                select max(id) from intervention_medcin;
+                """;
+        int id=0;
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement pst=conn.prepareStatement(requete);)
+        {
+            ResultSet rs=pst.executeQuery();
+            if(rs.next()){
+                id = rs.getInt("max(id)");
+            }
+            return id;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

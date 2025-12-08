@@ -3,6 +3,7 @@ package ma.prodenta.repository.modules.Facture.impl;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Facture;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.Facture.api.FactureDao;
 
 import java.sql.*;

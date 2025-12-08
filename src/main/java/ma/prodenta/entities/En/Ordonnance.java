@@ -1,5 +1,7 @@
 package ma.prodenta.entities.En;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.io.Serializable;
 @Data
@@ -8,6 +10,7 @@ import java.io.Serializable;
 @Builder
 public class Ordonnance implements Serializable {
     private Long idOrd;
-    private Date dateOrd;
+    private LocalDate dateOrd;
     private Integer idDossier;
+    private int idconsultation;
 }

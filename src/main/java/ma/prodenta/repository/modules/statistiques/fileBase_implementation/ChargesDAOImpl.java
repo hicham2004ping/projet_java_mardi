@@ -3,6 +3,7 @@ package ma.prodenta.repository.modules.statistiques.fileBase_implementation;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Charges;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.statistiques.api.ChargesDao;
 
 import java.io.IOException;

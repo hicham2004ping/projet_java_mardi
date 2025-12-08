@@ -14,6 +14,7 @@ public interface CrudRepository<T, ID> {
 
     boolean create(T objet) throws SQLException, IOException;
 
+
     void update(T objet) throws SQLException, IOException,Exception;
 
     boolean delete(T objet) throws SQLException,Exception;

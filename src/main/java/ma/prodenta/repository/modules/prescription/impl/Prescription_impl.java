@@ -1,11 +1,10 @@
 package ma.prodenta.repository.modules.prescription.impl;
-
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Ordonnance;
 import ma.prodenta.entities.En.Prescription;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.prescription.api.Prescription_api;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ public class Prescription_impl implements Prescription_api {
         }
         return list;
     }
-
     @Override
     public Prescription findById(Integer idPr) throws Exception {
         String sql = "SELECT * FROM Prescription WHERE idPr = ?";
@@ -85,7 +83,6 @@ public class Prescription_impl implements Prescription_api {
         String sql = "UPDATE Prescription SET quantite = ?, frequence = ?, dureeEnJours = ?, idOrd = ?, idMed = ? WHERE idPr = ?";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, presc.getQuantite());
             stmt.setString(2, presc.getFrequence());
             stmt.setInt(3, presc.getDureeEnJours());
@@ -135,5 +132,22 @@ public class Prescription_impl implements Prescription_api {
                 .idOrd(rs.getInt("idOrd"))
                 .idMed(rs.getInt("idMed"))
                 .build();
+    }
+    public int get_last_id(){
+        int id=0;
+        String requete= """
+                select max(idPr) from Prescription;
+                """;
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement stmt = conn.prepareStatement(requete);)
+        {
+            ResultSet rs=stmt.executeQuery();
+            if(rs.next()){
+                id=rs.getInt(1);
+            }
+            return id;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

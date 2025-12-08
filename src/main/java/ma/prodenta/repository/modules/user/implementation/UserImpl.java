@@ -148,7 +148,6 @@ public class UserImpl implements user_dao {
     }
     @Override
     public void update(Utilisateur objet) {
-
     }
 
     @Override
@@ -184,4 +183,47 @@ public class UserImpl implements user_dao {
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
     }
+
+    public  Utilisateur mapUtilisateur(ResultSet rs) throws SQLException {
+        int id = rs.getInt("idUser");
+        String nom = rs.getString("nom");
+        String email = rs.getString("email");
+        String adresse = rs.getString("adresse");
+        String cin = rs.getString("cin");
+        String tel = rs.getString("tel");
+        int idSexe = rs.getInt("idsexe");
+        String login = rs.getString("login");
+        String motdepasse = rs.getString("motdepasse");
+
+        LocalDate dateNaissance = null;
+        Date date = rs.getDate("dateNaissance");
+        if (date != null) {
+            dateNaissance = date.toLocalDate();
+        }
+
+        LocalDateTime lastLogin = null;
+        Timestamp ts = rs.getTimestamp("lastLoginDate");
+        if (ts != null) {
+            lastLogin = ts.toLocalDateTime();
+        }
+
+        int idRole = rs.getInt("idrole");
+
+        return new Utilisateur(
+                id,
+                nom,
+                email,
+                adresse,
+                cin,
+                tel,
+                idSexe,
+                login,
+                motdepasse,
+                dateNaissance,
+                lastLogin,
+                idRole
+        );
+    }
+
+
 }

@@ -8,8 +8,10 @@ import java.io.Serializable;
 @Builder
 public class Consultation implements Serializable {
     private Integer idConsult;
-    private Date dateConsult; // date
+    private Date dateConsult;
     private String observationMedecin;
     private Integer idDossier;
     private Integer idStatut;
+    private int id_medecin;
+    private int id_rdv;
 }

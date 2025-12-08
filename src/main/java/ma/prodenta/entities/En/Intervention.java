@@ -10,4 +10,5 @@ public class Intervention {
   private int numero_dent;
   private int prix_patient;
   private Acte acte;
+  private int id_consultation;
 }

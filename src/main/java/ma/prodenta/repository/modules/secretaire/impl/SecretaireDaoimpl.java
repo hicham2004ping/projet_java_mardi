@@ -2,7 +2,7 @@ package ma.prodenta.repository.modules.secretaire.impl;
 
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Secretaire;
-import ma.prodenta.repository.common.CrudRepository;
+import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.secretaire.api.SecretaireDao;
 
 import java.io.IOException;
