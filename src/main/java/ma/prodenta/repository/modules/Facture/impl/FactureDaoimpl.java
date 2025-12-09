@@ -120,4 +120,27 @@ public class FactureDaoimpl implements FactureDao {
                 .idSF(rs.getInt("idSF"))
                 .build();
     }
+    public int get_last_id() {
+        String requete = """
+            SELECT MAX(idFact) FROM facture
+            """;
+
+        int id = 0;
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(requete)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
+
+            return id;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

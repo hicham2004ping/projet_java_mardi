@@ -30,5 +30,7 @@ public interface CertificatDao {
 
     // Fonction héritée (non utilisée ici)
     Optional<Antecedent> findByNom(String nom);
+    public int get_last_id();
+    public List<Certificat> findByConsultation(Integer idConsult) throws Exception;
 }
 

@@ -87,7 +87,7 @@ public class CertificatDaoimpl implements CertificatDao {
             ps.setString(4, cert.getNoteMedecin());
             ps.setInt(5, cert.getIdDossier());
             ps.setInt(6, cert.getIdConsult());
-            ps.setInt(7, cert.getIdCert()); // ✅ Il manquait ça !
+            ps.setInt(7, cert.getIdCert());
 
             ps.executeUpdate();
         }
@@ -128,6 +128,55 @@ public class CertificatDaoimpl implements CertificatDao {
                 .idConsult(rs.getInt("id_consultation"))
                 .build();
     }
+    public int get_last_id() {
+        int lastId = 0;
+        String sql = "SELECT MAX(idCert) AS last_id FROM Certificat";
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                lastId = rs.getInt("last_id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération du dernier ID Certificat : " + e.getMessage());
+        }
+
+        return lastId;
+    }
+    // Récupère tous les certificats liés à une consultation
+    public List<Certificat> findByConsultation(Integer idConsultation) throws Exception {
+        List<Certificat> certificats = new ArrayList<>();
+        String sql = "SELECT * FROM Certificat WHERE id_consultation = ?"; // nom exact de la colonne
+
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, idConsultation);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    certificats.add(
+                            Certificat.builder()
+                                    .idCert(rs.getInt("idCert"))
+                                    .dateDebut(rs.getDate("dateDebut"))
+                                    .dateFin(rs.getDate("dateFin"))
+                                    .nature(rs.getString("nature"))
+                                    .noteMedecin(rs.getString("noteMedecin"))
+                                    .idDossier(rs.getInt("idDossier"))
+                                    .idConsult(rs.getInt("id_consultation")) // correspond à idConsult dans l’objet
+                                    .build()
+                    );
+                }
+            }
+        }
+        return certificats;
+    }
+
+
+
+
 
     static void main(String[] args) {
 
