@@ -429,6 +429,6 @@ public class Test_globale {
     }
 
     public static void main(){
-        test_dossier_medicale();
+        test_Patient_antecedent();
     }
 }
