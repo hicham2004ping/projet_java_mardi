@@ -427,6 +427,7 @@ public class Test_globale {
             System.out.println(e.getMessage());
         }
     }
+
     public static void main(){
         test_dossier_medicale();
     }

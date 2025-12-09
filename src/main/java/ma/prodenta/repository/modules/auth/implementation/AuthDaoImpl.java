@@ -157,29 +157,158 @@ public class AuthDaoImpl implements AuthDao {
     }
 
     @Override
-    public Utilisateur findById(Integer integer) throws Exception {
+    public Utilisateur findById(Integer idUser) throws Exception {
+        String sql = "SELECT * FROM utilisateur WHERE idUser = ?";
+
+        try (Connection con = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword());
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idUser);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new UserImpl().mapUtilisateur(rs);
+            }
+        }
         return null;
     }
 
-    @Override
-    public boolean create(Utilisateur objet) throws SQLException, IOException {
-        return false;
-    }
 
     @Override
-    public void update(Utilisateur objet) throws SQLException, IOException, Exception {
+    public boolean create(Utilisateur u) throws SQLException, IOException {
 
+        String sqlMaxId = "SELECT IFNULL(MAX(idUser), 0) + 1 FROM utilisateur";
+
+        String sqlInsert = "INSERT INTO utilisateur (" +
+                "idUser, nom, email, adresse, cin, tel, idSexe, login, motdepasse, " +
+                "dateNaissance, lastLoginDate, idRole" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword())) {
+
+            // =============================
+            // 1) Récupérer le prochain ID
+            // =============================
+            int nextId = 1;
+            try (Statement st = con.createStatement();
+                 ResultSet rs = st.executeQuery(sqlMaxId)) {
+                if (rs.next()) {
+                    nextId = rs.getInt(1);
+                }
+            }
+
+            // =============================
+            // 2) Insérer l'utilisateur
+            // =============================
+            try (PreparedStatement ps = con.prepareStatement(sqlInsert)) {
+
+                ps.setInt(1, nextId);
+                ps.setString(2, u.getNom());
+                ps.setString(3, u.getEmail());
+                ps.setString(4, u.getAdresse());
+                ps.setString(5, u.getCin());
+                ps.setString(6, u.getTel());
+                ps.setObject(7, u.getIdSexe(), java.sql.Types.INTEGER);
+                ps.setString(8, u.getLogin());
+                ps.setString(9, u.getMotdepasse());
+
+                // dateNaissance (LocalDate → java.sql.Date)
+                if (u.getDateNaissance() != null)
+                    ps.setDate(10, java.sql.Date.valueOf(u.getDateNaissance()));
+                else
+                    ps.setNull(10, java.sql.Types.DATE);
+
+                // lastLoginDate (LocalDateTime → Timestamp)
+                if (u.getLastLoginDate() != null)
+                    ps.setTimestamp(11, Timestamp.valueOf(u.getLastLoginDate()));
+                else
+                    ps.setNull(11, java.sql.Types.TIMESTAMP);
+
+                ps.setObject(12, u.getIdRole(), java.sql.Types.INTEGER);
+
+                int affected = ps.executeUpdate();
+                return affected > 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
 
     @Override
-    public boolean delete(Utilisateur objet) throws SQLException, Exception {
-        return false;
+    public void update(Utilisateur u) throws SQLException, IOException, Exception {
+
+        String sql = "UPDATE utilisateur SET " +
+                "nom = ?, email = ?, adresse = ?, cin = ?, tel = ?, idSexe = ?, " +
+                "login = ?, motdepasse = ?, dateNaissance = ?, lastLoginDate = ?, idRole = ? " +
+                "WHERE idUser = ?";
+
+        try (Connection con = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword());
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, u.getNom());
+            ps.setString(2, u.getEmail());
+            ps.setString(3, u.getAdresse());
+            ps.setString(4, u.getCin());
+            ps.setString(5, u.getTel());
+            ps.setObject(6, u.getIdSexe(), java.sql.Types.INTEGER);
+            ps.setString(7, u.getLogin());
+            ps.setString(8, u.getMotdepasse());
+
+            // LocalDate
+            if (u.getDateNaissance() != null)
+                ps.setDate(9, java.sql.Date.valueOf(u.getDateNaissance()));
+            else
+                ps.setNull(9, java.sql.Types.DATE);
+
+            // LocalDateTime
+            if (u.getLastLoginDate() != null)
+                ps.setTimestamp(10, Timestamp.valueOf(u.getLastLoginDate()));
+            else
+                ps.setNull(10, java.sql.Types.TIMESTAMP);
+
+            ps.setObject(11, u.getIdRole(), java.sql.Types.INTEGER);
+
+            ps.setInt(12, u.getIdUser());
+
+            ps.executeUpdate();
+        }
     }
 
+
     @Override
-    public boolean deleteById(Integer integer) throws SQLException, Exception {
-        return false;
+    public boolean delete(Utilisateur u) throws SQLException, Exception {
+        return deleteById(u.getIdUser());
     }
+
+
+    @Override
+    public boolean deleteById(Integer idUser) throws SQLException, Exception {
+        String sql = "DELETE FROM utilisateur WHERE idUser = ?";
+
+        try (Connection con = DriverManager.getConnection(
+                new Connextion_db().getUrl(),
+                new Connextion_db().getUsername(),
+                new Connextion_db().getPassword());
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idUser);
+            int affected = ps.executeUpdate();
+            return affected > 0;
+        }
+    }
+
 
     @Override
     public Optional<Antecedent> findByNom(String nom) {
