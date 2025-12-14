@@ -1,13 +1,13 @@
-package ma.prodenta.entities.En;
+    package ma.prodenta.entities.En;
 
-import lombok.*;
-import java.io.Serializable;
+    import lombok.*;
+    import java.io.Serializable;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Role implements Serializable {
-    private int idRole;
-    private String libelle;
-}
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public class Role implements Serializable {
+        private int idRole;
+        private String libelle;
+    }

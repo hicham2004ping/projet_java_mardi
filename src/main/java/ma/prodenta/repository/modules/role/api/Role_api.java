@@ -4,4 +4,5 @@ import ma.prodenta.repository.common.CrudRepository;
 
 public interface Role_api extends CrudRepository<Role,Integer> {
     public Role find_by_nom(String nom);
+    public Integer get_last_id();
 }
