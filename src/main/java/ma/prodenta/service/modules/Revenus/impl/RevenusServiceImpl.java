@@ -28,9 +28,6 @@ public class RevenusServiceImpl implements RevenusService {
             throw new IllegalArgumentException("L'objet revenu ne doit pas être null");
         }
 
-        // Exemple de validation métier supplémentaire possible :
-        // if (revenu.getMontant() <= 0) throw new IllegalArgumentException("Montant invalide");
-
         return revenusDao.create(revenu);
     }
 
