@@ -39,23 +39,28 @@ public class RDVDAOImpl implements RDVDAO {
     }
 
     public RDV findById(Integer id) throws Exception {
-
         String sql = "SELECT * FROM RDV WHERE idRDV = ?";
-
-        try (Connection conn = SessionFactory.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, id);
-
-            try (ResultSet rs = stmt.executeQuery()) {
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToRDV(rs);
+                    return new RDV(
+                            rs.getInt("idRDV"),
+                            rs.getDate("dateRDV"),
+                            rs.getTime("heure"),
+                            rs.getString("motif"),
+                            rs.getString("noteMedecin"),
+                            rs.getInt("id_dossier")
+                    );
+                } else {
+                    return null; // <-- retourne null si non trouvé
                 }
             }
         }
-
-        return null;
     }
+
+
 
     @Override
     public List<RDV> FindByDay(Date date) throws Exception {
@@ -116,30 +121,28 @@ public class RDVDAOImpl implements RDVDAO {
         }
         return nombre>0;
     }
-
-
     @Override
-    public void update(RDV rdv) {
+    public void update(RDV rdv) throws SQLException {
+        String sql = """
+        UPDATE RDV
+        SET dateRDV = ?, heure = ?, motif = ?, noteMedecin = ?, id_dossier = ?
+        WHERE idRDV = ?
+    """;
 
-        String sql = "UPDATE RDV SET dateRDV = ?, heure = ?, motif = ?, noteMedecin = ?, idPatient = ? " +
-                "WHERE idRDV = ?";
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-        try (Connection conn = SessionFactory.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ps.setDate(1, new java.sql.Date(rdv.getDateRDV().getTime()));
+            ps.setTime(2, rdv.getHeure());
+            ps.setString(3, rdv.getMotif());
+            ps.setString(4, rdv.getNoteMedecin());
+            ps.setInt(5, rdv.getIddossier());
+            ps.setInt(6, rdv.getIdRDV());
 
-            stmt.setDate(1, new java.sql.Date(rdv.getDateRDV().getTime()));
-            stmt.setTime(2, rdv.getHeure());
-            stmt.setString(3, rdv.getMotif());
-            stmt.setString(4, rdv.getNoteMedecin());
-            stmt.setLong(5, rdv.getIddossier());
-            stmt.setLong(6, rdv.getIdRDV());
-
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ps.executeUpdate();
         }
-
     }
+
 
 
     @Override
@@ -155,9 +158,20 @@ public class RDVDAOImpl implements RDVDAO {
     }
 
     @Override
-    public boolean deleteById(Integer integer) {
+    public boolean deleteById(Integer id) throws Exception {
+        String sql = "DELETE FROM RDV WHERE idRDV = ?";
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            int affected = ps.executeUpdate();
+            if (affected == 0) {
+                System.out.println("Aucun RDV supprimé, id inexistant : " + id);
+                return true;
+            }
+        }
         return false;
     }
+
 
     @Override
     public Optional<Antecedent> findByNom(String nom) {

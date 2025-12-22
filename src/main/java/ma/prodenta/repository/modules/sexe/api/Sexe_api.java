@@ -7,4 +7,5 @@ import java.sql.SQLException;
 public interface Sexe_api  extends CrudRepository<Sexe_c, Integer> {
     public Sexe_c findBylibelle(String libelle);
     public Sexe_c map_to_sexe(ResultSet rs) throws SQLException;
+    public Integer get_last_id();
 }

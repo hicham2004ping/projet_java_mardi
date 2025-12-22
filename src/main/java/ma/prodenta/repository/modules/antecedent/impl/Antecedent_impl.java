@@ -1,7 +1,9 @@
 package ma.prodenta.repository.modules.antecedent.impl;
 
 import ma.prodenta.entities.En.Antecedent;
+import ma.prodenta.entities.En.Patient;
 import ma.prodenta.entities.Enum.NiveauRisque;
+import ma.prodenta.entities.Enum.Sexe;
 import ma.prodenta.repository.common.Connextion_db;
 import ma.prodenta.repository.modules.antecedent.api.Antecedent_api;
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import ma.prodenta.config.SessionFactory;
+import ma.prodenta.repository.modules.antecedent_patient.impl.Antecedent_patient_impl;
 
 public class Antecedent_impl implements Antecedent_api {
 
@@ -118,35 +121,95 @@ public class Antecedent_impl implements Antecedent_api {
 
     @Override
     public boolean create(Antecedent objet) throws SQLException, IOException {
-        int id = 0;
-        try {
-            id = this.get_last_id()+1;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try(Connection conn = SessionFactory.getInstance().getConnection()){
-            int id_risque=0;
-            PreparedStatement stmt=conn.prepareStatement("insert into antecedent values(?,?,?,?)");
-            stmt.setInt(1,id);
-            stmt.setString(2,objet.getNom());
-            stmt.setString(3,objet.getCategorie());
-            if(objet.getNiveauRisque().name().equals("Faible")){
-                id_risque=4;
+        String requete = """
+            INSERT INTO antecedent (nom, categorie, idrisque)
+            VALUES (?, ?, ?)
+        """;
+
+        try (
+                Connection con = SessionFactory.getInstance().getConnection();
+                PreparedStatement prp = con.prepareStatement(requete, Statement.RETURN_GENERATED_KEYS)
+        ) {
+            prp.setString(1, objet.getNom());
+            prp.setString(2, objet.getCategorie());
+
+            int id_risque;
+            try {
+                id_risque = map_to_int(objet.getNiveauRisque());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            else if (objet.getNiveauRisque().name().equals("Modéré")){
-                id_risque=3;
+            prp.setInt(3, id_risque);
+
+            int nombre_lignes = prp.executeUpdate();
+
+            if (nombre_lignes == 0) return false;
+
+            // Récupérer l'ID généré par MySQL
+            ResultSet rs = prp.getGeneratedKeys();
+            if (rs.next()) {
+                objet.setIdAntecedent(rs.getInt(1));
             }
-            else if(objet.getNiveauRisque().name().equals("Trèsdangereux")){
-                id_risque=2;
-            }
-            else{
-                id_risque=1;
-            }
-            stmt.setInt(4,id_risque);
-            int rs=stmt.executeUpdate();
-            return rs>0;
+
+            return true;
         }
     }
+
+    @Override
+    public boolean create(Patient patient) throws SQLException {
+        List<Antecedent> listeAntecedents = patient.getAntecedents();
+        String requetePatient = """
+        INSERT INTO patient
+        (nom, datenaissance, adresse, telephone, idsexe, idassurance, prenom, email)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """;
+
+        try (
+                Connection con = SessionFactory.getInstance().getConnection();
+                PreparedStatement prp = con.prepareStatement(requetePatient, Statement.RETURN_GENERATED_KEYS)
+        ) {
+            int id_sexe = patient.getSexe() == Sexe.Homme ? 1 : 2;
+            int id_assurance = switch (patient.getAssurance()) {
+                case CNOPS -> 1;
+                case CNSS -> 2;
+                case RAMED -> 3;
+                default -> 4;
+            };
+
+            prp.setString(1, patient.getNom());
+            prp.setDate(2, Date.valueOf(patient.getDateNaissance()));
+            prp.setString(3, patient.getAdresse());
+            prp.setString(4, patient.getTelephone());
+            prp.setInt(5, id_sexe);
+            prp.setInt(6, id_assurance);
+            prp.setString(7, patient.getPrenom());
+            prp.setString(8, patient.getEmail());
+
+            int lignes = prp.executeUpdate();
+            if (lignes == 0) return false;
+
+            // récupérer l'ID généré par MySQL
+            try (ResultSet rs = prp.getGeneratedKeys()) {
+                if (rs.next()) {
+                    patient.setId(rs.getInt(1));
+                } else {
+                    throw new SQLException("Échec de la récupération de l'ID du patient.");
+                }
+            }
+
+            // insérer les antécédents liés
+            if (listeAntecedents != null && !listeAntecedents.isEmpty()) {
+                Antecedent_patient_impl ap = new Antecedent_patient_impl();
+                return ap.create(patient); // utilise maintenant l'ID généré
+            }
+
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
     @Override
     public void update(Antecedent objet) {

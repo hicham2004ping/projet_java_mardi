@@ -21,7 +21,7 @@ public class test_certif {
                     .dateFin(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)) // +7 jours
                     .nature("Repos maladie")
                     .noteMedecin("Patient à reposer")
-                    .idDossier(6)
+                    .idDossier(1)
                     .idConsult(1) // Associer à une consultation existante
                     .build();
 

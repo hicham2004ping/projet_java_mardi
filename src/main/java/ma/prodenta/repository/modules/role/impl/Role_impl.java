@@ -126,6 +126,31 @@ public class Role_impl implements Role_api {
             return pst.executeUpdate() > 0;
         }
     }
+    @Override
+    public Integer get_last_id() {
+        String sql = "SELECT MAX(idRole) AS last_id FROM role";
+        Integer lastId = null;
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                lastId = rs.getInt("last_id");
+
+                // si la table est vide, getInt() retourne 0 → on met null
+                if (rs.wasNull()) {
+                    lastId = null;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return lastId;
+    }
+
 
     @Override
     public Optional<Antecedent> findByNom(String nom) {

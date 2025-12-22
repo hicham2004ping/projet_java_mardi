@@ -1,19 +1,11 @@
 package ma.prodenta.repository.modules.medcin.api;
 
 import ma.prodenta.entities.En.Medecin;
+import ma.prodenta.repository.common.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface MedecinDao {
+public interface MedecinDao extends CrudRepository<Medecin,Integer> {
 
-    List<Medecin> findAll() throws Exception;
-
-    Optional<Medecin> findById(int idUser) throws Exception;
-
-    Medecin save(Medecin medecin) throws Exception;
-
-    void update(Medecin medecin) throws Exception;
-
-    void delete(int idUser) throws Exception;
 }

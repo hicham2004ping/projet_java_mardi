@@ -223,6 +223,27 @@ public class UserImpl implements user_dao {
                 idRole
         );
     }
+    public Integer get_last_id() {
+        String sql = "SELECT MAX(idUser) AS last_id FROM utilisateur";
+        Integer lastId = null;
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                lastId = rs.getInt("last_id");
+                if (rs.wasNull()) {  // table vide
+                    lastId = null;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return lastId;
+    }
 
 
 }

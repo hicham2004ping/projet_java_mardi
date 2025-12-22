@@ -157,4 +157,50 @@ public class ConsultationDaoimpl implements ConsultationDao {
             throw new RuntimeException(e);
         }
     }
+    public int get_last_id() {
+        int lastId = 0;
+        String sql = "SELECT MAX(idConsult) AS last_id FROM Consultation";
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                lastId = rs.getInt("last_id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération du dernier ID Consultation : " + e.getMessage());
+        }
+
+        return lastId;
+    }
+
+@Override
+    // Récupère toutes les consultations liées à un RDV
+    public List<Consultation> findByRdv(Integer idRdv) throws Exception {
+        List<Consultation> list = new ArrayList<>();
+        String sql = "SELECT * FROM Consultation WHERE id_rdv = ?";
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, idRdv);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new Consultation(
+                            rs.getInt("idConsult"),
+                            rs.getDate("dateConsult"),
+                            rs.getString("observationMedecin"),
+                            rs.getInt("idDossier"),
+                            rs.getInt("idStatut"),
+                            rs.getInt("id_medecin"),
+                            rs.getInt("id_rdv")
+                    ));
+                }
+            }
+        }
+        return list;
+    }
+
+
+
 }
