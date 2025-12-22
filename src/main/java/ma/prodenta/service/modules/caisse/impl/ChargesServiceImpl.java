@@ -42,8 +42,7 @@ public class ChargesServiceImpl implements ChargesService {
 
     @Override
     public List<Charges> findByCabinet(Integer idCabinet) throws Exception {
-        // Si tu n'as pas de méthode dédiée dans le repo,
-        // on filtre en mémoire à partir de findAll()
+
         return repo.findAll().stream()
                 .filter(c -> c.getIdCabinet() != null && c.getIdCabinet().equals(idCabinet))
                 .toList();

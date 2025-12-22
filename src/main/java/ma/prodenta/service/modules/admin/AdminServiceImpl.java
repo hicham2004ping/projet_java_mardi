@@ -7,7 +7,6 @@ import ma.prodenta.entities.En.Admin;
 import ma.prodenta.mvc.dto.admin.AdminViewDto;
 import ma.prodenta.mvc.dto.admin.LoginRequestDto;
 import ma.prodenta.repository.common.AdminRepository;
-import ma.prodenta.service.common.AdminService;
 
 import java.time.LocalDateTime;
 

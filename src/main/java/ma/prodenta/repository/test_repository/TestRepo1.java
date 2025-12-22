@@ -97,7 +97,7 @@ public class TestRepo1 {
         user1.setTel("test1");
         user1.setAdresse("test1");
         user1.setCin("test12");
-        user1.setLogin("&5d718");
+        user1.setLogin("&5d78");
         LocalDate date=LocalDate.now();
         user1.setDateNaissance(date);
         user1.setIdSexe(g);
@@ -127,7 +127,7 @@ public class TestRepo1 {
         /// ///////////staff
         StaffDaoImpl staffDAO = new StaffDaoImpl();
         Staff staff = new Staff();
-        staff.setIdStaff(748);
+        staff.setIdStaff(774884);
         staff.setPrime(1000.00);
         staff.setSalaire(4500.00);
         Date da=new Date();
@@ -191,8 +191,8 @@ public class TestRepo1 {
         //////////////DossierMedical
         Dossier_medical_impl dossierDao = new Dossier_medical_impl();
         DossierMedical dossier = new DossierMedical();
-        dossier.setIdPatient(patient.getId());
-        dossier.setIdMedecin(h);
+        dossier.setIdPatient(patient.getId()); // Utiliser l'ID du patient créé
+        dossier.setIdMedecin(h); // Utiliser l'ID du médecin créé
         boolean dossierCreated = dossierDao.create(dossier);
         Integer idDossier = null;
         if (!dossierCreated) {
@@ -205,9 +205,9 @@ public class TestRepo1 {
 
         //////////////StatutConsultation - utiliser un statut existant (1=En cours)
         Statut_consultation_impl statutDao = new Statut_consultation_impl();
-        Staut_consultation statut = statutDao.findById(1);
+        Staut_consultation statut = statutDao.findById(1); // Utiliser le statut "En cours" existant
         if (statut == null) {
-
+            // Si le statut n'existe pas, en créer un
             statut = new Staut_consultation();
             statut.setLibelle("En cours");
             statutDao.create(statut);
@@ -239,11 +239,11 @@ public class TestRepo1 {
 
         Consultation consultation = new Consultation();
         consultation.setDateConsult(dateRDV);
-        consultation.setIdDossier(idDossier);
+        consultation.setIdDossier(idDossier); // Utiliser l'ID du dossier créé
         consultation.setObservationMedecin("Besoin d'une intervention rapide");
-        consultation.setId_medecin(h);
-        consultation.setIdStatut(idStatut);
-        consultation.setId_rdv(idRdvGenere);
+        consultation.setId_medecin(h); // Utiliser l'ID du médecin créé
+        consultation.setIdStatut(idStatut); // Utiliser l'ID du statut
+        consultation.setId_rdv(idRdvGenere); // Utiliser l'ID du RDV créé
 
         consultationDAO.create(consultation);
 
@@ -258,8 +258,8 @@ public class TestRepo1 {
                 .dateFin(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000))
                 .nature("Repos maladie")
                 .noteMedecin("Patient à reposer")
-                .idDossier(idDossier)
-                .idConsult(idConsultGenere)
+                .idDossier(idDossier) // Utiliser l'ID du dossier créé
+                .idConsult(idConsultGenere) // Utiliser l'ID de la consultation créée
                 .build();
 
         certDAO.create(cert1);

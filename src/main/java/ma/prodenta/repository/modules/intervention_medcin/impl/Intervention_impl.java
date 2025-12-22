@@ -203,6 +203,7 @@ public class Intervention_impl  implements Intervention_api {
                 SET numero_dent = ?,
                     prix_patient = ?,
                     id_acte = ?
+                    duree=?
                 WHERE id = ?
                 """;
         int prix_patient = objet.getPrix_patient();
@@ -225,6 +226,7 @@ public class Intervention_impl  implements Intervention_api {
         ) {
             pst.setInt(1, objet.getNumero_dent());
             pst.setInt(2, objet.getPrix_patient());
+            pst.setInt(3, objet.getDuree());
             pst.setInt(3, objet.getActe().getId());
             pst.setInt(4, objet.getId());
             pst.executeUpdate();

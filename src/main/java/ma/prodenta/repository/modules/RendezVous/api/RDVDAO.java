@@ -12,4 +12,6 @@ public interface RDVDAO extends CrudRepository<RDV,Integer> {
     boolean existsById(Integer id);
     Integer count();
     int get_last_id();
+    public List<RDV> findByDossier(Integer idDossier) throws Exception;
+    public RDV findByDossier1(Integer idDossier) throws Exception;
 }

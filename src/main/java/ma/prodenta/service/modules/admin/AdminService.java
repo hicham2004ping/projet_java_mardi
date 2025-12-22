@@ -1,4 +1,4 @@
-package ma.prodenta.service.common;
+package ma.prodenta.service.modules.admin;
 
 import ma.prodenta.common.exceptions.ValidationException;
 import ma.prodenta.mvc.dto.admin.AdminViewDto;

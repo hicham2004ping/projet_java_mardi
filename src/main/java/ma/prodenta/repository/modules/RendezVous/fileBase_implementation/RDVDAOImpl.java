@@ -106,21 +106,30 @@ public class RDVDAOImpl implements RDVDAO {
 
     @Override
     public boolean create(RDV rdv){
-        String sql = "INSERT INTO RDV (dateRDV, heure, motif, noteMedecin, id_dossier) " +
-                "VALUES (?, ?, ?, ?, ?)";
-        int nombre =0;
+        String sql = "INSERT INTO RDV (dateRDV, heure, motif, noteMedecin, id_dossier) VALUES (?, ?, ?, ?, ?)";
+        int nombre = 0;
         try (Connection conn = SessionFactory.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
             stmt.setDate(1, new java.sql.Date(rdv.getDateRDV().getTime()));
             stmt.setTime(2, rdv.getHeure());
             stmt.setString(3, rdv.getMotif());
             stmt.setString(4, rdv.getNoteMedecin());
             stmt.setLong(5, rdv.getIddossier());
-           nombre = stmt.executeUpdate();
+
+            nombre = stmt.executeUpdate();
+
+            // Récupération de l'ID généré
+            try (ResultSet keys = stmt.getGeneratedKeys()) {
+                if (keys.next()) {
+                    rdv.setIdRDV(keys.getInt(1));
+                }
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return nombre>0;
+        return nombre > 0;
     }
 
     @Override
@@ -197,6 +206,39 @@ public class RDVDAOImpl implements RDVDAO {
 
         return lastId;
     }
+    // Récupère tous les RDV liés à un dossier médical
+    public List<RDV> findByDossier(Integer idDossier) throws Exception {
+        List<RDV> list = new ArrayList<>();
+        String sql = "SELECT * FROM RDV WHERE id_dossier = ?";
+
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, idDossier);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapResultSetToRDV(rs));
+                }
+            }
+        }
+        return list;
+    }
+    public RDV findByDossier1(Integer idDossier) throws Exception {
+        String sql = "SELECT * FROM RDV WHERE id_dossier = ? LIMIT 1"; // MySQL
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, idDossier);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToRDV(rs);
+                }
+            }
+        }
+        return null; // aucun RDV trouvé
+    }
+
+
 }
 
 
