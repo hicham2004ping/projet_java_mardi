@@ -35,6 +35,7 @@ public class Test_scenario_patient {
         Prescription_impl prescription_impl=Application_contexte.getPrescriptionRepository();
         MedicamentDAOImpl medicamentDAO=Application_contexte.getMedicamentRepository();
         RDVDAOImpl rdvdao=Application_contexte.getRdvRepository();
+        CertificatDaoimpl certificatRepository=Application_contexte.getCertificatRepository();
 
         Acte_impl acte_impl=Application_contexte.getActeRepository();
         Consultation consultation=new Consultation();
@@ -42,6 +43,7 @@ public class Test_scenario_patient {
         Medicament medicament =new Medicament();
         Ordonnance ordonnance=new Ordonnance();
         Prescription prescription=new Prescription();
+        Certificat certificat=new Certificat();
 
         Acte acte=new Acte();
         List<Antecedent> antecedents=new ArrayList<>();
@@ -76,18 +78,20 @@ public class Test_scenario_patient {
                 d.setIdMedecin(1);
                 d.setDateCreation(LocalDate.now());
                 boolean flag2=d1.create(d);
+                Integer id=d1.get_last_id();
                 //stockage dans la base
+
                 if(flag2){
 
                     System.out.println("creation  du dossier avec succes");
                     d2=d1.find_patient(p);
                     System.out.println("l'id du dossier est "+d2.getIdDossier()+" il appartient au patient"+p.getNom());
                     RDV rdv = new RDV();
-                    rdv.setDateRDV(new Date()); // aujourd'hui
+                    rdv.setDateRDV(new Date());
                     rdv.setHeure(Time.valueOf("10:30:00"));
-                    rdv.setMotif("Consultation dentaire générale");
-                    rdv.setNoteMedecin("Patient à examiner");
-                    rdv.setIddossier(d2.getIdDossier());
+                    rdv.setMotif("Consultation générale");
+                    rdv.setNoteMedecin("À examiner");
+                    rdv.setIddossier(id);
 
                     boolean flagRDV = rdvdao.create(rdv);
 
@@ -104,7 +108,19 @@ public class Test_scenario_patient {
                     consultation.setDateConsult(new Date());
                     consultation.setId_medecin(1);
                     boolean flag3=consultationDaoimpl.create(consultation);
+                    certificat.setNoteMedecin("Tu vas mouriiirr");
+                    certificat.setNature("mort");
+                    certificat.setDateFin(new Date());
+                    certificat.setIdDossier(d2.getIdDossier());
+                    certificat.setDateDebut(new Date());
+                    certificat.setIdConsult(consultation.getIdConsult());
+                    boolean flagCertif = certificatRepository.create(certificat);
+                    if(flagCertif){
+                        System.out.println("Création du certif avec succès, ID = " + certificat.getIdCert());
 
+                    }else{
+                        System.out.println("Échec de création du RDV");
+                    }
 
                     //test de la creation du consultation
                     if(flag3){
@@ -186,7 +202,7 @@ public class Test_scenario_patient {
                 for (Antecedent a : liste_antecedents) {
                     System.out.println("le nom de l'antecedent " + a.getNom() + " sa categorie est " + a.getCategorie());
                 }
-                RDV r = rdvRepo.findById(dossier.getIdDossier());
+                RDV r = rdvRepo.findByDossier1(dossier.getIdDossier());
 
                 if (r != null) {
                     System.out.println(
@@ -206,17 +222,33 @@ public class Test_scenario_patient {
                         System.out.println("l'interventin c'etait pour la dent numero" + i.getNumero_dent() + "le libelle de l'acte c'etait " + i.getActe().getLibelle());
                     }
                 }
+
                 // les ordonances
                 System.out.println("ordonances :");
                 for(Ordonnance ordonnance:dossierRepo.find_ordonances(dossier)){
                     System.out.println("l'id de l'ordoannce  est "+ordonnance.getIdOrd()+" a ete rediger le "+ordonnance.getDateOrd());
                 }
+
+                System.out.println("Certificats :");
+
+                for (Certificat cert : certificat.findByDossier(dossier.getIdDossier())) {
+                    System.out.println(
+                            "Certificat ID : " + cert.getIdCert() +
+                                    " | Nature : " + cert.getNature() +
+                                    " | Début : " + cert.getDateDebut() +
+                                    " | Fin : " + cert.getDateFin() +
+                                    " | Note : " + cert.getNoteMedecin()
+                    );
+                }
+
+
             } else {
                 System.out.println("Patient introuvable (ID = " + id_patient + ")");
             }
         } catch (Exception e) {
             System.out.println("Erreur lecture patient : " + e.getMessage());
         }
+
     }
 
     public void update(){

@@ -157,24 +157,6 @@ public class ConsultationDaoimpl implements ConsultationDao {
             throw new RuntimeException(e);
         }
     }
-    public int get_last_id() {
-        int lastId = 0;
-        String sql = "SELECT MAX(idConsult) AS last_id FROM Consultation";
-
-        try (Connection conn = SessionFactory.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            if (rs.next()) {
-                lastId = rs.getInt("last_id");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération du dernier ID Consultation : " + e.getMessage());
-        }
-
-        return lastId;
-    }
 
 @Override
     // Récupère toutes les consultations liées à un RDV
@@ -199,6 +181,50 @@ public class ConsultationDaoimpl implements ConsultationDao {
             }
         }
         return list;
+    }
+    // Récupère toutes les consultations d'un patient via son dossier
+    public List<Consultation> findByPatient(Integer idPatient) throws Exception {
+        List<Consultation> consultations = new ArrayList<>();
+        String sql = """
+        SELECT c.*
+        FROM Consultation c
+        JOIN DossierMedical d ON c.idDossier = d.idDossier
+        WHERE d.idPatient = ?
+    """;
+
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, idPatient);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    consultations.add(resultToConsultation(rs));
+                }
+            }
+        }
+
+        return consultations;
+    }
+
+    // Déjà présent : findByDossier, findById, findAll, create, update, delete, deleteById, findByRdv
+// Récupère le dernier ID pour créer de nouveaux objets
+    public int get_last_id() {
+        int lastId = 0;
+        String sql = "SELECT MAX(idConsult) AS last_id FROM Consultation";
+
+        try (Connection conn = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                lastId = rs.getInt("last_id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération du dernier ID Consultation : " + e.getMessage());
+        }
+
+        return lastId;
     }
 
 

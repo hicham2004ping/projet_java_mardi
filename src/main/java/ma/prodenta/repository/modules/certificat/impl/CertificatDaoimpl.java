@@ -173,6 +173,28 @@ public class CertificatDaoimpl implements CertificatDao {
         }
         return certificats;
     }
+    // Récupère tous les certificats liés à un dossier
+    public List<Certificat> findByDossier(Integer idDossier) throws Exception {
+        List<Certificat> certificats = new ArrayList<>();
+        String sql = "SELECT * FROM Certificat WHERE idDossier = ?";
+
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, idDossier);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    certificats.add(resultToCertificat(rs));
+                }
+            }
+        }
+
+        return certificats;
+    }
+
+
+
 
 
 
