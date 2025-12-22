@@ -18,6 +18,7 @@ import ma.prodenta.service.modules.dossierMedical.impl.DossierMedicalServiceImpl
 import ma.prodenta.service.modules.intervention.impl.Intervention_Service_impl;
 import ma.prodenta.service.modules.ordonnance.impl.Ordonance_Service_impl;
 import ma.prodenta.service.modules.patient.baseImplementation.PatientServiceImpl;
+import ma.prodenta.repository.modules.certificat.impl.CertificatDaoimpl;
 
 public class Application_contexte {
     public static final PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
@@ -61,6 +62,8 @@ public class Application_contexte {
 
     private static final Intervention_impl interventionRepository =
             new Intervention_impl();
+    private static final CertificatDaoimpl certificatRepository =
+            new CertificatDaoimpl();
 
     public static Patient_impl getPatientRepository() {
         return patientRepository;
@@ -131,4 +134,7 @@ public class Application_contexte {
         return rendez_vous;
     }
 
+    public static CertificatDaoimpl getCertificatRepository(){
+        return certificatRepository;
+    }
 }
