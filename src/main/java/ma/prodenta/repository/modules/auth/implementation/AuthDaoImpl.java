@@ -1,4 +1,5 @@
 package ma.prodenta.repository.modules.auth.implementation;
+import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.common.Connextion_db;
@@ -20,30 +21,28 @@ public class AuthDaoImpl implements AuthDao {
     public Optional<Utilisateur> findByLogin(String login) throws Exception {
         String sql = "SELECT * FROM utilisateur WHERE login = ?";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
+        try (Connection con= SessionFactory.getInstance().getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)){
             ps.setString(1, login);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 return Optional.of(new UserImpl().mapUtilisateur(rs));
             }
+            return Optional.empty();
+
         }
-        return Optional.empty();
+
+
+
+
     }
 
     @Override
     public Optional<Utilisateur> findByEmail(String email) throws Exception {
         String sql = "SELECT * FROM utilisateur WHERE email = ?";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, email);
@@ -60,10 +59,7 @@ public class AuthDaoImpl implements AuthDao {
     public Optional<Utilisateur> login(String login, String motdepasse) throws Exception {
         String sql = "SELECT * FROM utilisateur WHERE login = ? AND motdepasse = ?";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con =SessionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, login);
@@ -81,10 +77,7 @@ public class AuthDaoImpl implements AuthDao {
     public boolean existsByLogin(String login) {
         String sql = "SELECT COUNT(*) FROM utilisateur WHERE login = ?";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con =SessionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, login);
@@ -100,10 +93,7 @@ public class AuthDaoImpl implements AuthDao {
     public boolean existsByEmail(String email) {
         String sql = "SELECT COUNT(*) FROM utilisateur WHERE email = ?";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con =SessionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, email);
@@ -119,10 +109,7 @@ public class AuthDaoImpl implements AuthDao {
     public long count() {
         String sql = "SELECT COUNT(*) FROM utilisateur";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con = SessionFactory.getInstance().getConnection();
              Statement st = con.createStatement()) {
 
             ResultSet rs = st.executeQuery(sql);
@@ -142,10 +129,7 @@ public class AuthDaoImpl implements AuthDao {
         List<Utilisateur> list = new ArrayList<>();
         String sql = "SELECT * FROM utilisateur";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con = SessionFactory.getInstance().getConnection();
              Statement st = con.createStatement()) {
 
             ResultSet rs = st.executeQuery(sql);
@@ -160,10 +144,7 @@ public class AuthDaoImpl implements AuthDao {
     public Utilisateur findById(Integer idUser) throws Exception {
         String sql = "SELECT * FROM utilisateur WHERE idUser = ?";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, idUser);
@@ -187,10 +168,7 @@ public class AuthDaoImpl implements AuthDao {
                 "dateNaissance, lastLoginDate, idRole" +
                 ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword())) {
+        try (Connection con = SessionFactory.getInstance().getConnection();) {
 
             // =============================
             // 1) Récupérer le prochain ID
@@ -251,10 +229,7 @@ public class AuthDaoImpl implements AuthDao {
                 "login = ?, motdepasse = ?, dateNaissance = ?, lastLoginDate = ?, idRole = ? " +
                 "WHERE idUser = ?";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, u.getNom());
@@ -297,10 +272,7 @@ public class AuthDaoImpl implements AuthDao {
     public boolean deleteById(Integer idUser) throws SQLException, Exception {
         String sql = "DELETE FROM utilisateur WHERE idUser = ?";
 
-        try (Connection con = DriverManager.getConnection(
-                new Connextion_db().getUrl(),
-                new Connextion_db().getUsername(),
-                new Connextion_db().getPassword());
+        try (Connection con = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, idUser);

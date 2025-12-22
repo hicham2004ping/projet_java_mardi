@@ -76,11 +76,35 @@ public class ConsultationDaoimpl implements ConsultationDao {
             ps.setInt(4, objet.getIdStatut());
             ps.setInt(5,objet.getId_rdv());
             ps.setInt(6, objet.getId_medecin());
-            return ps.executeUpdate() > 0;
+            boolean flag= ps.executeUpdate() > 0;
+            if (flag) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if(rs.next()) {
+                    objet.setIdConsult(rs.getInt(1));
+                }
+                return true;
+            }
+            return false;
         }
     }
+
     @Override
     public void update(Consultation objet) throws SQLException, IOException, Exception {
+        String sql = """
+                update consultation set dateConsult=?,observationMedecin=?,idDossier=?,idStatut=?,id_rdv=?,id_medecin=?
+                where idConsult=?
+               """;
+        try (Connection c = SessionFactory.getInstance().getConnection();
+             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setDate(1, new java.sql.Date(objet.getDateConsult().getTime()));
+            ps.setString(2, objet.getObservationMedecin());
+            ps.setInt(3, objet.getIdDossier());
+            ps.setInt(4, objet.getIdStatut());
+            ps.setInt(5,objet.getId_rdv());
+            ps.setInt(6, objet.getId_medecin());
+            ps.setInt(7,objet.getIdConsult());
+            ps.executeUpdate() ;
+        }
 
     }
 

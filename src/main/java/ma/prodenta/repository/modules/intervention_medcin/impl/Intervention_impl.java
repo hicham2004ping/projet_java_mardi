@@ -1,8 +1,11 @@
 package ma.prodenta.repository.modules.intervention_medcin.impl;
+import ma.prodenta.config.Application_contexte;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Acte;
 import ma.prodenta.entities.En.Antecedent;
+import ma.prodenta.entities.En.Consultation;
 import ma.prodenta.entities.En.Intervention;
+import ma.prodenta.repository.modules.consultation.impl.ConsultationDaoimpl;
 import ma.prodenta.repository.modules.intervention_medcin.api.Intervention_api;
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import ma.prodenta.repository.modules.actes.impl.Acte_impl;
+
 public class Intervention_impl  implements Intervention_api {
 
     public Intervention map_resultset_to_objet(ResultSet resultSet) throws SQLException,Exception {
@@ -30,7 +34,6 @@ public class Intervention_impl  implements Intervention_api {
         }
         return intervention;
     }
-
 
     @Override
     public int numero_intervention_par_dent() {
@@ -66,6 +69,45 @@ public class Intervention_impl  implements Intervention_api {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public List<Intervention> interventions_par_consultation(Consultation consultation) throws SQLException {
+        String requete= """
+                select
+                i.id,i.numero_dent,i.prix_patient,i.id_acte,
+                a.id,a.categorie,a.libelle,a.prix_de_base
+                from intervention_medcin i, acte a
+                where
+                i.id_acte=a.id
+                and i.id_consultation=?
+                """;
+        List<Intervention>interventions=new ArrayList<>();
+        Intervention intervention = new Intervention();
+        Acte acte=new Acte();
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement ps=conn.prepareStatement(requete);)
+        {
+         ps.setInt(1,consultation.getIdConsult());
+         ResultSet rs=ps.executeQuery();
+         while(rs.next()){
+             intervention.setId(rs.getInt("i.id"));
+             intervention.setNumero_dent(rs.getInt("i.numero_dent"));
+             intervention.setPrix_patient(rs.getInt("i.prix_patient"));
+             intervention.setId_consultation(consultation.getIdConsult());
+
+             acte.setId(rs.getInt("a.id"));
+             acte.setCategorie(rs.getString("a.categorie"));
+             acte.setLibelle(rs.getString("a.libelle"));
+             acte.setPrix_de_base(rs.getInt("a.prix_de_base"));
+
+             intervention.setActe(acte);
+             interventions.add(intervention);
+             intervention=new Intervention();
+             acte=new Acte();
+         }
+        return interventions;
+        }
     }
 
     @Override
@@ -135,9 +177,6 @@ public class Intervention_impl  implements Intervention_api {
        int prix_patient = objet.getPrix_patient();
        int prix_generale=(int)objet.getActe().getPrix_de_base();
 
-        if(objet.getNumero_dent()>32 || objet.getNumero_dent()<1){
-             return false;
-         }
        System.out.println("la valeur apres le casting c'est "+prix_generale);
 
        try(Connection conn= SessionFactory.getInstance().getConnection();
@@ -236,6 +275,21 @@ public class Intervention_impl  implements Intervention_api {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+    public static void main(){
+        System.out.println("salut comment ca va");
+        Intervention_impl intervention_impl = Application_contexte.getInterventionRepository();
+        List<Intervention> interventions=new ArrayList<>();
+        ConsultationDaoimpl consultationDaoimpl =Application_contexte.getConsultationRepository();
+        try{
+            interventions=intervention_impl.interventions_par_consultation(consultationDaoimpl.findById(11));
+            for(Intervention intervention:interventions){
+                System.out.println("l'id de l'intervention c'est "+intervention.getId()+" le libelle de l'acte c'est "+intervention.getActe().getLibelle());
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }

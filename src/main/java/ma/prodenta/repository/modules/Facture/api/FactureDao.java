@@ -4,4 +4,5 @@ import ma.prodenta.entities.En.Facture;
 import ma.prodenta.repository.common.CrudRepository;
 
 public interface FactureDao extends CrudRepository<Facture,Integer> {
+
 }

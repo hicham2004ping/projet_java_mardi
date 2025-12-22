@@ -267,8 +267,6 @@ public class Antecedent_patient_impl implements Antecedent_patient {
         String requete= """
                 delete from patient_antecedent where id_patient=? and id_antecedent=?
                 """;
-        int id=0;
-        id=get_last_id();
         try(Connection conn= SessionFactory.getInstance().getConnection();
             PreparedStatement pst=conn.prepareStatement(requete))
         {

@@ -13,9 +13,7 @@ import java.util.Optional;
 
 public class Statut_consultation_impl implements Statut_consultation_api {
 
-    private static final String TABLE = "statutconsultation";
-
-    // ============================= FIND BY NOM =============================
+    private static final String TABLE = "statut_consultation";
     @Override
     public Staut_consultation findBYnom(String libelle) {
 
@@ -35,11 +33,9 @@ public class Statut_consultation_impl implements Statut_consultation_api {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
-    // ============================= FIND ALL =============================
     @Override
     public List<Staut_consultation> findAll() throws Exception {
 
@@ -60,7 +56,6 @@ public class Statut_consultation_impl implements Statut_consultation_api {
         return list;
     }
 
-    // ============================= FIND BY ID =============================
     @Override
     public Staut_consultation findById(Integer id) throws Exception {
 
@@ -81,7 +76,6 @@ public class Statut_consultation_impl implements Statut_consultation_api {
         return null;
     }
 
-    // ============================= CREATE =============================
     @Override
     public boolean create(Staut_consultation objet) throws SQLException, IOException {
 
@@ -96,7 +90,6 @@ public class Statut_consultation_impl implements Statut_consultation_api {
         }
     }
 
-    // ============================= UPDATE =============================
     @Override
     public void update(Staut_consultation objet) throws SQLException, IOException, Exception {
 
@@ -112,7 +105,6 @@ public class Statut_consultation_impl implements Statut_consultation_api {
         }
     }
 
-    // ============================= DELETE =============================
     @Override
     public boolean delete(Staut_consultation objet) throws SQLException, Exception {
         return deleteById(objet.getId());
