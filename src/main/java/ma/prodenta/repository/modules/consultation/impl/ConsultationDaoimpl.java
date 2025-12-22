@@ -1,3 +1,4 @@
+
 package ma.prodenta.repository.modules.consultation.impl;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
@@ -8,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 public class ConsultationDaoimpl implements ConsultationDao {
     @Override
     public List<Consultation> findByDossier(Integer idDossier) throws Exception {
@@ -97,7 +99,6 @@ public class ConsultationDaoimpl implements ConsultationDao {
         try (Connection c = SessionFactory.getInstance().getConnection();
              PreparedStatement ps = c.prepareStatement(sql))
         {
-            System.out.println("je suis dans la methode update et l'id est "+objet.getIdConsult());
             ps.setDate(1, new java.sql.Date(objet.getDateConsult().getTime()));
             ps.setString(2, objet.getObservationMedecin());
             ps.setInt(3, objet.getIdDossier());
@@ -200,5 +201,10 @@ public class ConsultationDaoimpl implements ConsultationDao {
             }
         }
         return list;
+    }
+
+    @Override
+    public List<Consultation> findByPatient(Integer idPatient) throws Exception {
+        return List.of();
     }
 }

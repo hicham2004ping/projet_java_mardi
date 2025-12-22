@@ -8,13 +8,13 @@ public class Consultatino {
         Consultation_service_impl consultationService = new Consultation_service_impl();
 
         try {
-            int idPatient = 73;
-            int idDossier = 45;
+            int idPatient = 76;
+            int idDossier = 48;
             int idMedecin = 1;
-            int idRdv = 5;
+            int idRdv = 8;
             int idConsultation = 25;
 
-            //consultationService.demarerConsultation(idDossier, idMedecin, idRdv, "Observation de test depuis main");
+           // consultationService.demarerConsultation(idDossier, idMedecin, idRdv, "Observation de test depuis main");
 
 
             Consultation consultationActive = consultationService.getConsultationActiveDuPatient(idPatient);

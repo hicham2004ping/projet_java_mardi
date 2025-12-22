@@ -119,7 +119,6 @@ public class RDVDAOImpl implements RDVDAO {
 
             nombre = stmt.executeUpdate();
 
-            // Récupération de l'ID généré
             try (ResultSet keys = stmt.getGeneratedKeys()) {
                 if (keys.next()) {
                     rdv.setIdRDV(keys.getInt(1));

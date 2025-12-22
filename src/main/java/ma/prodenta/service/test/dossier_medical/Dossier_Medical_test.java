@@ -9,7 +9,7 @@ public class Dossier_Medical_test {
         try {
             DossierMedicalServiceImpl dossierMedicalServiceImpl = Application_contexte.getdossierMedicalService();
             Patient patient = new Patient();
-            patient.setId(73);
+            patient.setId(76);
             dossierMedicalServiceImpl.find_dossier(patient);
 
             int totalConsultations =dossierMedicalServiceImpl.total_consultations_Patient(patient);

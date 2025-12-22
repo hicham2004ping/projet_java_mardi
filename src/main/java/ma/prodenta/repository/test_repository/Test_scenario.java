@@ -8,7 +8,6 @@ import ma.prodenta.repository.modules.medicament.fileBase_implementation.Medicam
 import ma.prodenta.repository.modules.ordonnance.impl.OrdonnanceDaoImpl;
 import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_medical_impl;
-
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl
 import ma.prodenta.repository.modules.actes.impl.Acte_impl;
 import ma.prodenta.repository.modules.prescription.impl.Prescription_impl;
 
-public class Test_scenario_patient {
+public class Test_scenario {
    private static int id_patient;
 
     public void creation(){
@@ -34,7 +33,7 @@ public class Test_scenario_patient {
         OrdonnanceDaoImpl ordonnanceDao=Application_contexte.getOrdonnanceRepository();
         Prescription_impl prescription_impl=Application_contexte.getPrescriptionRepository();
         MedicamentDAOImpl medicamentDAO=Application_contexte.getMedicamentRepository();
-        RDVDAOImpl rdvdao=Application_contexte.getRdvRepository();
+        RDVDAOImpl rdvdao=Application_contexte.getRDVRepository();
         CertificatDaoimpl certificatRepository=Application_contexte.getCertificatRepository();
 
         Acte_impl acte_impl=Application_contexte.getActeRepository();
@@ -86,6 +85,7 @@ public class Test_scenario_patient {
                     System.out.println("creation  du dossier avec succes");
                     d2=d1.find_patient(p);
                     System.out.println("l'id du dossier est "+d2.getIdDossier()+" il appartient au patient"+p.getNom());
+
                     RDV rdv = new RDV();
                     rdv.setDateRDV(new Date());
                     rdv.setHeure(Time.valueOf("10:30:00"));
@@ -184,7 +184,7 @@ public class Test_scenario_patient {
         ConsultationDaoimpl consultationRepo = Application_contexte.getConsultationRepository();
         Intervention_impl interventionRepo = Application_contexte.getInterventionRepository();
         Antecedent_patient_impl antecedent_patient_impl=Application_contexte.getAntecedentPatientRepository();
-        RDVDAOImpl rdvRepo=Application_contexte.getRdvRepository();
+        RDVDAOImpl rdvRepo=Application_contexte.getRDVRepository();
         CertificatDaoimpl certificat=Application_contexte.getCertificatRepository();
 
         List<Antecedent>liste_antecedents=new ArrayList<>();
@@ -305,7 +305,7 @@ public class Test_scenario_patient {
 
 
     public static void main(){
-        Test_scenario_patient p=new Test_scenario_patient();
+        Test_scenario p=new Test_scenario();
         System.out.println("\n*************Creation*************\n");
         p.creation();
         System.out.println("*************lecture*************\n");
@@ -313,6 +313,6 @@ public class Test_scenario_patient {
         System.out.println("*************Update*************\n");
         p.update();
         System.out.println("*************Delete*************\n");
-        p.delete();
+      //  p.delete();
     }
 }
