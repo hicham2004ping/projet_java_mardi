@@ -8,7 +8,7 @@ import java.util.Date;
 import java.io.Serializable;
 import java.util.List;
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
-public class Patient { //implements Comparable<Patient>{
+public class Patient {
     private String prenom ;
     private int  id;
     private String nom;

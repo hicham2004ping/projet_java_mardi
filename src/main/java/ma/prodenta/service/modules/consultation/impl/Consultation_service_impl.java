@@ -14,7 +14,6 @@ import ma.prodenta.repository.modules.statut_consultation.impl.Statut_consultati
 public class Consultation_service_impl implements ma.prodenta.service.modules.consultation.api.Consultation_service_impl {
     @Override
     public void cloturerConsultation(int idConsultation) throws Exception {
-
         Statut_consultation_impl statutRepository =Application_contexte.getStatutRepository();
         ConsultationDaoimpl consultationDaoimpl = Application_contexte.getConsultationRepository();
 
@@ -23,10 +22,18 @@ public class Consultation_service_impl implements ma.prodenta.service.modules.co
 
         statut=statutRepository.findBYnom("Terminé");
         consultation=consultationDaoimpl.findById(idConsultation);
-        consultation.setIdConsult(statut.getId());
 
+        if(consultation.getIdStatut()!=statutRepository.findBYnom("En cours").getId()){
+            throw new Exception("impossible de cloturer une consultation qu'est pas en cours");
+        }
+
+        int id=consultation.getIdStatut();
+        consultation.setIdStatut(statut.getId());
         consultationDaoimpl.update(consultation);
 
+        if(id==consultation.getIdStatut()){
+            throw new Exception("erreur lors de la mise a jour de la statut du consultation");
+        }
         System.out.println("le statut de la consultation a ete mis ajour avec success !!");
     }
 

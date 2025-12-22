@@ -4,7 +4,9 @@ import ma.prodenta.entities.En.Ordonnance;
 import ma.prodenta.entities.En.Prescription;
 import ma.prodenta.repository.common.CrudRepository;
 
+import java.sql.SQLException;
+import java.util.List;
+
 public interface Prescription_api extends CrudRepository<Prescription,Integer> {
     public int total_prescriptions(Ordonnance ordonance);
-
 }

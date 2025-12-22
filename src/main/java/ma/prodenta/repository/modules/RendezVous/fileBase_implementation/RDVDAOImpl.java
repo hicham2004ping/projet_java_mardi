@@ -20,6 +20,7 @@ public class RDVDAOImpl implements RDVDAO {
             return rs.getInt(1);
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
+
     @Override
     public List<RDV> findAll() throws Exception {
 
@@ -91,6 +92,7 @@ public class RDVDAOImpl implements RDVDAO {
             try (ResultSet rs = ps.executeQuery()) { return rs.next(); }
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
+
     private RDV mapResultSetToRDV(ResultSet rs) throws SQLException {
         return (RDV) RDV.builder()
                 .idRDV(rs.getInt("idRDV"))
@@ -101,7 +103,6 @@ public class RDVDAOImpl implements RDVDAO {
                 .iddossier(rs.getInt("id_dossier"))
                 .build();
     }
-
 
     @Override
     public boolean create(RDV rdv){
@@ -121,6 +122,7 @@ public class RDVDAOImpl implements RDVDAO {
         }
         return nombre>0;
     }
+
     @Override
     public void update(RDV rdv) throws SQLException {
         String sql = """

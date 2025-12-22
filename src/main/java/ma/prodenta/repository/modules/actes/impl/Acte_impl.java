@@ -62,6 +62,84 @@ public class Acte_impl implements Acte_api {
     }
 
     @Override
+    public List<Acte> getActesParCategorie(String categorie) throws Exception {
+        String requete= """
+                select * from acte where categorie=?;
+                """;
+        List<Acte> actes=new ArrayList<>();
+        Acte acte=new Acte();
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement pst=conn.prepareStatement(requete);){
+            pst.setString(1,categorie);
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                acte.setId(rs.getInt("id"));
+                acte.setLibelle(rs.getString("libelle"));
+                acte.setCategorie(rs.getString("categorie"));
+                acte.setPrix_de_base(rs.getDouble("prix_de_base"));
+                actes.add(acte);
+                acte=new Acte();
+            }
+            return actes;
+        }
+    }
+
+    @Override
+    public List<Acte> rechercherActesParMotCle(String motCle) throws Exception {
+        String requete= """
+                select * from acte where libelle like ? or categorie like ?;
+                """;
+        List<Acte> actes=new ArrayList<>();
+        Acte acte=new Acte();
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+            PreparedStatement pst=conn.prepareStatement(requete);){
+            pst.setString(1,'%'+motCle+'%');
+            pst.setString(2,'%'+motCle+'%');
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                acte.setId(rs.getInt("id"));
+                acte.setLibelle(rs.getString("libelle"));
+                acte.setCategorie(rs.getString("categorie"));
+                acte.setPrix_de_base(rs.getDouble("prix_de_base"));
+                actes.add(acte);
+                acte=new Acte();
+            }
+            return actes;
+        }
+    }
+
+    @Override
+    public List<Acte> trierActesParPrix(boolean ascendant) throws Exception {
+        String requete;
+        if(ascendant){
+             requete= """
+                select * from acte order by prix_de_base ;
+                """;
+
+        }
+        else{
+             requete= """
+                select * from acte order by prix_de_base desc ;
+                """;
+        }
+        List<Acte> actes=new ArrayList<>();
+        Acte acte=new Acte();
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+            PreparedStatement pst=conn.prepareStatement(requete);){
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                acte.setId(rs.getInt("id"));
+                acte.setLibelle(rs.getString("libelle"));
+                acte.setCategorie(rs.getString("categorie"));
+                acte.setPrix_de_base(rs.getDouble("prix_de_base"));
+                actes.add(acte);
+                acte=new Acte();
+            }
+            return actes;
+        }
+    }
+
+    @Override
     public List<Acte> findAll() throws Exception {
         String requete = "select * from acte";
         List<Acte> actes = new ArrayList<>();
@@ -166,7 +244,7 @@ public class Acte_impl implements Acte_api {
         try(Connection conn=SessionFactory.getInstance().getConnection();
         PreparedStatement pst=conn.prepareStatement(requete))
         {
-            pst.setString(1,"%"+nom+"%");
+            pst.setString(1,nom);
             ResultSet rs=pst.executeQuery();
             if(rs.next()){
                 acte=mapResultSetToActe(rs);

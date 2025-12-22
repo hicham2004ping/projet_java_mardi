@@ -177,17 +177,14 @@ public class Intervention_impl  implements Intervention_api {
        int prix_patient = objet.getPrix_patient();
        int prix_generale=(int)objet.getActe().getPrix_de_base();
 
-       System.out.println("la valeur apres le casting c'est "+prix_generale);
 
        try(Connection conn= SessionFactory.getInstance().getConnection();
            PreparedStatement pst= conn.prepareStatement(requete);)
        {
            if (prix_patient == -1){
-               System.out.println("ca sera le prix par defaut");
                objet.setPrix_patient(prix_generale);
            }
            else{
-               System.out.println("ca sera pas le prix par defaut");
                objet.setPrix_patient(prix_patient);
            }
            pst.setInt(1,objet.getNumero_dent());
@@ -275,21 +272,6 @@ public class Intervention_impl  implements Intervention_api {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-    }
-    public static void main(){
-        System.out.println("salut comment ca va");
-        Intervention_impl intervention_impl = Application_contexte.getInterventionRepository();
-        List<Intervention> interventions=new ArrayList<>();
-        ConsultationDaoimpl consultationDaoimpl =Application_contexte.getConsultationRepository();
-        try{
-            interventions=intervention_impl.interventions_par_consultation(consultationDaoimpl.findById(11));
-            for(Intervention intervention:interventions){
-                System.out.println("l'id de l'intervention c'est "+intervention.getId()+" le libelle de l'acte c'est "+intervention.getActe().getLibelle());
-            }
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
         }
     }
 }

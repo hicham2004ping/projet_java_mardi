@@ -66,7 +66,7 @@ public class Intervention_Service_impl implements Intervention_Service_api {
         if (consultation==null) {
             throw new Exception("la consultation n'existe pas dans la base ");
         }
-        if(consultation.getIdConsult()!=stautConsultation.findBYnom("En cours").getId()){
+        if(consultation.getIdStatut()!=stautConsultation.findBYnom("En cours").getId()){
             throw new Exception("la consultation est terminer");
         }
         System.out.println("la consultation n'est pas encore terminer");

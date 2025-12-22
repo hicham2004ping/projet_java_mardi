@@ -6,7 +6,9 @@ import ma.prodenta.repository.modules.medicament.fileBase_implementation.Medicam
 import ma.prodenta.repository.modules.ordonnance.impl.OrdonnanceDaoImpl;
 import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_medical_impl;
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,11 +19,13 @@ import ma.prodenta.repository.modules.consultation.impl.ConsultationDaoimpl;
 import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl;
 import ma.prodenta.repository.modules.actes.impl.Acte_impl;
 import ma.prodenta.repository.modules.prescription.impl.Prescription_impl;
+import ma.prodenta.repository.modules.RendezVous.fileBase_implementation.RDVDAOImpl;
 
 public class Test_scenario_patient {
    private static int id_patient;
 
     public void creation(){
+
         Dossier_medical_impl d1=Application_contexte.getDossierMedicalRepository();
         Patient_impl patientRepository =Application_contexte.getPatientRepository();
         Antecedent_impl antecedent_impl=Application_contexte.getAntecedentRepository();
@@ -30,6 +34,8 @@ public class Test_scenario_patient {
         OrdonnanceDaoImpl ordonnanceDao=Application_contexte.getOrdonnanceRepository();
         Prescription_impl prescription_impl=Application_contexte.getPrescriptionRepository();
         MedicamentDAOImpl medicamentDAO=Application_contexte.getMedicamentRepository();
+        RDVDAOImpl rendez_vous=Application_contexte.getRDVRepository();
+        RDV rdv=new RDV();
 
         Acte_impl acte_impl=Application_contexte.getActeRepository();
         Consultation consultation=new Consultation();
@@ -53,6 +59,7 @@ public class Test_scenario_patient {
         p.setEmail("fouad@chokr.com");
         p.setDateNaissance(LocalDate.now());
 
+        //creation des rendez-vous
         try{
             //remplissage de la list des antecedents
             for(int i=1;i<=5;i++){
@@ -73,13 +80,14 @@ public class Test_scenario_patient {
                 boolean flag2=d1.create(d);
                 //stockage dans la base
                 if(flag2){
-
                     System.out.println("creation  du dossier avec succes");
+                    rdv.setIddossier(d.getIdDossier());
                     d2=d1.find_patient(p);
                     System.out.println("l'id du dossier est "+d2.getIdDossier()+" il appartient au patient"+p.getNom());
+                    //creation de la consultation
 
                     consultation.setObservationMedecin("tout ira mieux demain");
-                    consultation.setId_rdv(1);
+                    consultation.setId_rdv(5);
                     consultation.setIdDossier(d2.getIdDossier());
                     consultation.setIdStatut(1);
                     consultation.setDateConsult(new Date());
@@ -239,16 +247,15 @@ public class Test_scenario_patient {
         }
     }
 
-
     public static void main(){
         Test_scenario_patient p=new Test_scenario_patient();
         System.out.println("\n*************Creation*************\n");
         p.creation();
-        System.out.println("*************lecture*************\n");
+        System.out.println("\n*************lecture*************\n");
         p.lecture();
-        System.out.println("*************Update*************\n");
+        System.out.println("\n*************Update*************\n");
         p.update();
-        System.out.println("*************Delete*************\n");
-        p.delete();
+        System.out.println("\n*************Delete*************\n");
+       // p.delete();
     }
 }

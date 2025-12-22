@@ -1,9 +1,8 @@
 package ma.prodenta.repository.modules.ordonnance.impl;
+import ma.prodenta.config.Application_contexte;
 import ma.prodenta.config.SessionFactory;
-import ma.prodenta.entities.En.Antecedent;
-import ma.prodenta.entities.En.Medicament;
-import ma.prodenta.entities.En.Ordonnance;
-import ma.prodenta.entities.En.Utilisateur;
+import ma.prodenta.entities.En.*;
+import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_medical_impl;
 import ma.prodenta.repository.modules.ordonnance.api.Ordonance_api;
 import java.net.Inet4Address;
 import java.sql.*;
@@ -33,6 +32,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
         }
         return null;
     }
+
 
     @Override
     public List<Ordonnance> findAll() throws Exception {
@@ -131,10 +131,12 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
     public List<Medicament> find_all_medicament_in_ordonance(Ordonnance ordonance) {
         List<Medicament> medicaments = new ArrayList<>();
         String sql = """
-            SELECT m.* 
-            FROM medicament m
-            JOIN ordonnance_medicament om ON om.idMed = m.idMed
-            WHERE om.idOrd = ?
+            select m.idMed,m.nom,m.laboratoire,m.type,m.remboursable,m.prixUnit,m.description,m.idForme
+            from prescription p,medicament m
+            where
+            p.idMed=m.idMed
+            and
+            p.idOrd=?
         """;
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -170,13 +172,109 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
             stmt.setLong(1, ordonance.getIdOrd());
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1); // total des prix
+                    return rs.getInt(1);
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return 0;
+    }
+
+    @Override
+    public List<Ordonnance> list_ordonances_dossier(int idDossier) throws Exception {
+        List<Ordonnance> ordonances = new ArrayList<>();
+        Ordonnance ordonance = new Ordonnance();
+        String requete= """
+                select * from ordonnance where idDossier=?
+                """;
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement ps=conn.prepareStatement(requete))
+        {
+            ps.setInt(1, idDossier);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ordonance.setIdDossier(idDossier);
+                ordonance.setDateOrd(rs.getDate("dateOrd").toLocalDate());
+                ordonance.setIdOrd(rs.getLong("idOrd"));
+                ordonance.setIdconsultation(rs.getInt("id_Conultation"));
+                ordonances.add(ordonance);
+                ordonance = new Ordonnance();
+            }
+            return ordonances;
+        }
+    }
+
+    @Override
+    public List<Ordonnance> consulterOrdonnancesParConsultation(Integer idConsultation) throws SQLException {
+        String  requete = """
+        select * from  ordonnance where id_conultation=?
+        """;
+        List<Ordonnance> ordonances = new ArrayList<>();
+        Ordonnance ordonance = new Ordonnance();
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement stmt=conn.prepareStatement(requete))
+        {
+            stmt.setInt(1, idConsultation);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ordonance.setIdconsultation(idConsultation);
+                ordonance.setDateOrd(rs.getDate("dateOrd").toLocalDate());
+                ordonance.setIdDossier(rs.getInt("idDossier"));
+                ordonance.setIdOrd(rs.getLong("idOrd"));
+                ordonances.add(ordonance);
+                ordonance = new Ordonnance();
+            }
+            return ordonances;
+        }
+    }
+
+    @Override
+    public double calculerCoutTotal(Ordonnance ordonnance) throws SQLException {
+        String requete= """
+                select sum(p.quantite*m.prixUnit)
+                from
+                prescription p, medicament m
+                where
+                p.idMed=m.idMed
+                and
+                p.idOrd=?
+                """;
+        double total = 0;
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement stmt=conn.prepareStatement(requete))
+        {
+            stmt.setInt(1,Math.toIntExact(ordonnance.getIdOrd()));
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                total=rs.getDouble(1);
+            }
+            return total;
+        }
+    }
+
+    @Override
+    public List<Prescription> list_Prescriptions(Ordonnance ordonnance) throws Exception {
+        String requete= """
+                select * from prescription where idOrd=?
+                """;
+        List<Prescription> prescriptions = new ArrayList<>();
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement stmt=conn.prepareStatement(requete)){
+            stmt.setInt(1, Math.toIntExact(ordonnance.getIdOrd()));
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                prescriptions.add(new Prescription(
+                        rs.getInt("idPr"),
+                        rs.getInt("quantite"),
+                        rs.getString("frequence"),
+                        rs.getInt("dureeEnJours"),
+                        Math.toIntExact(ordonnance.getIdOrd()),
+                        rs.getInt("idMed")
+                ));
+            }
+            return prescriptions;
+        }
     }
 
     public int last_id(){
@@ -195,5 +293,4 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
             throw new RuntimeException(e);
         }
     }
-
 }

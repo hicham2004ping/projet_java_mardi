@@ -8,14 +8,14 @@ import java.util.Optional;
 
 public interface PatientService {
     void creation(Patient p,int IdMedecin) throws Exception;
-    void find_by_email(String email) throws Exception;
-    void search_by_nom_prenom(String keyword) throws Exception;
-    void count();
-    void find_all() throws Exception;
+    Patient find_by_email(String email) throws Exception;
+    List<Patient> search_by_nom_prenom(String keyword) throws Exception;
+    long count();
+    List<Patient> find_all() throws Exception;
     void ajouter_antecedent_to_patient(int patientId, int antecedentId) throws Exception;
     void supprimer_antecedent_from_patient(int patientId, int antecedentId) throws Exception;
     void remove_all_antecedents_from_patient(int patientId) throws Exception;
-    void get_antecedents_of_patient(int patientId) throws Exception;
-    void get_patients_by_antecedent(int antecedentId) throws Exception;
-    void get_last_id() throws SQLException, IOException;
+    List<Antecedent> get_antecedents_of_patient(int patientId) throws Exception;
+    List<Patient> get_patients_by_antecedent(int antecedentId) throws Exception;
+    int get_last_id() throws SQLException, IOException;
 }

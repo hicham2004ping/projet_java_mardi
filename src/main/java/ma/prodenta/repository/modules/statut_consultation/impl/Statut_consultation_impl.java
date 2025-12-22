@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class Statut_consultation_impl implements Statut_consultation_api {
 
-    private static final String TABLE = "statut_consultation";
+    private static final String TABLE = "statutconsultation";
     @Override
     public Staut_consultation findBYnom(String libelle) {
 

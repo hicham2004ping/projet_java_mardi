@@ -95,7 +95,9 @@ public class ConsultationDaoimpl implements ConsultationDao {
                 where idConsult=?
                """;
         try (Connection c = SessionFactory.getInstance().getConnection();
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = c.prepareStatement(sql))
+        {
+            System.out.println("je suis dans la methode update et l'id est "+objet.getIdConsult());
             ps.setDate(1, new java.sql.Date(objet.getDateConsult().getTime()));
             ps.setString(2, objet.getObservationMedecin());
             ps.setInt(3, objet.getIdDossier());
@@ -105,7 +107,6 @@ public class ConsultationDaoimpl implements ConsultationDao {
             ps.setInt(7,objet.getIdConsult());
             ps.executeUpdate() ;
         }
-
     }
 
     @Override
@@ -200,7 +201,4 @@ public class ConsultationDaoimpl implements ConsultationDao {
         }
         return list;
     }
-
-
-
 }

@@ -1,5 +1,6 @@
 package ma.prodenta.config;
 import ma.prodenta.entities.En.Staut_consultation;
+import ma.prodenta.repository.modules.RendezVous.fileBase_implementation.RDVDAOImpl;
 import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
 import ma.prodenta.repository.modules.antecedent_patient.impl.Antecedent_patient_impl;
@@ -11,10 +12,25 @@ import ma.prodenta.repository.modules.prescription.impl.Prescription_impl;
 import ma.prodenta.repository.modules.actes.impl.Acte_impl;
 import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl;
 import ma.prodenta.repository.modules.statut_consultation.impl.Statut_consultation_impl;
+import ma.prodenta.service.modules.actes.impl.Acte_Service_impl;
+import ma.prodenta.service.modules.consultation.impl.Consultation_service_impl;
+import ma.prodenta.service.modules.dossierMedical.impl.DossierMedicalServiceImpl;
+import ma.prodenta.service.modules.intervention.impl.Intervention_Service_impl;
+import ma.prodenta.service.modules.ordonnance.impl.Ordonance_Service_impl;
+import ma.prodenta.service.modules.patient.baseImplementation.PatientServiceImpl;
 
 public class Application_contexte {
+    public static final PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
+    public static final Ordonance_Service_impl ordonanceServiceImpl = new Ordonance_Service_impl();
+    public static final DossierMedicalServiceImpl dossierMedicalServiceImpl = new DossierMedicalServiceImpl();
+    public static final Consultation_service_impl consultationServiceImpl = new Consultation_service_impl();
+    public static final Intervention_Service_impl interventionServiceImpl = new Intervention_Service_impl();
+    public static final Acte_Service_impl acteServiceImpl = new Acte_Service_impl();
 
-    private static final Statut_consultation_impl statutRepository = new Statut_consultation_impl();
+    private static final Statut_consultation_impl statutRepository =
+            new Statut_consultation_impl();
+    private static final RDVDAOImpl rendez_vous=
+            new RDVDAOImpl();
 
     private static final Patient_impl patientRepository =
             new Patient_impl();
@@ -88,4 +104,31 @@ public class Application_contexte {
     public static Statut_consultation_impl getStatutRepository() {
         return statutRepository;
     }
+
+    public static PatientServiceImpl getpatientService(){
+        return patientServiceImpl;
+    }
+    public static DossierMedicalServiceImpl getdossierMedicalService(){
+        return dossierMedicalServiceImpl;
+    }
+
+    public static Consultation_service_impl getconsultationService(){
+        return consultationServiceImpl;
+    }
+
+    public static Ordonance_Service_impl getordonanceService(){
+        return ordonanceServiceImpl;
+    }
+
+    public static Intervention_Service_impl getinterventionService(){
+        return interventionServiceImpl;
+    }
+
+    public static Acte_Service_impl getacteService(){
+        return acteServiceImpl;
+    }
+    public static RDVDAOImpl getRDVRepository(){
+        return rendez_vous;
+    }
+
 }

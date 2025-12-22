@@ -217,15 +217,46 @@ public class Patient_impl implements PatientDao {
         List<Patient> patients = new ArrayList<>();
 
         String requete = "SELECT * FROM patient";
+        Patient p=new Patient();
 
         try (
                 Connection conn = SessionFactory.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(requete);
-                ResultSet rs = stmt.executeQuery()
         ) {
 
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                patients.add(mapResultSetToPatient(rs));
+                if (rs.getInt("idSexe")==1){
+                    p.setSexe(Sexe.Homme);
+                }
+                else{
+                    p.setSexe(Sexe.Femme);
+                }
+                if (rs.getInt("idAssurance")==1){
+                    p.setAssurance(Assurance.CNOPS);
+                } else if (rs.getInt("idAssurance")==2) {
+                    p.setAssurance(Assurance.CNSS);
+
+                }
+                else if(rs.getInt("idAssurance")==3) {
+                    p.setAssurance(Assurance.RAMED);
+                }
+                else{
+                    p.setAssurance(Assurance.Aucune);
+                }
+                patients.add(
+                        new Patient(
+                        rs.getString("prenom"),
+                        rs.getInt("idPatient"),
+                        rs.getString("nom"),
+                        rs.getDate("dateNaissance").toLocalDate(),
+                        rs.getString("adresse"),
+                        rs.getString("email"),
+                        rs.getString("telephone"),
+                        p.getSexe(),
+                        p.getAssurance() ,
+                        null
+                ));
             }
 
         }

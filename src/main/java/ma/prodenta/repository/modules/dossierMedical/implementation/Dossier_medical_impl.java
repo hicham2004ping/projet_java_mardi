@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 public class Dossier_medical_impl implements DossierMedicalRepository {
 
     @Override
@@ -194,7 +195,7 @@ public class Dossier_medical_impl implements DossierMedicalRepository {
     @Override
     public int total_ordonances(Patient patient) throws SQLException, IOException {
         String requete= """
-                select count(*) from ordonance where idDossier=?
+                select count(*) from ordonnance where idDossier=?
                 """;
         DossierMedical dossierMedical=find_patient(patient);
         int n = 0;

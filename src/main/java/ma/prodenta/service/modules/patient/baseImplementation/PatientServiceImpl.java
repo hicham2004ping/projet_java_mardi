@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class PatientServiceImpl implements PatientService {
-
     @Override
     public void creation(Patient p, int idMedecin) throws Exception {
 
@@ -41,13 +40,11 @@ public class PatientServiceImpl implements PatientService {
 
         System.out.println("Patient créé avec succès, ID = " + p.getId());
 
-        // Création antécédents
         if (!antecedentRepo.create(p))
             throw new Exception("Impossible de créer les antécédents du patient");
 
         System.out.println("Antécédents ajoutés avec succès");
 
-        // Création dossier médical
         DossierMedical dossier = new DossierMedical();
         dossier.setIdPatient(p.getId());
         dossier.setIdMedecin(idMedecin);
@@ -60,53 +57,48 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void find_by_email(String email) throws Exception {
+    public Patient find_by_email(String email) throws Exception {
         Patient_impl repo = Application_contexte.getPatientRepository();
         Patient p = repo.findByEmail(email);
 
         if (p == null)
             throw new Exception("Aucun patient avec cet email");
 
-        System.out.println("Patient trouvé : " + p.getNom());
+        return p;
     }
 
     @Override
-    public void search_by_nom_prenom(String keyword) throws Exception {
+    public List<Patient> search_by_nom_prenom(String keyword) throws Exception {
         Patient_impl repo = Application_contexte.getPatientRepository();
         List<Patient> patients = repo.searchByNomPrenom(keyword);
 
         if (patients == null || patients.isEmpty())
             throw new Exception("Aucun patient trouvé");
 
-        for (Patient p : patients) {
-            System.out.println("Patient : " + p.getNom());
-        }
+        return patients;
     }
 
     @Override
-    public void count() {
+    public long count() {
         Patient_impl repo = Application_contexte.getPatientRepository();
-        long n = repo.count();
-        System.out.println("Nombre total de patients : " + n);
+        return repo.count();
+
     }
 
     @Override
-    public void find_all() throws Exception {
+    public List<Patient> find_all() throws Exception {
         Patient_impl repo = Application_contexte.getPatientRepository();
         List<Patient> patients = repo.findAll();
 
         if (patients == null || patients.isEmpty())
             throw new Exception("Aucun patient dans la base");
 
-        for(Patient p : patients){
-            System.out.println("le nom du Patient est " + p.getNom());
-        }
+        return patients;
     }
 
     @Override
     public void ajouter_antecedent_to_patient(int patientId, int antecedentId) throws Exception
     {
-
         Patient_impl patientRepo = new Patient_impl();
         Antecedent_impl antecedentRepo = new Antecedent_impl();
         Antecedent_patient_impl linkRepo = new Antecedent_patient_impl();
@@ -161,7 +153,7 @@ public class PatientServiceImpl implements PatientService {
 
 
     @Override
-    public void get_antecedents_of_patient(int patientId) throws Exception {
+    public List<Antecedent> get_antecedents_of_patient(int patientId) throws Exception {
 
         Patient_impl patientRepo = new Patient_impl();
         Antecedent_patient_impl linkRepo = new Antecedent_patient_impl();
@@ -172,14 +164,14 @@ public class PatientServiceImpl implements PatientService {
             throw new Exception("Patient introuvable");
 
         List<Antecedent> antecedents = linkRepo.find_antecedent_by_patient(p);
-
-        for(Antecedent antecedent : antecedents){
-            System.out.println("le libelle de l'antecedent est "+antecedent.getNom()+" sa categorie est "+antecedent.getCategorie());
+        if (antecedents == null || antecedents.isEmpty()){
+            throw new Exception("ca patient n'a aucun antecedent");
         }
+        return antecedents;
     }
 
     @Override
-    public void get_patients_by_antecedent(int antecedentId) throws Exception {
+    public List<Patient> get_patients_by_antecedent(int antecedentId) throws Exception {
 
         Antecedent_impl antecedentRepo =Application_contexte.getAntecedentRepository();
         Antecedent_patient_impl linkRepo =Application_contexte.getAntecedentPatientRepository();
@@ -190,16 +182,16 @@ public class PatientServiceImpl implements PatientService {
             throw new Exception("Antécédent introuvable");
 
         List<Patient> patients = linkRepo.find_patients_by_antecedent(a);
-
-        for(Patient patient : patients){
-            System.out.println("le patient "+patient.getNom()+" a "+a.getNom()+" comme antecedent");
+        if (patients.isEmpty()){
+            throw new  Exception("aucun patient ne souffre d'un antecedent");
         }
+        return patients;
     }
 
     @Override
-    public void get_last_id() throws SQLException, IOException {
+    public int get_last_id() throws SQLException, IOException {
         Patient_impl repo = new Patient_impl();
         int id = repo.get_last_id();
-        System.out.println("Dernier ID patient : " + id);
+        return id;
     }
 }
