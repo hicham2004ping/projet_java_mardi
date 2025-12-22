@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface RDVI extends Service<RDV,Integer> {
     List<RDV> TrouveCrenau(Date date);
-    List<Integer> TrouveCrenauLibre(Date date);
+    List<Integer> TrouveCrenauLibre(Date date) throws Exception;
 }

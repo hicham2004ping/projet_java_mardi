@@ -2,10 +2,14 @@ package ma.prodenta.repository.test_repository;
 import ma.prodenta.entities.En.*;
 import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.Sexe;
+import ma.prodenta.repository.modules.RendezVous.fileBase_implementation.RDVDAOImpl;
+import ma.prodenta.repository.modules.certificat.impl.CertificatDaoimpl;
 import ma.prodenta.repository.modules.medicament.fileBase_implementation.MedicamentDAOImpl;
 import ma.prodenta.repository.modules.ordonnance.impl.OrdonnanceDaoImpl;
 import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_medical_impl;
+
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +34,7 @@ public class Test_scenario_patient {
         OrdonnanceDaoImpl ordonnanceDao=Application_contexte.getOrdonnanceRepository();
         Prescription_impl prescription_impl=Application_contexte.getPrescriptionRepository();
         MedicamentDAOImpl medicamentDAO=Application_contexte.getMedicamentRepository();
+        RDVDAOImpl rdvdao=Application_contexte.getRdvRepository();
 
         Acte_impl acte_impl=Application_contexte.getActeRepository();
         Consultation consultation=new Consultation();
@@ -77,14 +82,29 @@ public class Test_scenario_patient {
                     System.out.println("creation  du dossier avec succes");
                     d2=d1.find_patient(p);
                     System.out.println("l'id du dossier est "+d2.getIdDossier()+" il appartient au patient"+p.getNom());
+                    RDV rdv = new RDV();
+                    rdv.setDateRDV(new Date()); // aujourd'hui
+                    rdv.setHeure(Time.valueOf("10:30:00"));
+                    rdv.setMotif("Consultation dentaire générale");
+                    rdv.setNoteMedecin("Patient à examiner");
+                    rdv.setIddossier(d2.getIdDossier());
+
+                    boolean flagRDV = rdvdao.create(rdv);
+
+                    if(flagRDV){
+                        System.out.println("Création du RDV avec succès, ID = " + rdv.getIdRDV());
+                    }else{
+                        System.out.println("Échec de création du RDV");
+                    }
 
                     consultation.setObservationMedecin("tout ira mieux demain");
-                    consultation.setId_rdv(1);
+                    consultation.setId_rdv(rdv.getIdRDV());
                     consultation.setIdDossier(d2.getIdDossier());
                     consultation.setIdStatut(1);
                     consultation.setDateConsult(new Date());
                     consultation.setId_medecin(1);
                     boolean flag3=consultationDaoimpl.create(consultation);
+
 
                     //test de la creation du consultation
                     if(flag3){
@@ -148,6 +168,8 @@ public class Test_scenario_patient {
         ConsultationDaoimpl consultationRepo = Application_contexte.getConsultationRepository();
         Intervention_impl interventionRepo = Application_contexte.getInterventionRepository();
         Antecedent_patient_impl antecedent_patient_impl=Application_contexte.getAntecedentPatientRepository();
+        RDVDAOImpl rdvRepo=Application_contexte.getRdvRepository();
+        CertificatDaoimpl certificat=Application_contexte.getCertificatRepository();
 
         List<Antecedent>liste_antecedents=new ArrayList<>();
         try {
@@ -163,6 +185,16 @@ public class Test_scenario_patient {
                 System.out.println("Antécédents du patient :");
                 for (Antecedent a : liste_antecedents) {
                     System.out.println("le nom de l'antecedent " + a.getNom() + " sa categorie est " + a.getCategorie());
+                }
+                RDV r = rdvRepo.findById(dossier.getIdDossier());
+
+                if (r != null) {
+                    System.out.println(
+                            "RDV ID : " + r.getIdRDV() +
+                                    " | Date : " + r.getDateRDV() +
+                                    " | Heure : " + r.getHeure() +
+                                    " | Motif : " + r.getMotif()
+                    );
                 }
 
                 // les Consultations

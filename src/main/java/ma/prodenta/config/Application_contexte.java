@@ -1,5 +1,7 @@
 package ma.prodenta.config;
 import ma.prodenta.entities.En.Staut_consultation;
+import ma.prodenta.repository.modules.RendezVous.fileBase_implementation.RDVDAOImpl;
+import ma.prodenta.repository.modules.certificat.impl.CertificatDaoimpl;
 import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
 import ma.prodenta.repository.modules.antecedent_patient.impl.Antecedent_patient_impl;
@@ -18,6 +20,10 @@ public class Application_contexte {
 
     private static final Patient_impl patientRepository =
             new Patient_impl();
+    private static final RDVDAOImpl rdvRepository =
+            new RDVDAOImpl();
+    private static final CertificatDaoimpl  certificatRepository =
+            new CertificatDaoimpl();
 
     private static final Antecedent_impl antecedentRepository =
             new Antecedent_impl();
@@ -87,5 +93,13 @@ public class Application_contexte {
     }
     public static Statut_consultation_impl getStatutRepository() {
         return statutRepository;
+    }
+
+    public static RDVDAOImpl getRdvRepository() {
+        return rdvRepository;
+    }
+
+    public static CertificatDaoimpl getCertificatRepository() {
+        return certificatRepository;
     }
 }
