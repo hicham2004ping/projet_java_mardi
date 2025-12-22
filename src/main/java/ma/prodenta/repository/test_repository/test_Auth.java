@@ -1,4 +1,4 @@
-package ma.prodenta.test_repository;
+package ma.prodenta.repository.test_repository;
 
 import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.repository.modules.auth.api.AuthDao;

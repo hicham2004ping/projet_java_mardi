@@ -59,7 +59,7 @@ public class Patient_impl implements PatientDao {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
         return null;
@@ -95,7 +95,7 @@ public class Patient_impl implements PatientDao {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
         return patients;
@@ -313,8 +313,7 @@ public class Patient_impl implements PatientDao {
     }
 
     @Override
-    public void update(Patient objet) throws SQLException {
-
+    public void update(Patient objet) throws SQLException, IOException, Exception {
         Antecedent_patient_impl antecedent_patient_impl = new Antecedent_patient_impl();
 
         List<Antecedent> newList = objet.getAntecedents();
@@ -365,6 +364,7 @@ public class Patient_impl implements PatientDao {
             pst.executeUpdate();
         }
     }
+
 
     @Override
     public boolean delete(Patient objet) throws SQLException, IOException {

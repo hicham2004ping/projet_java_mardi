@@ -61,14 +61,20 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
         String sql = "INSERT INTO Ordonnance (dateOrd, idDossier,id_conultation) VALUES (?,?,?)";
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             stmt.setDate(1,Date.valueOf(ord.getDateOrd()));
             stmt.setInt(2, ord.getIdDossier());
             stmt.setInt(3, ord.getIdconsultation());
-            n = stmt.executeUpdate();
+            boolean flag= stmt.executeUpdate()>0;
+            ResultSet rs = stmt.getGeneratedKeys();
+            if(flag){
+                if(rs.next()){
+                    ord.setIdOrd(rs.getLong(1));
+                }
+                return true;
+            }
+            return false;
         }
-
-        return n > 0;
     }
 
     @Override
