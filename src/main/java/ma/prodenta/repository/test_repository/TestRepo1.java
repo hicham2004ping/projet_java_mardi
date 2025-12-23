@@ -21,14 +21,237 @@ import ma.prodenta.repository.modules.statistiques.fileBase_implementation.Reven
 import ma.prodenta.repository.modules.user.implementation.UserImpl;
 import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_medical_impl;
 import ma.prodenta.repository.modules.statut_consultation.impl.Statut_consultation_impl;
+import ma.prodenta.repository.modules.auth.implementation.AuthDaoImpl;
+import ma.prodenta.repository.modules.userManager.implementation.UserManagerRepositoryImpl;
+import ma.prodenta.config.SessionFactory;
+import ma.prodenta.common.util.PasswordUtil;
 
+import java.sql.Connection;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class TestRepo1 {
+
+    public static void testAuthRepository() throws Exception {
+        System.out.println("\n========== TEST AUTH REPOSITORY ==========");
+
+        AuthDaoImpl authDao = new AuthDaoImpl();
+
+        // Test 1: Création d'un utilisateur pour auth
+        System.out.println("\n--- Test 1: Création utilisateur ---");
+        Utilisateur testUser = new Utilisateur();
+        testUser.setNom("Test Auth User");
+        testUser.setEmail("authuser@test.com");
+        testUser.setAdresse("123 Auth Street");
+        testUser.setCin("AUTH12345");
+        testUser.setTel("0612345678");
+        testUser.setLogin("authtestuser");
+        testUser.setMotdepasse(PasswordUtil.hashPassword("SecurePass123"));
+        testUser.setDateNaissance(LocalDate.of(1990, 5, 15));
+        testUser.setIdSexe(1);
+        testUser.setIdRole(1);
+
+        boolean created = authDao.create(testUser);
+        System.out.println("✓ Utilisateur créé: " + created);
+
+        // Test 2: findByLogin
+        System.out.println("\n--- Test 2: findByLogin ---");
+        Optional<Utilisateur> foundByLogin = authDao.findByLogin("authtestuser");
+        if (foundByLogin.isPresent()) {
+            System.out.println("✓ Trouvé par login: " + foundByLogin.get().getNom());
+        } else {
+            System.out.println("✗ Non trouvé par login");
+        }
+
+        // Test 3: findByEmail
+        System.out.println("\n--- Test 3: findByEmail ---");
+        Optional<Utilisateur> foundByEmail = authDao.findByEmail("authuser@test.com");
+        if (foundByEmail.isPresent()) {
+            System.out.println("✓ Trouvé par email: " + foundByEmail.get().getNom());
+        } else {
+            System.out.println("✗ Non trouvé par email");
+        }
+
+        // Test 4: existsByLogin
+        System.out.println("\n--- Test 4: existsByLogin ---");
+        boolean exists = authDao.existsByLogin("authtestuser");
+        System.out.println("✓ Login existe: " + exists);
+
+        // Test 5: existsByEmail
+        System.out.println("\n--- Test 5: existsByEmail ---");
+        boolean emailExists = authDao.existsByEmail("authuser@test.com");
+        System.out.println("✓ Email existe: " + emailExists);
+
+        // Test 6: login (authenticate)
+        System.out.println("\n--- Test 6: login (authentication) ---");
+        Optional<Utilisateur> authenticated = authDao.login("authtestuser", PasswordUtil.hashPassword("SecurePass123"));
+        if (authenticated.isPresent()) {
+            System.out.println("✓ Authentification réussie pour: " + authenticated.get().getLogin());
+        } else {
+            System.out.println("✗ Authentification échouée");
+        }
+
+        // Test 7: count
+        System.out.println("\n--- Test 7: count ---");
+        long count = authDao.count();
+        System.out.println("✓ Nombre total d'utilisateurs: " + count);
+
+        // Test 8: findAll
+        System.out.println("\n--- Test 8: findAll ---");
+        List<Utilisateur> allUsers = authDao.findAll();
+        System.out.println("✓ Liste de tous les utilisateurs: " + allUsers.size() + " utilisateur(s)");
+
+        // Test 9: update
+        if (foundByLogin.isPresent()) {
+            System.out.println("\n--- Test 9: update ---");
+            Utilisateur userToUpdate = foundByLogin.get();
+            String oldName = userToUpdate.getNom();
+            userToUpdate.setNom("Test Auth User UPDATED");
+            userToUpdate.setAdresse("456 Updated Street");
+            authDao.update(userToUpdate);
+
+            Optional<Utilisateur> updated = authDao.findByLogin("authtestuser");
+            if (updated.isPresent()) {
+                System.out.println("✓ Nom avant: " + oldName);
+                System.out.println("✓ Nom après: " + updated.get().getNom());
+            }
+        }
+
+        // Test 10: findById
+        if (foundByLogin.isPresent()) {
+            System.out.println("\n--- Test 10: findById ---");
+            Integer userId = foundByLogin.get().getIdUser();
+            Utilisateur foundById = authDao.findById(userId);
+            if (foundById != null) {
+                System.out.println("✓ Trouvé par ID " + userId + ": " + foundById.getNom());
+            } else {
+                System.out.println("✗ Non trouvé par ID");
+            }
+        }
+
+        // Test 11: delete
+        if (foundByLogin.isPresent()) {
+            System.out.println("\n--- Test 11: delete ---");
+            Integer userIdToDelete = foundByLogin.get().getIdUser();
+            boolean deleted = authDao.deleteById(userIdToDelete);
+            System.out.println("✓ Utilisateur supprimé: " + deleted);
+
+            // Vérification de la suppression
+            Utilisateur shouldBeNull = authDao.findById(userIdToDelete);
+            System.out.println("✓ Vérification suppression: " + (shouldBeNull == null ? "OK" : "ERREUR"));
+        }
+
+        System.out.println("\n========== FIN TEST AUTH REPOSITORY ==========");
+    }
+
+    public static void testUserManagerRepository() throws Exception {
+        System.out.println("\n========== TEST USERMANAGER REPOSITORY ==========");
+
+        try (Connection conn = SessionFactory.getInstance().getConnection()) {
+            UserManagerRepositoryImpl userManagerRepo = new UserManagerRepositoryImpl(conn);
+
+            // Test 1: Création d'un UserManager
+            System.out.println("\n--- Test 1: Création UserManager ---");
+            UserManager testUserManager = new UserManager();
+            testUserManager.setUsername("testmanager01");
+            testUserManager.setPasswordHash(PasswordUtil.hashPassword("ManagerPass123"));
+            testUserManager.setRole("ADMIN");
+            testUserManager.setActif(true);
+            testUserManager.setDateCreation(new Date());
+
+            UserManager saved = userManagerRepo.save(testUserManager);
+            System.out.println("✓ UserManager créé avec ID: " + saved.getIdUser());
+            System.out.println("  Username: " + saved.getUsername());
+            System.out.println("  Role: " + saved.getRole());
+            System.out.println("  Actif: " + saved.getActif());
+
+            // Test 2: findById
+            System.out.println("\n--- Test 2: findById ---");
+            UserManager foundById = userManagerRepo.findById(saved.getIdUser());
+            if (foundById != null) {
+                System.out.println("✓ Trouvé par ID " + saved.getIdUser() + ": " + foundById.getUsername());
+            } else {
+                System.out.println("✗ Non trouvé par ID");
+            }
+
+            // Test 3: findByUsername
+            System.out.println("\n--- Test 3: findByUsername ---");
+            UserManager foundByUsername = userManagerRepo.findByUsername("testmanager01");
+            if (foundByUsername != null) {
+                System.out.println("✓ Trouvé par username: " + foundByUsername.getUsername());
+                System.out.println("  Role: " + foundByUsername.getRole());
+            } else {
+                System.out.println("✗ Non trouvé par username");
+            }
+
+            // Test 4: findAll
+            System.out.println("\n--- Test 4: findAll ---");
+            List<UserManager> allUsers = userManagerRepo.findAll();
+            System.out.println("✓ Nombre total de UserManagers: " + allUsers.size());
+            for (UserManager um : allUsers) {
+                System.out.println("  - " + um.getUsername() + " (" + um.getRole() + ") - Actif: " + um.getActif());
+            }
+
+            // Test 5: update
+            System.out.println("\n--- Test 5: update ---");
+            String oldRole = saved.getRole();
+            Boolean oldActif = saved.getActif();
+
+            saved.setRole("SUPER_ADMIN");
+            saved.setActif(false);
+            UserManager updated = userManagerRepo.update(saved);
+
+            System.out.println("✓ Role avant: " + oldRole + " → après: " + updated.getRole());
+            System.out.println("✓ Actif avant: " + oldActif + " → après: " + updated.getActif());
+
+            // Test 6: Réactivation
+            System.out.println("\n--- Test 6: Réactivation ---");
+            updated.setActif(true);
+            UserManager reactivated = userManagerRepo.update(updated);
+            System.out.println("✓ UserManager réactivé: " + reactivated.getActif());
+
+            // Test 7: Créer un deuxième UserManager pour tester la liste
+            System.out.println("\n--- Test 7: Création d'un deuxième UserManager ---");
+            UserManager testUserManager2 = new UserManager();
+            testUserManager2.setUsername("testmanager02");
+            testUserManager2.setPasswordHash(PasswordUtil.hashPassword("Pass123"));
+            testUserManager2.setRole("MEDECIN");
+            testUserManager2.setActif(false);
+            testUserManager2.setDateCreation(new Date());
+
+            UserManager saved2 = userManagerRepo.save(testUserManager2);
+            System.out.println("✓ Deuxième UserManager créé: " + saved2.getUsername());
+
+            // Test 8: Liste finale
+            System.out.println("\n--- Test 8: Liste finale des UserManagers ---");
+            List<UserManager> finalList = userManagerRepo.findAll();
+            System.out.println("✓ Total: " + finalList.size() + " UserManager(s)");
+            for (UserManager um : finalList) {
+                System.out.println("  - ID:" + um.getIdUser() + " | " + um.getUsername() +
+                        " | Role:" + um.getRole() + " | Actif:" + um.getActif());
+            }
+
+            // Test 9: delete premier UserManager
+            System.out.println("\n--- Test 9: delete ---");
+            userManagerRepo.delete(saved.getIdUser());
+            UserManager deletedCheck = userManagerRepo.findById(saved.getIdUser());
+            System.out.println("✓ Premier UserManager supprimé: " + (deletedCheck == null));
+
+            // Test 10: delete deuxième UserManager
+            System.out.println("\n--- Test 10: Nettoyage ---");
+            userManagerRepo.delete(saved2.getIdUser());
+            UserManager deletedCheck2 = userManagerRepo.findById(saved2.getIdUser());
+            System.out.println("✓ Deuxième UserManager supprimé: " + (deletedCheck2 == null));
+
+        }
+
+        System.out.println("\n========== FIN TEST USERMANAGER REPOSITORY ==========");
+    }
+
     public static TestResult insertProcess() throws Exception {
         /// Cabinet medical
         //////////////////////////
@@ -174,20 +397,6 @@ public class TestRepo1 {
             System.out.println(patientDao.findById(patient.getId()));
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //////////////DossierMedical
         Dossier_medical_impl dossierDao = new Dossier_medical_impl();
         DossierMedical dossier = new DossierMedical();
@@ -322,212 +531,52 @@ public class TestRepo1 {
         System.out.println("Consultation : " + consultationUpdated);
         System.out.println("Certificat : " + certUpdated);
 
-        // Vérifier que les relations sont toujours cohérentes après update
-        System.out.println("\n--- Vérification des relations APRÈS update (CASCADE) ---");
-        boolean relationsOK = true;
-
-        if (!rdvUpdated.getIddossier().equals(consultationUpdated.getIdDossier())) {
-            System.out.println("❌ ERREUR: RDV.idDossier (" + rdvUpdated.getIddossier() +
-                    ") != Consultation.idDossier (" + consultationUpdated.getIdDossier() + ")");
-            relationsOK = false;
-        } else {
-            System.out.println("✓ RDV.idDossier = Consultation.idDossier = " + rdvUpdated.getIddossier());
-        }
-
-        if (!rdvUpdated.getIdRDV().equals(consultationUpdated.getId_rdv())) {
-            System.out.println("❌ ERREUR: RDV.idRDV (" + rdvUpdated.getIdRDV() +
-                    ") != Consultation.id_rdv (" + consultationUpdated.getId_rdv() + ")");
-            relationsOK = false;
-        } else {
-            System.out.println("✓ RDV.idRDV = Consultation.id_rdv = " + rdvUpdated.getIdRDV());
-        }
-
-        if (!consultationUpdated.getIdDossier().equals(certUpdated.getIdDossier())) {
-            System.out.println("❌ ERREUR: Consultation.idDossier (" + consultationUpdated.getIdDossier() +
-                    ") != Certificat.idDossier (" + certUpdated.getIdDossier() + ")");
-            relationsOK = false;
-        } else {
-            System.out.println("✓ Consultation.idDossier = Certificat.idDossier = " + consultationUpdated.getIdDossier());
-        }
-
-        if (!consultationUpdated.getIdConsult().equals(certUpdated.getIdConsult())) {
-            System.out.println("❌ ERREUR: Consultation.idConsult (" + consultationUpdated.getIdConsult() +
-                    ") != Certificat.idConsult (" + certUpdated.getIdConsult() + ")");
-            relationsOK = false;
-        } else {
-            System.out.println("✓ Consultation.idConsult = Certificat.idConsult = " + consultationUpdated.getIdConsult());
-        }
-
-        if (relationsOK) {
-            System.out.println("\n✅ Toutes les relations en cascade sont cohérentes après l'update !");
-        } else {
-            System.out.println("\n❌ Certaines relations ne sont pas cohérentes !");
-        }
+        // Vérifier les relations après update
+        System.out.println("\n--- Vérification des relations APRÈS update ---");
+        System.out.println("RDV.idDossier = " + rdvUpdated.getIddossier());
+        System.out.println("Consultation.idDossier = " + consultationUpdated.getIdDossier());
+        System.out.println("Consultation.id_rdv = " + consultationUpdated.getId_rdv());
+        System.out.println("Consultation.id_medecin = " + consultationUpdated.getId_medecin());
+        System.out.println("Certificat.idDossier = " + certUpdated.getIdDossier());
+        System.out.println("Certificat.idConsult = " + certUpdated.getIdConsult());
     }
 
-    public static void deleteProcessCascade(RDV rdv, Consultation consultation, Certificat cert) throws Exception {
+    public static void deleteProcess(Certificat cert, RDV rdv, Consultation consultation) throws Exception {
+        System.out.println("\n=== SUPPRESSION ===");
+
         RDVDAOImpl rdvDAO = new RDVDAOImpl();
         ConsultationDaoimpl consultationDAO = new ConsultationDaoimpl();
         CertificatDaoimpl certDAO = new CertificatDaoimpl();
 
-        System.out.println("\n=== TEST DE SUPPRESSION EN CASCADE ===");
-        System.out.println("RDV à supprimer : " + rdv);
-        System.out.println("Consultation liée : " + consultation);
-        System.out.println("Certificat lié : " + cert);
+        // Delete certificat
+        certDAO.deleteById(cert.getIdCert());
+        System.out.println("Certificat supprimé : " + cert.getIdCert());
 
-        // Vérifier que les entités existent avant suppression
-        System.out.println("\n--- Vérification AVANT suppression ---");
-        RDV rdvAvant = rdvDAO.findById(rdv.getIdRDV());
-        Consultation consultAvant = consultationDAO.findById(consultation.getIdConsult());
-        Certificat certAvant = certDAO.findById(cert.getIdCert());
+        // Delete consultation
+        consultationDAO.deleteById(consultation.getIdConsult());
+        System.out.println("Consultation supprimée : " + consultation.getIdConsult());
 
-        System.out.println("RDV existe ? " + (rdvAvant != null ? "OUI (ID: " + rdvAvant.getIdRDV() + ")" : "NON"));
-        System.out.println("Consultation existe ? " + (consultAvant != null ? "OUI (ID: " + consultAvant.getIdConsult() + ")" : "NON"));
-        System.out.println("Certificat existe ? " + (certAvant != null ? "OUI (ID: " + certAvant.getIdCert() + ")" : "NON"));
-
-        // Compter les relations
-        List<Consultation> consultations = consultationDAO.findByRdv(rdv.getIdRDV());
-        System.out.println("Nombre de consultations liées au RDV : " + consultations.size());
-
-        for (Consultation c : consultations) {
-            List<Certificat> certs = certDAO.findByConsultation(c.getIdConsult());
-            System.out.println("Nombre de certificats liés à la consultation " + c.getIdConsult() + " : " + certs.size());
-        }
-
-        // Suppression en cascade (dans l'ordre : Certificat -> Consultation -> RDV)
-        System.out.println("\n--- Suppression en cascade ---");
-
-        // 1. Supprimer tous les certificats liés aux consultations
-        for (Consultation c : consultations) {
-            List<Certificat> certs = certDAO.findByConsultation(c.getIdConsult());
-            for (Certificat certToDelete : certs) {
-                boolean deleted = certDAO.delete(certToDelete);
-                if (deleted) {
-                    System.out.println("✓ Certificat supprimé : ID=" + certToDelete.getIdCert());
-                } else {
-                    System.out.println("❌ Erreur lors de la suppression du certificat ID=" + certToDelete.getIdCert());
-                }
-            }
-        }
-
-        // 2. Supprimer toutes les consultations liées au RDV
-        for (Consultation c : consultations) {
-            boolean deleted = consultationDAO.delete(c);
-            if (deleted) {
-                System.out.println("✓ Consultation supprimée : ID=" + c.getIdConsult());
-            } else {
-                System.out.println("❌ Erreur lors de la suppression de la consultation ID=" + c.getIdConsult());
-            }
-        }
-
-        // 3. Supprimer le RDV
-        boolean rdvDeleted = rdvDAO.deleteById(rdv.getIdRDV());
-        if (rdvDeleted) {
-            System.out.println("✓ RDV supprimé : ID=" + rdv.getIdRDV());
-        } else {
-            System.out.println("✓ RDV supprimé (ou déjà supprimé) : ID=" + rdv.getIdRDV());
-        }
-
-        // Vérification après suppression
-        System.out.println("\n--- Vérification APRÈS suppression (CASCADE) ---");
-        RDV rdvApres = rdvDAO.findById(rdv.getIdRDV());
-        Consultation consultApres = consultationDAO.findById(consultation.getIdConsult());
-        Certificat certApres = certDAO.findById(cert.getIdCert());
-
-        boolean cascadeOK = true;
-
-        // Vérifier si le RDV existe (null ou ID null signifie qu'il n'existe pas)
-        if (rdvApres != null && rdvApres.getIdRDV() != null) {
-            System.out.println("❌ ERREUR: Le RDV existe encore après suppression ! ID=" + rdvApres.getIdRDV());
-            cascadeOK = false;
-        } else {
-            System.out.println("✓ RDV correctement supprimé");
-        }
-
-        // Vérifier si la Consultation existe (null ou ID null signifie qu'elle n'existe pas)
-        if (consultApres != null && consultApres.getIdConsult() != null) {
-            System.out.println("❌ ERREUR: La Consultation existe encore après suppression ! ID=" + consultApres.getIdConsult());
-            cascadeOK = false;
-        } else {
-            System.out.println("✓ Consultation correctement supprimée");
-        }
-
-        // Vérifier si le Certificat existe (null ou ID null signifie qu'il n'existe pas)
-        if (certApres != null && certApres.getIdCert() != null) {
-            System.out.println("❌ ERREUR: Le Certificat existe encore après suppression ! ID=" + certApres.getIdCert());
-            cascadeOK = false;
-        } else {
-            System.out.println("✓ Certificat correctement supprimé");
-        }
-
-        // Vérifier qu'il n'y a plus de consultations liées au RDV
-        List<Consultation> consultationsApres = consultationDAO.findByRdv(rdv.getIdRDV());
-        if (!consultationsApres.isEmpty()) {
-            System.out.println("❌ ERREUR: Il reste " + consultationsApres.size() + " consultation(s) liée(s) au RDV supprimé !");
-            cascadeOK = false;
-        } else {
-            System.out.println("✓ Aucune consultation liée au RDV supprimé");
-        }
-
-        if (cascadeOK) {
-            System.out.println("\n✅ La suppression en cascade a fonctionné correctement !");
-        } else {
-            System.out.println("\n❌ La suppression en cascade n'a pas fonctionné correctement !");
-        }
+        // Delete RDV
+        rdvDAO.deleteById(rdv.getIdRDV());
+        System.out.println("RDV supprimé : " + rdv.getIdRDV());
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        try {
+            System.out.println("=== DÉMARRAGE DES TESTS ===\n");
 
-        // --- 1. INSERTION ---
-        System.out.println("=== INSERTION ===");
-        TestResult result = insertProcess();
+            testAuthRepository();
+            testUserManagerRepository();
 
-        // Utiliser les objets créés directement pour update et delete
-        RDV rdv = result.rdv;
-        Consultation consultation = result.consultation;
-        Certificat cert = result.certificat;
+            // Tests existants
+            TestResult result = insertProcess();
+            updateProcess(result.certificat, result.rdv, result.consultation);
+            deleteProcess(result.certificat, result.rdv, result.consultation);
 
-        // --- 2. UPDATE ---
-        System.out.println("\n=== UPDATE ===");
-        // Exemple de modification - les clés étrangères restent les mêmes (créées dans insertProcess)
-        rdv.setMotif("Changement du motif");
-        consultation.setObservationMedecin("Observation mise à jour");
-        cert.setNoteMedecin("Note médecin mise à jour");
-
-        updateProcess(cert, rdv, consultation);
-
-        // --- 3. DELETE ---
-        System.out.println("\n=== DELETE ===");
-        // Utiliser les objets créés pour tester la suppression en cascade
-        deleteProcessCascade(rdv, consultation, cert);
-
-        // Vérification que tout a été supprimé
-        RDVDAOImpl rdvDAO = new RDVDAOImpl();
-        ConsultationDaoimpl consultationDAO = new ConsultationDaoimpl();
-        CertificatDaoimpl certDAO = new CertificatDaoimpl();
-
-        RDV rdvCheck = rdvDAO.findById(rdv.getIdRDV());
-        Consultation consultCheck = consultationDAO.findById(consultation.getIdConsult());
-        Certificat certCheck = certDAO.findById(cert.getIdCert());
-
-        System.out.println("\n=== VÉRIFICATION APRÈS DELETE ===");
-        // Vérifier si les objets existent vraiment (ID null signifie qu'ils n'existent pas)
-        boolean rdvExiste = rdvCheck != null && rdvCheck.getIdRDV() != null;
-        boolean consultExiste = consultCheck != null && consultCheck.getIdConsult() != null;
-        boolean certExiste = certCheck != null && certCheck.getIdCert() != null;
-
-        System.out.println("RDV existant ? " + (rdvExiste ? "OUI (ID: " + rdvCheck.getIdRDV() + ")" : "NON"));
-        System.out.println("Consultation existante ? " + (consultExiste ? "OUI (ID: " + consultCheck.getIdConsult() + ")" : "NON"));
-        System.out.println("Certificat existant ? " + (certExiste ? "OUI (ID: " + certCheck.getIdCert() + ")" : "NON"));
-
-        if (!rdvExiste && !consultExiste && !certExiste) {
-            System.out.println("\n✅ Tous les éléments ont été correctement supprimés en cascade !");
-        } else {
-            System.out.println("\n❌ Certains éléments existent encore après la suppression !");
+            System.out.println("\n=== TOUS LES TESTS TERMINÉS AVEC SUCCÈS ===");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("\n=== ERREUR LORS DES TESTS ===");
         }
-
     }
-
-
 }
-

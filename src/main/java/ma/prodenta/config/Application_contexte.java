@@ -19,6 +19,9 @@ import ma.prodenta.service.modules.intervention.impl.Intervention_Service_impl;
 import ma.prodenta.service.modules.ordonnance.impl.Ordonance_Service_impl;
 import ma.prodenta.service.modules.patient.baseImplementation.PatientServiceImpl;
 import ma.prodenta.repository.modules.certificat.impl.CertificatDaoimpl;
+import ma.prodenta.service.modules.auth.impl.AuthServiceImpl;
+import ma.prodenta.service.modules.usermanager.impl.UserManagerServiceImpl;
+import ma.prodenta.repository.modules.auth.implementation.AuthDaoImpl;
 
 public class Application_contexte {
     public static final PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
@@ -27,6 +30,9 @@ public class Application_contexte {
     public static final Consultation_service_impl consultationServiceImpl = new Consultation_service_impl();
     public static final Intervention_Service_impl interventionServiceImpl = new Intervention_Service_impl();
     public static final Acte_Service_impl acteServiceImpl = new Acte_Service_impl();
+
+    public static final AuthServiceImpl authServiceImpl = new AuthServiceImpl();
+    public static final UserManagerServiceImpl userManagerServiceImpl = new UserManagerServiceImpl();
 
     private static final Statut_consultation_impl statutRepository =
             new Statut_consultation_impl();
@@ -64,6 +70,9 @@ public class Application_contexte {
             new Intervention_impl();
     private static final CertificatDaoimpl certificatRepository =
             new CertificatDaoimpl();
+
+    private static final AuthDaoImpl authRepository =
+            new AuthDaoImpl();
 
     public static Patient_impl getPatientRepository() {
         return patientRepository;
@@ -136,5 +145,17 @@ public class Application_contexte {
 
     public static CertificatDaoimpl getCertificatRepository(){
         return certificatRepository;
+    }
+
+    public static AuthServiceImpl getAuthService() {
+        return authServiceImpl;
+    }
+
+    public static UserManagerServiceImpl getUserManagerService() {
+        return userManagerServiceImpl;
+    }
+
+    public static AuthDaoImpl getAuthRepository() {
+        return authRepository;
     }
 }

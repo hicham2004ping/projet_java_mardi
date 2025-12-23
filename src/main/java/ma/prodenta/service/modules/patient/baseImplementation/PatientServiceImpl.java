@@ -8,7 +8,7 @@ import ma.prodenta.repository.modules.antecedent_patient.impl.Antecedent_patient
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
 import ma.prodenta.service.modules.patient.api.PatientService;
 import ma.prodenta.config.Application_contexte;
-import ma.prodenta.service.common.validateur.email.validateur_email;
+//import ma.prodenta.service.common.validateur.email.validateur_email;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -25,9 +25,9 @@ public class PatientServiceImpl implements PatientService {
         if (p.getNom() == null || p.getNom().isBlank())
             throw new Exception("Nom du patient obligatoire");
 
-        if (p.getEmail() == null || !validateur_email.is_valid(p.getEmail()))
+        /*if (p.getEmail() == null || !validateur_email.is_valid(p.getEmail()))
             throw new Exception("Email invalide");
-
+        */
         if (p.getTelephone() == null || p.getTelephone().isBlank())
             throw new Exception("Téléphone obligatoire");
 
