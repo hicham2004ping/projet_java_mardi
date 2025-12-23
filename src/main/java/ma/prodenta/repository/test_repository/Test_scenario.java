@@ -308,11 +308,11 @@ public class Test_scenario {
         Test_scenario p=new Test_scenario();
         System.out.println("\n*************Creation*************\n");
         p.creation();
-        System.out.println("*************lecture*************\n");
+        System.out.println("\n*************lecture*************\n");
         p.lecture();
-        System.out.println("*************Update*************\n");
+        System.out.println("\n*************Update*************\n");
         p.update();
-        System.out.println("*************Delete*************\n");
-      //  p.delete();
+        System.out.println("\n*************Delete*************\n");
+        p.delete();
     }
 }

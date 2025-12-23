@@ -111,7 +111,6 @@ public class Dossier_medical_impl implements DossierMedicalRepository {
         String requete= """
                 insert into dossiermedical (dateCreation,idPatient,idMedecin) values (?,?,?)
                 """;
-        System.out.println("on est dans la fonction create du dossier medical et l'id du patient est "+objet.getIdPatient()+" et la date du creation est "+objet.getDateCreation());
         try(Connection conn= SessionFactory.getInstance().getConnection();
             PreparedStatement ps=conn.prepareStatement(requete,Statement.RETURN_GENERATED_KEYS))
         {

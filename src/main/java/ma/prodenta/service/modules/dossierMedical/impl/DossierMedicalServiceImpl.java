@@ -43,8 +43,8 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
     @Override
     public int total_ordonances_Patient(Patient patient) throws Exception {
         Dossier_medical_impl dossier_medical_impl=Application_contexte.getDossierMedicalRepository();
-        if(dossier_medical_impl.total_ordonances(patient)==0){
-            throw new Exception("le patient n'a pas encore effecteur une consultation");
+        if(patient==null||patient.getId()<=0){
+            throw new Exception("ce patient est invalide ");
         }
         return dossier_medical_impl.total_ordonances(patient);
     }

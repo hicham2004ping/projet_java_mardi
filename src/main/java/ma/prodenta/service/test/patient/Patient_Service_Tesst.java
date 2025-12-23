@@ -18,11 +18,11 @@ public class Patient_Service_Tesst {
         List<Antecedent> antecedents1 = new ArrayList<>();
         try {
             Patient p = new Patient();
-            p.setNom("TESsT");
-            p.setPrenom("MAIN");
-            p.setEmail("main.tesst@email.com");
+            p.setNom("karaki");
+            p.setPrenom("ali");
+            p.setEmail("ali@email.com");
             p.setTelephone("0611111111");
-            p.setDateNaissance(LocalDate.of(1999, 5, 10));
+            p.setDateNaissance(LocalDate.of(2024, 9, 27));
             p.setAdresse("Bierut");
             p.setAssurance(Assurance.CNSS);
             int idMedecin = 1;
@@ -37,10 +37,10 @@ public class Patient_Service_Tesst {
 
             int patientId = p.getId();
 
-            Patient pByEmail = patientService.find_by_email("main.test@email.com");
+            Patient pByEmail = patientService.find_by_email("wissam@email.com");
             System.out.println("Patient trouvé par email : " + pByEmail.getNom() + " " + pByEmail.getPrenom());
 
-            List<Patient> patientsByName = patientService.search_by_nom_prenom("TEST");
+            List<Patient> patientsByName = patientService.search_by_nom_prenom("ha");
 
             System.out.println("Patients trouvés par mot clé : " + patientsByName.size());
 

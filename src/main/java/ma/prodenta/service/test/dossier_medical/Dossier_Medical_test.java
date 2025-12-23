@@ -5,11 +5,10 @@ import ma.prodenta.service.modules.dossierMedical.impl.DossierMedicalServiceImpl
 public class Dossier_Medical_test {
 
     public static void main(String[] args) {
-
         try {
             DossierMedicalServiceImpl dossierMedicalServiceImpl = Application_contexte.getdossierMedicalService();
             Patient patient = new Patient();
-            patient.setId(76);
+            patient.setId(80);
             dossierMedicalServiceImpl.find_dossier(patient);
 
             int totalConsultations =dossierMedicalServiceImpl.total_consultations_Patient(patient);

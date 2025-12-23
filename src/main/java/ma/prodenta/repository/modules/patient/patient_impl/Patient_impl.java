@@ -22,8 +22,6 @@ import ma.prodenta.config.SessionFactory;
 @NoArgsConstructor
 public class Patient_impl implements PatientDao {
 
-    public static Connextion_db connetion_base;
-
     public int get_last_id() throws IOException, SQLException {
         int id = 0;
 
@@ -90,8 +88,39 @@ public class Patient_impl implements PatientDao {
 
             ResultSet rs = pst.executeQuery();
 
+            Patient p = new Patient();
             while (rs.next()) {
-                patients.add(mapResultSetToPatient(rs));
+                if (rs.getInt("idSexe")==1){
+                    p.setSexe(Sexe.Homme);
+                }
+                else{
+                    p.setSexe(Sexe.Femme);
+                }
+                if (rs.getInt("idAssurance")==1){
+                    p.setAssurance(Assurance.CNOPS);
+                } else if (rs.getInt("idAssurance")==2) {
+                    p.setAssurance(Assurance.CNSS);
+
+                }
+                else if(rs.getInt("idAssurance")==3) {
+                    p.setAssurance(Assurance.RAMED);
+                }
+                else{
+                    p.setAssurance(Assurance.Aucune);
+                }
+                patients.add(
+                        new Patient(
+                                rs.getString("prenom"),
+                                rs.getInt("idPatient"),
+                                rs.getString("nom"),
+                                rs.getDate("dateNaissance").toLocalDate(),
+                                rs.getString("adresse"),
+                                rs.getString("email"),
+                                rs.getString("telephone"),
+                                p.getSexe(),
+                                p.getAssurance() ,
+                                null
+                        ));
             }
 
         } catch (Exception e) {
