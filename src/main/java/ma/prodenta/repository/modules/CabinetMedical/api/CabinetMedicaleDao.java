@@ -10,8 +10,5 @@ public interface CabinetMedicaleDao extends CrudRepository<CabinetMedical, Integ
 
     boolean create(CabinetMedical cab) throws SQLException, IOException;
 
-    // ---------------------------
-    // DELETE
-    // ---------------------------
     boolean delete(CabinetMedical cab) throws Exception;
 }
