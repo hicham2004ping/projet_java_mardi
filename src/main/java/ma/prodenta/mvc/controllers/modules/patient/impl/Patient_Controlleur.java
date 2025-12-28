@@ -1,4 +1,4 @@
-package ma.prodenta.mvc.controllers.modules.patient;
+package ma.prodenta.mvc.controllers.modules.patient.impl;
 import ma.prodenta.config.Application_contexte;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
@@ -6,19 +6,19 @@ import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.Sexe;
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
 import ma.prodenta.repository.modules.assurance.implement.Assurance_impl;
-import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.sexe.impl.Sexe_impl;
 import ma.prodenta.service.modules.patient.api.PatientService;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Creation_Patient_Controlleur {
+public class Patient_Controlleur {
     private PatientService patientService;
     private Sexe_impl sexe;
     private Assurance_impl  assurance;
     private Antecedent_impl antecedent;
 
-    public Creation_Patient_Controlleur() {
+    public Patient_Controlleur() {
         sexe=Application_contexte.getSexe_impl();
         assurance=Application_contexte.getAssurance_impl();
         antecedent=Application_contexte.getAntecedentRepository();
@@ -43,5 +43,28 @@ public class Creation_Patient_Controlleur {
         catch(Exception e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public List<Patient> afficher_tous(){
+        List<Patient> patients=new ArrayList<>();
+        try{
+           patients = patientService.find_all();
+           return patients;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return patients;
+    }
+
+    public Patient afficher_patient(int id){
+        Patient patient=new Patient();
+        try{
+            patient=patientService.find_by_id(id);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return patient;
     }
 }

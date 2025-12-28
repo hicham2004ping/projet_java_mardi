@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PatientService {
+    Patient find_by_id(int id);
     void creation(Patient p,int IdMedecin) throws Exception;
     Patient find_by_email(String email) throws Exception;
     List<Patient> search_by_nom_prenom(String keyword) throws Exception;

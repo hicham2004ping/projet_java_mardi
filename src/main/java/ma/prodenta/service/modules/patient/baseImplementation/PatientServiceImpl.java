@@ -17,6 +17,22 @@ import java.util.Optional;
 
 public class PatientServiceImpl implements PatientService {
     @Override
+    public Patient find_by_id(int id) {
+        if (id<=0){
+            throw new IllegalArgumentException("l'id du patient n'est pas valide");
+        }
+        Patient patient=new Patient();
+        Patient_impl patientDao=Application_contexte.getPatientRepository();
+        try{
+            patient=patientDao.findById(id);
+            return patient;
+        } catch (Exception e) {
+            System.out.println("erreur lors de la lecture du patient ");
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void creation(Patient p, int idMedecin) throws Exception {
 
         if (p == null)

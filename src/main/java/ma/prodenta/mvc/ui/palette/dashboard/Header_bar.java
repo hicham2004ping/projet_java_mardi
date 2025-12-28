@@ -7,7 +7,7 @@ public class Header_bar extends JPanel {
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(1200, 70));
         setLayout(new BorderLayout());
-        JLabel lb = new JLabel("Bonjour Dr. MARTIN, comment vous allez aujourd'hui ?");
+        JLabel lb = new JLabel("tout ira mieux demain ");
         lb.setHorizontalAlignment(SwingConstants.LEFT);
         lb.setVerticalAlignment(SwingConstants.CENTER);
         lb.setFont(new Font("Segoe UI", Font.BOLD, 18));
