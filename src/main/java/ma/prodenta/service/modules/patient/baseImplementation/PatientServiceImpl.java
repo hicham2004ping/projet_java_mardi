@@ -31,6 +31,9 @@ public class PatientServiceImpl implements PatientService {
         if (p.getTelephone() == null || p.getTelephone().isBlank())
             throw new Exception("Téléphone obligatoire");
 
+        if(p.getDateNaissance().isAfter(LocalDate.now())){
+            throw new Exception("erreur lors de la saisie de la date du naissance du patient");
+        }
         Patient_impl patientRepo = Application_contexte.getPatientRepository();
         Antecedent_patient_impl antecedentRepo = Application_contexte.getAntecedentPatientRepository();
         Dossier_medical_impl dossierRepo = Application_contexte.getDossierMedicalRepository();

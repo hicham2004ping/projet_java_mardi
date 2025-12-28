@@ -31,7 +31,6 @@ import java.util.List;
 public class TestRepo1 {
     public static TestResult insertProcess() throws Exception {
         /// Cabinet medical
-        //////////////////////////
         CabinetMedicaleImpl cabinetMedical = new CabinetMedicaleImpl();
         CabinetMedical cabinetMedical1 = new CabinetMedical();
         cabinetMedical1.setIdCabinet(1);
@@ -59,7 +58,6 @@ public class TestRepo1 {
         charges.setTitre("Cabinet description");
         chargesDAO.create(charges);
         Long b = chargesDAO.get_last_id();
-        Integer c = b.intValue();
         System.out.println(chargesDAO.findById(b));
         /////////////revenus
         RevenusDAOImpl  revenusDAO = new RevenusDAOImpl();
@@ -71,7 +69,6 @@ public class TestRepo1 {
         revenus.setIdRev(1L);
         revenusDAO.create(revenus);
         Long d = revenusDAO.get_last_id();
-        Integer e = b.intValue();
         System.out.println(revenusDAO.findById(d));
         /// /////////////////role
         Role_impl role = new Role_impl();
@@ -174,20 +171,6 @@ public class TestRepo1 {
             System.out.println(patientDao.findById(patient.getId()));
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //////////////DossierMedical
         Dossier_medical_impl dossierDao = new Dossier_medical_impl();
         DossierMedical dossier = new DossierMedical();
@@ -216,16 +199,14 @@ public class TestRepo1 {
         Integer idStatut = statut.getId();
         System.out.println("Statut consultation utilisé : " + statut.getLibelle() + " (ID: " + idStatut + ")");
 
-        /// ///////////////////////RDV, Consultation, Certificat
         RDVDAOImpl rdvDAO = new RDVDAOImpl();
         ConsultationDaoimpl consultationDAO = new ConsultationDaoimpl();
         CertificatDaoimpl certDAO = new CertificatDaoimpl();
 
-        // Créer RDV avec le dossier créé
         RDV rdv = new RDV();
         Date dateRDV = new Date(104, 8, 9);
         Time heure = Time.valueOf("14:30:45");
-        rdv.setIddossier(idDossier); // Utiliser l'ID du dossier créé
+        rdv.setIddossier(idDossier);
         rdv.setDateRDV(dateRDV);
         rdv.setHeure(heure);
         rdv.setMotif("Trois dents cassées");
@@ -239,11 +220,11 @@ public class TestRepo1 {
 
         Consultation consultation = new Consultation();
         consultation.setDateConsult(dateRDV);
-        consultation.setIdDossier(idDossier); // Utiliser l'ID du dossier créé
+        consultation.setIdDossier(idDossier);
         consultation.setObservationMedecin("Besoin d'une intervention rapide");
-        consultation.setId_medecin(h); // Utiliser l'ID du médecin créé
-        consultation.setIdStatut(idStatut); // Utiliser l'ID du statut
-        consultation.setId_rdv(idRdvGenere); // Utiliser l'ID du RDV créé
+        consultation.setId_medecin(h);
+        consultation.setIdStatut(idStatut);
+        consultation.setId_rdv(idRdvGenere);
 
         consultationDAO.create(consultation);
 
@@ -476,7 +457,7 @@ public class TestRepo1 {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+     static void main() throws Exception {
 
         // --- 1. INSERTION ---
         System.out.println("=== INSERTION ===");

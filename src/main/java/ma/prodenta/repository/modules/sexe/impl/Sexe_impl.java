@@ -20,7 +20,7 @@ public class Sexe_impl implements Sexe_api {
                 """;
         List<Sexe_c>liste_sexe=new ArrayList<>();
         try(Connection conn=SessionFactory.getInstance().getConnection();
-        PreparedStatement ps=conn.prepareStatement(requete);)
+        PreparedStatement ps=conn.prepareStatement(requete))
         {
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
@@ -38,10 +38,9 @@ public class Sexe_impl implements Sexe_api {
         String requete= """
                 select * from sexe where idsexe=?
                 """;
-        int id;
         Sexe_c sexe=new Sexe_c();
         try(Connection conn=SessionFactory.getInstance().getConnection();
-        PreparedStatement ps=conn.prepareStatement(requete);)
+        PreparedStatement ps=conn.prepareStatement(requete))
         {
          ps.setInt(1,integer);
          ResultSet rs=ps.executeQuery();
@@ -87,7 +86,7 @@ public class Sexe_impl implements Sexe_api {
         int id=0;
         Sexe_c sexe=new Sexe_c();
         try(Connection conn= SessionFactory.getInstance().getConnection();
-            PreparedStatement stmt=conn.prepareStatement(requete);)
+            PreparedStatement stmt=conn.prepareStatement(requete))
         {
             stmt.setString(1,"%"+libelle+"%");
             ResultSet rs=stmt.executeQuery();
@@ -136,4 +135,20 @@ public class Sexe_impl implements Sexe_api {
         return lastId;
     }
 
+    @Override
+    public int find_by_nom(String nom) throws SQLException {
+        String requete= """
+                select idSexe from sexe where libelle=nom ;
+                """;
+        int id=0;
+        try(Connection conn=SessionFactory.getInstance().getConnection();
+        PreparedStatement ps=conn.prepareStatement(requete))
+        {
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                id= rs.getInt("idsexe");
+            }
+            return id;
+        }
+    }
 }

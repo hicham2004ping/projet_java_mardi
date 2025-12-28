@@ -8,4 +8,5 @@ public interface Sexe_api  extends CrudRepository<Sexe_c, Integer> {
     public Sexe_c findBylibelle(String libelle);
     public Sexe_c map_to_sexe(ResultSet rs) throws SQLException;
     public Integer get_last_id();
+    public int find_by_nom(String nom) throws SQLException;
 }

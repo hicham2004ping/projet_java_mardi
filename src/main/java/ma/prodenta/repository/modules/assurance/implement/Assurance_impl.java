@@ -161,6 +161,23 @@ public class Assurance_impl implements  Assurance_api {
     }
 
     @Override
+    public int id_assurance(String libelle) throws SQLException {
+        String requete= """
+                select idAssurance from assurance where libelle=libelle
+                """;
+        int id=0;
+        try(Connection conn = SessionFactory.getInstance().getConnection();
+        PreparedStatement stmt = conn.prepareStatement(requete);)
+        {
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                id=rs.getInt("idassurance");
+            }
+            return id;
+        }
+    }
+
+    @Override
     public Optional<Antecedent> findByNom(String nom) {
         return Optional.empty();
     }

@@ -1,11 +1,11 @@
 package ma.prodenta.service.test.acte;
-
 import ma.prodenta.service.modules.actes.impl.Acte_Service_impl;
 import ma.prodenta.entities.En.Acte;
 import java.util.List;
 
 public class Acte_Test {
     public static void main(String[] args) {
+
         Acte_Service_impl acteService = new Acte_Service_impl();
         try {
 
@@ -45,6 +45,7 @@ public class Acte_Test {
             System.err.println("ERREUR TEST ACTE");
             e.printStackTrace();
         }
+
     }
 }
 

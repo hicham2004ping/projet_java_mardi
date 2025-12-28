@@ -19,6 +19,8 @@ import ma.prodenta.service.modules.intervention.impl.Intervention_Service_impl;
 import ma.prodenta.service.modules.ordonnance.impl.Ordonance_Service_impl;
 import ma.prodenta.service.modules.patient.baseImplementation.PatientServiceImpl;
 import ma.prodenta.repository.modules.certificat.impl.CertificatDaoimpl;
+import ma.prodenta.repository.modules.assurance.implement.Assurance_impl;
+import ma.prodenta.repository.modules.sexe.impl.Sexe_impl;
 
 public class Application_contexte {
     public static final PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
@@ -27,43 +29,32 @@ public class Application_contexte {
     public static final Consultation_service_impl consultationServiceImpl = new Consultation_service_impl();
     public static final Intervention_Service_impl interventionServiceImpl = new Intervention_Service_impl();
     public static final Acte_Service_impl acteServiceImpl = new Acte_Service_impl();
+    public  static final Prescription_impl prescriptionServiceImpl = new Prescription_impl();
+    private static final Statut_consultation_impl statutRepository = new Statut_consultation_impl();
+    private static final RDVDAOImpl rendez_vous= new RDVDAOImpl();
+    private static final Sexe_impl sexe_impl = new Sexe_impl();
+    private static final Assurance_impl assurance_impl=new Assurance_impl();
 
-    private static final Statut_consultation_impl statutRepository =
-            new Statut_consultation_impl();
-    private static final RDVDAOImpl rendez_vous=
-            new RDVDAOImpl();
+    private static final Patient_impl patientRepository = new Patient_impl();
 
-    private static final Patient_impl patientRepository =
-            new Patient_impl();
+    private static final Antecedent_impl antecedentRepository = new Antecedent_impl();
 
-    private static final Antecedent_impl antecedentRepository =
-            new Antecedent_impl();
+    private static final Antecedent_patient_impl antecedentPatientRepository = new Antecedent_patient_impl();
 
-    private static final Antecedent_patient_impl antecedentPatientRepository =
-            new Antecedent_patient_impl();
+    private static final Dossier_medical_impl dossierMedicalRepository = new Dossier_medical_impl();
 
-    private static final Dossier_medical_impl dossierMedicalRepository =
-            new Dossier_medical_impl();
+    private static final ConsultationDaoimpl consultationRepository = new ConsultationDaoimpl();
 
-    private static final ConsultationDaoimpl consultationRepository =
-            new ConsultationDaoimpl();
+    private static final OrdonnanceDaoImpl ordonnanceRepository = new OrdonnanceDaoImpl();
 
-    private static final OrdonnanceDaoImpl ordonnanceRepository =
-            new OrdonnanceDaoImpl();
+    private static final MedicamentDAOImpl medicamentRepository = new MedicamentDAOImpl();
 
-    private static final MedicamentDAOImpl medicamentRepository =
-            new MedicamentDAOImpl();
+    private static final Prescription_impl prescriptionRepository = new Prescription_impl();
 
-    private static final Prescription_impl prescriptionRepository =
-            new Prescription_impl();
+    private static final Acte_impl acteRepository = new Acte_impl();
 
-    private static final Acte_impl acteRepository =
-            new Acte_impl();
-
-    private static final Intervention_impl interventionRepository =
-            new Intervention_impl();
-    private static final CertificatDaoimpl certificatRepository =
-            new CertificatDaoimpl();
+    private static final Intervention_impl interventionRepository = new Intervention_impl();
+    private static final CertificatDaoimpl certificatRepository = new CertificatDaoimpl();
 
     public static Patient_impl getPatientRepository() {
         return patientRepository;
@@ -136,5 +127,11 @@ public class Application_contexte {
 
     public static CertificatDaoimpl getCertificatRepository(){
         return certificatRepository;
+    }
+    public static Assurance_impl getAssurance_impl(){
+        return assurance_impl;
+    }
+    public static Sexe_impl getSexe_impl(){
+        return sexe_impl;
     }
 }

@@ -2,14 +2,8 @@ package ma.prodenta.service.modules.dossierMedical.impl;
 import ma.prodenta.config.Application_contexte;
 import ma.prodenta.entities.En.DossierMedical;
 import ma.prodenta.entities.En.Patient;
-import ma.prodenta.mvc.dto.dossiermedical.DossierMedicalDto;
-import ma.prodenta.repository.common.DossierMedicalRepository;
 import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_medical_impl;
 import ma.prodenta.service.modules.dossierMedical.api.DossierMedicalService;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class DossierMedicalServiceImpl implements DossierMedicalService {
     @Override
