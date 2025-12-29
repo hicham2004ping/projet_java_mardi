@@ -1,4 +1,5 @@
 package ma.prodenta.mvc.controllers.modules.patient.impl;
+import ma.prodenta.common.exceptions.*;
 import ma.prodenta.config.Application_contexte;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import ma.prodenta.mvc.controllers.modules.antecedent.impl.Antecedent_Controlleur_Impl;
+
 
 public class Patient_Controlleur {
     private PatientService patientService;
@@ -45,8 +47,9 @@ public class Patient_Controlleur {
             p.setAssurance(assurance1);
             patientService.creation(p,idMedecin);
         }
-        catch(Exception e){
-            throw new Exception("erreur lors de la creation du patient ");
+        catch(EmailExisteException | EmailInvalideException | Date_Naissance_Exception  | ArgumentException e ){
+            System.out.println(e.getMessage());
+            throw e;
         }
     }
 
