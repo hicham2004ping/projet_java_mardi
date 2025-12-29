@@ -7,12 +7,10 @@ import ma.prodenta.entities.Enum.Sexe;
 import ma.prodenta.mvc.controllers.modules.patient.impl.Patient_Controlleur;
 import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
 import ma.prodenta.service.modules.antecedent.impl.Antecedent_Service_ServiceImpl;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import com.toedter.calendar.JDateChooser;
-
 import java.awt.*;
 import java.sql.SQLException;
 import java.time.LocalDate;

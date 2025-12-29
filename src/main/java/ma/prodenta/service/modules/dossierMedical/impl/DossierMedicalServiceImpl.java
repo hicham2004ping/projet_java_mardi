@@ -1,9 +1,15 @@
 package ma.prodenta.service.modules.dossierMedical.impl;
+import ma.prodenta.common.exceptions.ArgumentException;
+import ma.prodenta.common.exceptions.ErreurLectureException;
+import ma.prodenta.common.exceptions.ErreurSuppressionException;
 import ma.prodenta.config.Application_contexte;
 import ma.prodenta.entities.En.DossierMedical;
 import ma.prodenta.entities.En.Patient;
+import ma.prodenta.mvc.dto.dossiermedical.Dossier_Medical_vu_generale_DTO;
 import ma.prodenta.repository.modules.dossierMedical.implementation.Dossier_medical_impl;
 import ma.prodenta.service.modules.dossierMedical.api.DossierMedicalService;
+
+import java.util.List;
 
 public class DossierMedicalServiceImpl implements DossierMedicalService {
     @Override
@@ -85,5 +91,28 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
             throw new Exception("le patient n'existe pas ");
         }
         return dossier_medical_impl.total_certificat_patient(patient);
+    }
+
+    @Override
+    public List<Dossier_Medical_vu_generale_DTO> find_all_view() throws Exception {
+        Dossier_medical_impl dossier=Application_contexte.getDossierMedicalRepository();
+        return dossier.find_all_view();
+    }
+
+    @Override
+    public void delte_by_id(int id) throws Exception {
+        Dossier_medical_impl dossier_repo=Application_contexte.getDossierMedicalRepository();
+        if(id<=0){
+            throw new ArgumentException("l'argument passer a la fonction de recherche est non valide ");
+        }
+        DossierMedical dossierMedical= dossier_repo.findById(id);
+
+        if(dossierMedical==null){
+            throw new ErreurLectureException("aucun dossier n'existe avec cette id ");
+        }
+        if(!dossier_repo.deleteById(id)){
+            throw new ErreurSuppressionException("impossible de supprimer ce dossier");
+        }
+        System.out.println("suppression avec success du dossier");
     }
 }

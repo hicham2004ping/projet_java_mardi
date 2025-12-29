@@ -13,6 +13,7 @@ import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl
 import ma.prodenta.repository.modules.statut_consultation.impl.Statut_consultation_impl;
 import ma.prodenta.service.modules.actes.impl.Acte_Service_impl;
 import ma.prodenta.service.modules.consultation.impl.Consultation_service_impl;
+import ma.prodenta.service.modules.dossierMedical.api.DossierMedicalService;
 import ma.prodenta.service.modules.dossierMedical.impl.DossierMedicalServiceImpl;
 import ma.prodenta.service.modules.intervention.impl.Intervention_Service_impl;
 import ma.prodenta.service.modules.ordonnance.impl.Ordonance_Service_impl;
@@ -23,8 +24,9 @@ import ma.prodenta.repository.modules.sexe.impl.Sexe_impl;
 import ma.prodenta.mvc.controllers.modules.patient.impl.Patient_Controlleur;
 import ma.prodenta.service.modules.antecedent.impl.Antecedent_Service_ServiceImpl;
 import ma.prodenta.mvc.controllers.modules.antecedent.impl.Antecedent_Controlleur_Impl;
-
+import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
 public class Application_contexte {
+
     public static final PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
     public static final Ordonance_Service_impl ordonanceServiceImpl = new Ordonance_Service_impl();
     public static final DossierMedicalServiceImpl dossierMedicalServiceImpl = new DossierMedicalServiceImpl();
@@ -32,13 +34,15 @@ public class Application_contexte {
     public static final Intervention_Service_impl interventionServiceImpl = new Intervention_Service_impl();
     public static final Acte_Service_impl acteServiceImpl = new Acte_Service_impl();
     public  static final Prescription_impl prescriptionServiceImpl = new Prescription_impl();
-    private static final Statut_consultation_impl statutRepository = new Statut_consultation_impl();
-    private static final RDVDAOImpl rendez_vous= new RDVDAOImpl();
+    public static final Statut_consultation_impl statutRepository = new Statut_consultation_impl();
+    public static final RDVDAOImpl rendez_vous= new RDVDAOImpl();
     private static final Sexe_impl sexe_impl = new Sexe_impl();
     private static final Assurance_impl assurance_impl=new Assurance_impl();
     private static final Patient_Controlleur patientControlleur=new Patient_Controlleur();
     private static final Antecedent_Service_ServiceImpl antecedent_service=new Antecedent_Service_ServiceImpl();
     private static final Antecedent_Controlleur_Impl antecedent_controlleur=new Antecedent_Controlleur_Impl();
+    private static final DossierMedicalController dossierMedicalController=new DossierMedicalController();
+    private static final DossierMedicalServiceImpl dossierMedicalService=new DossierMedicalServiceImpl();
 
     private static final Patient_impl patientRepository = new Patient_impl();
 
@@ -147,5 +151,11 @@ public class Application_contexte {
     }
     public static Antecedent_Controlleur_Impl getAntecedent_controlleur(){
         return antecedent_controlleur;
+    }
+    public static DossierMedicalController getDossierMedicalController(){
+        return dossierMedicalController;
+    }
+    public static DossierMedicalServiceImpl getDossierMedicalServiceImpl(){
+        return dossierMedicalServiceImpl;
     }
 }

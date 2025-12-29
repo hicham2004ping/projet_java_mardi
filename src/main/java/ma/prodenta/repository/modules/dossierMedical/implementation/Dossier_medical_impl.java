@@ -1,9 +1,11 @@
 package ma.prodenta.repository.modules.dossierMedical.implementation;
+import ma.prodenta.config.Application_contexte;
 import ma.prodenta.config.SessionFactory;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.DossierMedical;
 import ma.prodenta.entities.En.Ordonnance;
 import ma.prodenta.entities.En.Patient;
+import ma.prodenta.mvc.dto.dossiermedical.Dossier_Medical_vu_generale_DTO;
 import ma.prodenta.repository.modules.dossierMedical.api.DossierMedicalRepository;
 import java.io.IOException;
 import java.sql.*;
@@ -278,5 +280,61 @@ public class Dossier_medical_impl implements DossierMedicalRepository {
         }
     }
 
+    @Override
+    public List<Dossier_Medical_vu_generale_DTO> find_all_view() throws SQLException {
+        List<Dossier_Medical_vu_generale_DTO>list=new ArrayList<>();
+        Dossier_Medical_vu_generale_DTO dossier=new Dossier_Medical_vu_generale_DTO();
+        String requete = """
+                SELECT
+                    d.idDossier,
+                    d.dateCreation,
+                    p.idPatient,
+                    p.nom,
+                    p.prenom,
+                    COUNT(DISTINCT o.idOrd) AS total_ordonnance,
+                    COUNT(DISTINCT c.idConsult) AS total_consultation
+                FROM patient p
+                JOIN dossiermedical d ON p.idPatient = d.idPatient
+                LEFT JOIN ordonnance o ON d.idDossier = o.idDossier
+                LEFT JOIN consultation c ON d.idDossier = c.idDossier
+                GROUP BY
+                    d.idDossier,
+                    d.dateCreation,
+                    p.idPatient,
+                    p.nom,
+                    p.prenom;
+                
+                
+                """;
+        try(Connection conn= SessionFactory.getInstance().getConnection();
+        PreparedStatement ps=conn.prepareStatement(requete);)
+        {
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                dossier.setIdDossier(rs.getInt("idDossier"));
+                dossier.setPatient_nom(rs.getString("nom"));
+                dossier.setPatient_prenom(rs.getString("prenom"));
+                dossier.setDate_creation(rs.getDate("dateCreation").toLocalDate());
+                dossier.setTotal_ordonnance(rs.getInt("total_ordonnance"));
+                dossier.setTotal_conusltations(rs.getInt("total_consultation"));
+                list.add(dossier);
+                dossier=new Dossier_Medical_vu_generale_DTO();
+            }
+            return list;
+        }
+    }
 
+    static void main(){
+        Dossier_medical_impl dossier= Application_contexte.getDossierMedicalRepository();
+        List<Dossier_Medical_vu_generale_DTO> dossier1=new ArrayList<>();
+        try{
+            dossier1=dossier.find_all_view();
+            for(var dossier2:dossier1){
+                System.out.println("l'id du dossier est "+dossier2.getIdDossier()+" le nom du patient c'est "+dossier2.getPatient_nom()+" le totale des consultatiosn est "+dossier2.getTotal_conusltations());
+            }
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+        }
+    }
 }
