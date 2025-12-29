@@ -17,5 +17,7 @@ public interface DossierMedicalService {
     public int total_certificat_patient(Patient patient) throws Exception;
     public List<Dossier_Medical_vu_generale_DTO> find_all_view() throws Exception;
     public void delte_by_id(int id) throws Exception;
+    public DossierMedical find_by_id(int id) throws Exception;
+    public Patient find_patient(int id) throws Exception;
 }
 

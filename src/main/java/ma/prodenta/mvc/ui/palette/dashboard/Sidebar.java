@@ -4,10 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Sidebar extends JPanel {
-    JButton dashboard, rendez_vous, patients, agenda, caise,dossier_medical,log_out,users;
+    JButton dashboard, rendez_vous, patients, agenda, caise,dossier_medical,log_out,users,consultation;
 
     public Sidebar(Dashboard_view view) {
-        setLayout(new GridLayout(8, 1));
+        setLayout(new GridLayout(9, 1));
+        consultation = new JButton("Consultation");
         dashboard = new JButton("Dashboard");
         rendez_vous = new JButton("Rendez vous");
         patients = new JButton("Patients");
@@ -18,7 +19,7 @@ public class Sidebar extends JPanel {
         users=new JButton("Utilisateurs");
         add(dashboard);
         add(rendez_vous);
-
+        add(consultation);
         add(patients);
         patients.addActionListener(e ->{
             System.out.println("le boutton du patient a ete clicker");

@@ -86,7 +86,7 @@ public class PatientServiceImpl implements PatientService {
         Patient p = repo.findByEmail(email);
 
         if (p == null)
-            throw new Exception("Aucun patient avec cet email");
+            throw new ErreurLectureException("Aucun patient avec cet email");
 
         return p;
     }

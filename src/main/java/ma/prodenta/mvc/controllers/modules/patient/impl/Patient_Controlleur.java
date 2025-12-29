@@ -84,4 +84,13 @@ public class Patient_Controlleur {
     public void supprimer_patient(int id) throws Exception {
         patientService.delete_by_id(id);
     }
+    public Patient find_by_email(String email) throws Exception {
+        try{
+           return patientService.find_by_email(email);
+        }
+        catch (ErreurLectureException e){
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
 }

@@ -2,9 +2,11 @@ package ma.prodenta.mvc.ui.patient;
 import ma.prodenta.common.exceptions.*;
 import ma.prodenta.config.Application_contexte;
 import ma.prodenta.entities.En.Antecedent;
+import ma.prodenta.entities.En.Patient;
 import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.Sexe;
 import ma.prodenta.mvc.controllers.modules.patient.impl.Patient_Controlleur;
+import ma.prodenta.mvc.dto.patient.PatientDTO;
 import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
 import ma.prodenta.service.modules.antecedent.impl.Antecedent_Service_ServiceImpl;
 import javax.swing.*;
@@ -144,7 +146,6 @@ public class Ajouter_patient extends JPanel {
         tableScroll.setBorder(BorderFactory.createTitledBorder("Antécédents"));
         tableScroll.setPreferredSize(new Dimension(450, 350));
 
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.45;
@@ -167,7 +168,6 @@ public class Ajouter_patient extends JPanel {
                     JOptionPane.showMessageDialog(this, "Erreur lors du chargement des antécédents", "Erreur", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
             }
             int table_Sexe_ligne=sexeTable.getSelectedRow();
             if(table_Sexe_ligne!=-1){
@@ -181,7 +181,6 @@ public class Ajouter_patient extends JPanel {
             }
             try {
                 Date date = dateChooser.getDate();LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
                 controller.creation_patient(
                         1,
                         nom.getText().trim(),
@@ -194,11 +193,11 @@ public class Ajouter_patient extends JPanel {
                         assurance1.name(),
                         list
                 );
-
-                JOptionPane.showMessageDialog(this,
-                        "Le patient a été ajouté avec succès",
-                        "Succès", JOptionPane.INFORMATION_MESSAGE);
-
+                Patient patient=controller.find_by_email(email.getText().trim());
+                PatientDTO patientDTO= PatientDTO.patientParseDto(patient);
+                view.getAfficherPatient().ajouter_patient_ligne(patientDTO);
+                JOptionPane.showMessageDialog(this, "Le patient a été ajouté avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                PatientDTO patientDto=new PatientDTO();
             } catch (ArgumentException | EmailInvalideException | EmailExisteException |
                      Date_Naissance_Exception | ErreurLectureException | SQLException ex) {
 

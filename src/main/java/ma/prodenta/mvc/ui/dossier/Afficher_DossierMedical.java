@@ -5,12 +5,14 @@ import javax.swing.table.TableColumn;
 import ma.prodenta.config.Application_contexte;
 import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
 import ma.prodenta.mvc.dto.dossiermedical.Dossier_Medical_vu_generale_DTO;
+import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
 import java.awt.*;
 import java.util.List;
 
 public class Afficher_DossierMedical extends JPanel {
     DossierMedicalController controller;
     public Afficher_DossierMedical() throws Exception {
+
         controller = Application_contexte.getDossierMedicalController();
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -40,6 +42,7 @@ public class Afficher_DossierMedical extends JPanel {
         colonne_id.setMaxWidth(0);
         colonne_id.setResizable(false);
         colonne_id.setPreferredWidth(0);
+        tableDossier.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollDossier = new JScrollPane(tableDossier);
         scrollDossier.setPreferredSize(new Dimension(800, 400));
@@ -81,6 +84,21 @@ public class Afficher_DossierMedical extends JPanel {
             }
             else{
                 JOptionPane.showMessageDialog(this,"vous devez selectionner une ligne ","impossible de supprimer un dossier",JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        detailles.addActionListener(e -> {
+            int indice=tableDossier.getSelectedRow();
+            if(indice==-1){
+                JOptionPane.showMessageDialog(this,"avant de lister les detailles d'un dossier vous devez selectioner un dossier ","erruer",JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                int idDossier=Integer.parseInt(tableDossier.getValueAt(indice,0).toString());
+                try {
+                    new Dashboard_view().afficherDetailsDossier(idDossier);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }
