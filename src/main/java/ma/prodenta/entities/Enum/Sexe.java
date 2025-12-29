@@ -3,7 +3,7 @@ package ma.prodenta.entities.Enum;
 public enum Sexe {
     Homme(1) ,
     Femme(2);
-    private  int id;
+    private int id;
     Sexe(int id) {
         this.id=id;
     }
@@ -23,5 +23,9 @@ public enum Sexe {
                 return s;
         }
         throw new IllegalArgumentException("Le sexe n'existe pas");
+    }
+    public static void main(){
+        Sexe s=get_sexeby_libelle("Femme");
+        System.out.println("l'id du sexe femme est "+s.getId());
     }
 }

@@ -8,12 +8,12 @@ import ma.prodenta.repository.modules.antecedent_patient.impl.Antecedent_patient
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
 import ma.prodenta.service.modules.patient.api.PatientService;
 import ma.prodenta.config.Application_contexte;
-//import ma.prodenta.service.common.validateur.email.validateur_email;
+import ma.prodenta.service.common.validateur.email.validateur_email;
+import ma.prodenta.common.validators.Date_naissance_Validator;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public class PatientServiceImpl implements PatientService {
     @Override
@@ -41,9 +41,9 @@ public class PatientServiceImpl implements PatientService {
         if (p.getNom() == null || p.getNom().isBlank())
             throw new Exception("Nom du patient obligatoire");
 
-        /*if (p.getEmail() == null || !validateur_email.is_valid(p.getEmail()))
+        if (p.getEmail() == null || !validateur_email.is_valid(p.getEmail()))
             throw new Exception("Email invalide");
-        */
+
         if (p.getTelephone() == null || p.getTelephone().isBlank())
             throw new Exception("Téléphone obligatoire");
 
@@ -209,8 +209,22 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public int get_last_id() throws SQLException, IOException {
-        Patient_impl repo = new Patient_impl();
+        Patient_impl repo = Application_contexte.getPatientRepository();
         int id = repo.get_last_id();
         return id;
     }
+
+    @Override
+    public void delete_by_id(int id) throws Exception {
+        Patient_impl repo=Application_contexte.getPatientRepository();
+        if(id<=0){
+            throw new IllegalArgumentException("l'id du patient est non valide ");
+        }
+        boolean flag=repo.deleteById(id);
+        if(!flag){
+            throw new Exception("le patient n'a pas pu etre supprimer");
+        }
+        System.out.println("le patient a ete supprimer avec success");
+    }
+
 }

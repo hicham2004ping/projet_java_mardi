@@ -19,4 +19,5 @@ public interface PatientService {
     List<Antecedent> get_antecedents_of_patient(int patientId) throws Exception;
     List<Patient> get_patients_by_antecedent(int antecedentId) throws Exception;
     int get_last_id() throws SQLException, IOException;
+    void delete_by_id(int id) throws Exception;
 }

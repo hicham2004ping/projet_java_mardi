@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class Sidebar extends JPanel {
     JButton dashboard, rendez_vous, patients, agenda, caise,dossier_medical,log_out,users;
+
     public Sidebar(Dashboard_view view) {
         setLayout(new GridLayout(8, 1));
         dashboard = new JButton("Dashboard");
@@ -17,18 +18,21 @@ public class Sidebar extends JPanel {
         users=new JButton("Utilisateurs");
         add(dashboard);
         add(rendez_vous);
+
         add(patients);
         patients.addActionListener(e ->{
             System.out.println("le boutton du patient a ete clicker");
             view.afficher_Panel("patients");
         });
-        add(agenda);
-        add(caise);
+
         add(dossier_medical);
         dossier_medical.addActionListener(e ->{
             System.out.println("le boutton du dossier medical a ete clicker");
             view.afficher_Panel("Dossier medical");
         });
+
+        add(agenda);
+        add(caise);
         add(users);
         add(log_out);
         setPreferredSize(new Dimension(300,500));

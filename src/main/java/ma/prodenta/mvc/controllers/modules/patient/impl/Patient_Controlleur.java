@@ -4,13 +4,17 @@ import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
 import ma.prodenta.entities.Enum.Assurance;
 import ma.prodenta.entities.Enum.Sexe;
+import ma.prodenta.mvc.dto.patient.PatientDTO;
 import ma.prodenta.repository.modules.antecedent.impl.Antecedent_impl;
 import ma.prodenta.repository.modules.assurance.implement.Assurance_impl;
+import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.sexe.impl.Sexe_impl;
+import ma.prodenta.service.modules.antecedent.impl.Antecedent_Service_ServiceImpl;
 import ma.prodenta.service.modules.patient.api.PatientService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import ma.prodenta.mvc.controllers.modules.antecedent.impl.Antecedent_Controlleur_Impl;
 
 public class Patient_Controlleur {
     private PatientService patientService;
@@ -25,7 +29,7 @@ public class Patient_Controlleur {
         patientService=Application_contexte.getpatientService();
     }
 
-    public void creation_patient(int idMedecin, String nom, String prenom, LocalDate date_naissance , String adresse, String email, String telephone, String sexe, String assurance, List<Antecedent> antecedents) {
+    public void creation_patient(int idMedecin, String nom, String prenom, LocalDate date_naissance , String adresse, String email, String telephone, String sexe, String assurance, List<Antecedent> antecedents) throws Exception {
         Patient p=new Patient();
         p.setAdresse(adresse);
         p.setEmail(email);
@@ -33,31 +37,38 @@ public class Patient_Controlleur {
         p.setPrenom(prenom);
         p.setDateNaissance(date_naissance);
         p.setAntecedents(antecedents);
+        p.setTelephone(telephone);
         try{
-            Sexe sexe1=Sexe.valueOf(sexe);
-            Assurance assurance1=Assurance.valueOf(assurance);
+            Assurance assurance1=Assurance.get_Assurance_by_Libelle(assurance);
+            Sexe sexe1=Sexe.get_sexeby_libelle(sexe);
             p.setSexe(sexe1);
             p.setAssurance(assurance1);
             patientService.creation(p,idMedecin);
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
+            throw new Exception("erreur lors de la creation du patient ");
         }
     }
 
-    public List<Patient> afficher_tous(){
-        List<Patient> patients=new ArrayList<>();
-        try{
-           patients = patientService.find_all();
-           return patients;
+    public List<PatientDTO> afficher_tous(){
+            Patient_impl patientRepo = new Patient_impl();
+            List<PatientDTO> patientDTOs = new ArrayList<PatientDTO>();
+            PatientDTO patientDto=new PatientDTO();
+            List<Patient> patients=new ArrayList<>();
+            try{
+                patients=patientRepo.findAll();
+                for(Patient p:patients){
+                    patientDto= PatientDTO.patientParseDto(p);
+                    patientDTOs.add(patientDto);
+                }
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            return patientDTOs;
         }
-        catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        return patients;
-    }
 
-    public Patient afficher_patient(int id){
+    public PatientDTO afficher_patient(int id){
         Patient patient=new Patient();
         try{
             patient=patientService.find_by_id(id);
@@ -65,6 +76,9 @@ public class Patient_Controlleur {
         catch(Exception e){
             System.out.println(e.getMessage());
         }
-        return patient;
+        return PatientDTO.patientParseDto(patient);
+    }
+    public void supprimer_patient(int id) throws Exception {
+        patientService.delete_by_id(id);
     }
 }

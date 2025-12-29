@@ -1,4 +1,4 @@
-/*package ma.prodenta.service.common.validateur.email;
+package ma.prodenta.service.common.validateur.email;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class validateur_email {
@@ -7,4 +7,3 @@ public class validateur_email {
         return email_validator.isValid(email);
     }
 }
-*/

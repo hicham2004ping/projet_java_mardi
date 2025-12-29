@@ -6,6 +6,7 @@ public enum Assurance {
     CNSS(2),
     Aucune(4),
     RAMED(3);
+
     private int id;
 
     Assurance(int id) {
@@ -14,7 +15,7 @@ public enum Assurance {
     public int getId() {
         return id;
     }
-    public Assurance get_Assurance_by_Libelle(String libelle)
+    public static Assurance  get_Assurance_by_Libelle(String libelle)
     {
         for(Assurance assurance:Assurance.values()){
             if(assurance.name().equals(libelle)){
@@ -22,5 +23,9 @@ public enum Assurance {
             }
         }
         throw new IllegalArgumentException("le libelle de ce sexe n'existe pas ");
+    }
+    public static void main(){
+        Assurance a=Assurance.get_Assurance_by_Libelle("CNOPS");
+        System.out.println("l'd c'est "+a.getId());
     }
 }

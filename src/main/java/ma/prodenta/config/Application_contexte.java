@@ -21,6 +21,8 @@ import ma.prodenta.repository.modules.certificat.impl.CertificatDaoimpl;
 import ma.prodenta.repository.modules.assurance.implement.Assurance_impl;
 import ma.prodenta.repository.modules.sexe.impl.Sexe_impl;
 import ma.prodenta.mvc.controllers.modules.patient.impl.Patient_Controlleur;
+import ma.prodenta.service.modules.antecedent.impl.Antecedent_Service_ServiceImpl;
+import ma.prodenta.mvc.controllers.modules.antecedent.impl.Antecedent_Controlleur_Impl;
 
 public class Application_contexte {
     public static final PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
@@ -34,7 +36,9 @@ public class Application_contexte {
     private static final RDVDAOImpl rendez_vous= new RDVDAOImpl();
     private static final Sexe_impl sexe_impl = new Sexe_impl();
     private static final Assurance_impl assurance_impl=new Assurance_impl();
-    private static final Patient_Controlleur creation_patient=new Patient_Controlleur();
+    private static final Patient_Controlleur patientControlleur=new Patient_Controlleur();
+    private static final Antecedent_Service_ServiceImpl antecedent_service=new Antecedent_Service_ServiceImpl();
+    private static final Antecedent_Controlleur_Impl antecedent_controlleur=new Antecedent_Controlleur_Impl();
 
     private static final Patient_impl patientRepository = new Patient_impl();
 
@@ -135,7 +139,13 @@ public class Application_contexte {
     public static Sexe_impl getSexe_impl(){
         return sexe_impl;
     }
-    public static Patient_Controlleur getCreation_patient(){
-        return creation_patient;
+    public static Patient_Controlleur getPatientControlleur(){
+        return patientControlleur;
+    }
+    public static Antecedent_Service_ServiceImpl getAntecedent_Service(){
+        return antecedent_service;
+    }
+    public static Antecedent_Controlleur_Impl getAntecedent_controlleur(){
+        return antecedent_controlleur;
     }
 }

@@ -16,14 +16,14 @@ public class PatientDTO {
     private int id;
     private String nom;
     private String prenom;
-    private LocalDate date_naissance;
+    private String date_naissance;
 
-    public PatientDTO patientParseDto(Patient p){
+    public static PatientDTO patientParseDto(Patient p){
         PatientDTO patientDTO=new PatientDTO();
         patientDTO.setId(p.getId());
         patientDTO.setNom(p.getNom());
         patientDTO.setPrenom(p.getPrenom());
-        patientDTO.setDate_naissance(p.getDateNaissance());
+        patientDTO.setDate_naissance(p.getDateNaissance().toString());
         return patientDTO;
     }
 }
