@@ -8,4 +8,5 @@ public interface Patient_Controlleur_Api {
     public void creation_patient(int idMedecin, String nom, String prenom, LocalDate date_naissance , String adresse, String email, String telephone, String sexe, String assurance, List<Antecedent> antecedents) ;
     public List<Patient> afficher_tous();
     public Patient afficher_patient(int id);
+    public Patient find_by_email(String email);
 }

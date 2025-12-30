@@ -6,11 +6,10 @@ import java.time.LocalDate;
 @AllArgsConstructor @Data @NoArgsConstructor
 
 public class Dossier_Medical_vu_generale_DTO {
-    private String patient_email;
+    private int idDossier;
     private String patient_nom;
-    private int patientId;
+    private String patient_prenom;
     private int total_conusltations;
     private int  total_ordonnance;
-    private String total;
-    private LocalDate date_premier_consultation;
+    private LocalDate date_creation;
 }

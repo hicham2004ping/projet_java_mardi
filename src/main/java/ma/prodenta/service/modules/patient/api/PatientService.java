@@ -1,4 +1,5 @@
 package ma.prodenta.service.modules.patient.api;
+import ma.prodenta.common.exceptions.*;
 import ma.prodenta.entities.En.Antecedent;
 import ma.prodenta.entities.En.Patient;
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.util.Optional;
 
 public interface PatientService {
     Patient find_by_id(int id);
-    void creation(Patient p,int IdMedecin) throws Exception;
+    void creation(Patient p,int IdMedecin) throws EmailExisteException, EmailInvalideException, ArgumentException, Date_Naissance_Exception, ErreurCreationException, SQLException, IOException;
     Patient find_by_email(String email) throws Exception;
     List<Patient> search_by_nom_prenom(String keyword) throws Exception;
     long count();
@@ -19,4 +20,5 @@ public interface PatientService {
     List<Antecedent> get_antecedents_of_patient(int patientId) throws Exception;
     List<Patient> get_patients_by_antecedent(int antecedentId) throws Exception;
     int get_last_id() throws SQLException, IOException;
+    void delete_by_id(int id) throws Exception;
 }

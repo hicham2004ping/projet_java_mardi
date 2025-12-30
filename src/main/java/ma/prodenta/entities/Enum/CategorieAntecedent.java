@@ -1,5 +1,4 @@
 package ma.prodenta.entities.Enum;
-
 public enum CategorieAntecedent {
     ALLERGIE,
     MALADIE_CHRONIQUE,
