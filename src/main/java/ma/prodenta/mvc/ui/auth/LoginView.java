@@ -28,4 +28,3 @@ public class LoginView extends JFrame {
         setVisible(true);
     }
 }
-

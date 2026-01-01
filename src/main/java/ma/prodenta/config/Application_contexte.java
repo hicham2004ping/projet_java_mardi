@@ -25,6 +25,15 @@ import ma.prodenta.mvc.controllers.modules.patient.impl.Patient_Controlleur;
 import ma.prodenta.service.modules.antecedent.impl.Antecedent_Service_ServiceImpl;
 import ma.prodenta.mvc.controllers.modules.antecedent.impl.Antecedent_Controlleur_Impl;
 import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
+import ma.prodenta.service.modules.agenda.impl.AgendaServiceImpl;
+import ma.prodenta.service.modules.dashboard.impl.DashboardServiceImpl;
+import ma.prodenta.service.modules.auth.impl.AuthServiceImpl;
+import ma.prodenta.service.modules.usermanager.impl.UserManagerServiceImpl;
+import ma.prodenta.repository.modules.agenda.implementation.AgendaRepositoryImpl;
+import ma.prodenta.repository.modules.Dashboard.implementation.DashboardRepositoryImpl;
+import ma.prodenta.mvc.controllers.modules.auth.impl.AuthControlleur_Impl;
+import ma.prodenta.mvc.controllers.modules.userManager.impl.UserManagerControlleur_Impl;
+
 public class Application_contexte {
 
     public static final PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
@@ -43,6 +52,13 @@ public class Application_contexte {
     private static final Antecedent_Controlleur_Impl antecedent_controlleur=new Antecedent_Controlleur_Impl();
     private static final DossierMedicalController dossierMedicalController=new DossierMedicalController();
     private static final DossierMedicalServiceImpl dossierMedicalService=new DossierMedicalServiceImpl();
+
+    private static final AgendaServiceImpl agendaServiceImpl = new AgendaServiceImpl();
+    private static final DashboardServiceImpl dashboardServiceImpl = new DashboardServiceImpl();
+    private static final AuthServiceImpl authServiceImpl = new AuthServiceImpl();
+    private static final UserManagerServiceImpl userManagerServiceImpl = new UserManagerServiceImpl();
+    private static final AuthControlleur_Impl authControlleur = new AuthControlleur_Impl();
+    private static final UserManagerControlleur_Impl userManagerControlleur = new UserManagerControlleur_Impl();
 
     private static final Patient_impl patientRepository = new Patient_impl();
 
@@ -64,6 +80,9 @@ public class Application_contexte {
 
     private static final Intervention_impl interventionRepository = new Intervention_impl();
     private static final CertificatDaoimpl certificatRepository = new CertificatDaoimpl();
+
+    private static final AgendaRepositoryImpl agendaRepository = new AgendaRepositoryImpl(null);
+    private static final DashboardRepositoryImpl dashboardRepository = new DashboardRepositoryImpl(null);
 
     public static Patient_impl getPatientRepository() {
         return patientRepository;
@@ -157,5 +176,37 @@ public class Application_contexte {
     }
     public static DossierMedicalServiceImpl getDossierMedicalServiceImpl(){
         return dossierMedicalServiceImpl;
+    }
+
+    public static AgendaServiceImpl getAgendaServiceImpl(){
+        return agendaServiceImpl;
+    }
+
+    public static DashboardServiceImpl getDashboardServiceImpl(){
+        return dashboardServiceImpl;
+    }
+
+    public static AuthServiceImpl getAuthServiceImpl(){
+        return authServiceImpl;
+    }
+
+    public static UserManagerServiceImpl getUserManagerServiceImpl(){
+        return userManagerServiceImpl;
+    }
+
+    public static AuthControlleur_Impl getAuthControlleur(){
+        return authControlleur;
+    }
+
+    public static UserManagerControlleur_Impl getUserManagerControlleur(){
+        return userManagerControlleur;
+    }
+
+    public static AgendaRepositoryImpl getAgendaRepository(){
+        return agendaRepository;
+    }
+
+    public static DashboardRepositoryImpl getDashboardRepository(){
+        return dashboardRepository;
     }
 }
