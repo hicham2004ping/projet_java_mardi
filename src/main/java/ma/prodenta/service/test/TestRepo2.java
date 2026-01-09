@@ -4,6 +4,10 @@ import ma.prodenta.entities.En.UserManager;
 import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.service.modules.auth.impl.AuthServiceImpl;
 import ma.prodenta.service.modules.usermanager.impl.UserManagerServiceImpl;
+import ma.prodenta.service.modules.agenda.impl.AgendaServiceImpl;
+import ma.prodenta.service.modules.dashboard.impl.DashboardServiceImpl;
+import ma.prodenta.entities.En.Agenda;
+import ma.prodenta.entities.En.Dashboard;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -113,7 +117,7 @@ public class TestRepo2 {
             userToUpdate.setNom("Service Test Updated");
             userToUpdate.setTel("0699887766");
             authService.updateUser(userToUpdate);
-            
+
             Utilisateur updated = authService.findByLogin("serviceuser");
             System.out.println("✓ Utilisateur mis à jour");
             System.out.println("  Nouveau nom: " + updated.getNom());
@@ -128,7 +132,7 @@ public class TestRepo2 {
             Utilisateur userToDelete = authService.findByLogin("serviceuser");
             boolean deleted = authService.deleteUser(userToDelete.getIdUser());
             System.out.println((deleted ? "✓" : "✗") + " Utilisateur supprimé: " + deleted);
-            
+
             // Vérifier que l'utilisateur n'existe plus
             try {
                 authService.findByLogin("serviceuser");
@@ -232,7 +236,7 @@ public class TestRepo2 {
             UserManager managerToUpdate = userManagerService.findByUsername("manager_test");
             managerToUpdate.setRole("SUPER_ADMIN");
             managerToUpdate.setActif(true);
-            
+
             UserManager updated = userManagerService.updateUser(managerToUpdate);
             System.out.println("✓ UserManager mis à jour");
             System.out.println("  Nouveau role: " + updated.getRole());
@@ -246,7 +250,7 @@ public class TestRepo2 {
             UserManager managerToDeactivate = userManagerService.findByUsername("manager_test");
             boolean deactivated = userManagerService.deactivateUser(managerToDeactivate.getIdUser());
             System.out.println((deactivated ? "✓" : "✗") + " Utilisateur désactivé");
-            
+
             UserManager deactivatedUser = userManagerService.findById(managerToDeactivate.getIdUser());
             System.out.println("  Statut actif: " + deactivatedUser.getActif());
         } catch (Exception e) {
@@ -259,7 +263,7 @@ public class TestRepo2 {
             UserManager managerToActivate = userManagerService.findByUsername("manager_test");
             boolean activated = userManagerService.activateUser(managerToActivate.getIdUser());
             System.out.println((activated ? "✓" : "✗") + " Utilisateur réactivé");
-            
+
             UserManager activatedUser = userManagerService.findById(managerToActivate.getIdUser());
             System.out.println("  Statut actif: " + activatedUser.getActif());
         } catch (Exception e) {
@@ -281,7 +285,7 @@ public class TestRepo2 {
             UserManager managerToDelete = userManagerService.findByUsername("manager_test");
             userManagerService.deleteUser(managerToDelete.getIdUser());
             System.out.println("✓ UserManager supprimé");
-            
+
             // Vérifier que le manager n'existe plus
             try {
                 userManagerService.findByUsername("manager_test");
@@ -298,12 +302,189 @@ public class TestRepo2 {
         System.out.println("========================================");
     }
 
+    public static void testAgendaService() throws Exception {
+        System.out.println("\n========================================");
+        System.out.println("     TEST DU SERVICE AGENDA            ");
+        System.out.println("========================================");
+
+        AgendaServiceImpl agendaService = new AgendaServiceImpl();
+
+        // Test 1: Création d'un agenda
+        System.out.println("\n--- Test 1: Création d'un agenda ---");
+        Agenda newAgenda = new Agenda();
+        newAgenda.setIdMedecin(1);
+        newAgenda.setIdPatient(1);
+        newAgenda.setDateDebut(new java.util.Date());
+        newAgenda.setDateFin(new java.util.Date(System.currentTimeMillis() + 3600000));
+        newAgenda.setStatut("planifie");
+        newAgenda.setNote("Controle dentaire");
+
+        try {
+            Agenda created = agendaService.save(newAgenda);
+            System.out.println("✓ Agenda créé avec succès");
+            System.out.println("  ID: " + created.getIdAgenda());
+            System.out.println("  Médecin: " + created.getIdMedecin());
+            System.out.println("  Patient: " + created.getIdPatient());
+        } catch (Exception e) {
+            System.out.println("✗ Erreur lors de la création: " + e.getMessage());
+        }
+
+        // Test 2: Recherche par ID
+        System.out.println("\n--- Test 2: Recherche par ID ---");
+        try {
+            Agenda foundAgenda = agendaService.findById(1);
+            System.out.println("✓ Agenda trouvé par ID");
+            System.out.println("  Statut: " + foundAgenda.getStatut());
+            System.out.println("  Note: " + foundAgenda.getNote());
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        // Test 3: Obtenir tous les agendas
+        System.out.println("\n--- Test 3: Obtenir tous les agendas ---");
+        try {
+            java.util.List<Agenda> allAgendas = agendaService.findAll();
+            System.out.println("✓ Nombre d'agendas: " + allAgendas.size());
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        // Test 4: Recherche par date
+        System.out.println("\n--- Test 4: Recherche par date ---");
+        try {
+            java.util.List<Agenda> agendaByDate = agendaService.findByDate(new java.util.Date());
+            System.out.println("✓ Nombre d'agendas pour cette date: " + agendaByDate.size());
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        // Test 5: Mise à jour d'un agenda
+        System.out.println("\n--- Test 5: Mise à jour d'un agenda ---");
+        try {
+            Agenda agendaToUpdate = agendaService.findById(1);
+            agendaToUpdate.setStatut("en_cours");
+            agendaToUpdate.setNote("Mise à jour du traitement");
+            Agenda updated = agendaService.update(agendaToUpdate);
+            System.out.println("✓ Agenda mis à jour");
+            System.out.println("  Nouveau statut: " + updated.getStatut());
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        // Test 6: Suppression d'un agenda
+        System.out.println("\n--- Test 6: Suppression d'un agenda ---");
+        try {
+            agendaService.delete(1);
+            System.out.println("✓ Agenda supprimé");
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        System.out.println("\n========================================");
+        System.out.println("    FIN TEST SERVICE AGENDA            ");
+        System.out.println("========================================");
+    }
+
+    public static void testDashboardService() throws Exception {
+        System.out.println("\n========================================");
+        System.out.println("     TEST DU SERVICE DASHBOARD         ");
+        System.out.println("========================================");
+
+        DashboardServiceImpl dashboardService = new DashboardServiceImpl();
+
+        // Test 1: Création d'un dashboard
+        System.out.println("\n--- Test 1: Création d'un dashboard ---");
+        Dashboard newDashboard = new Dashboard();
+        newDashboard.setDateDebut(new java.util.Date());
+        newDashboard.setDateFin(new java.util.Date(System.currentTimeMillis() + 86400000));
+        newDashboard.setNbPatients(15);
+        newDashboard.setNbActes(25);
+        newDashboard.setTotalRecettes(3500.50);
+        newDashboard.setTotalDepenses(800.25);
+
+        try {
+            Dashboard created = dashboardService.save(newDashboard);
+            System.out.println("✓ Dashboard créé avec succès");
+            System.out.println("  ID: " + created.getIdDashboard());
+            System.out.println("  Patients: " + created.getNbPatients());
+            System.out.println("  Actes: " + created.getNbActes());
+            System.out.println("  Recettes: " + created.getTotalRecettes() + " DH");
+        } catch (Exception e) {
+            System.out.println("✗ Erreur lors de la création: " + e.getMessage());
+        }
+
+        // Test 2: Recherche par ID
+        System.out.println("\n--- Test 2: Recherche par ID ---");
+        try {
+            Dashboard foundDashboard = dashboardService.findById(1);
+            System.out.println("✓ Dashboard trouvé par ID");
+            System.out.println("  Dépenses: " + foundDashboard.getTotalDepenses() + " DH");
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        // Test 3: Obtenir tous les dashboards
+        System.out.println("\n--- Test 3: Obtenir tous les dashboards ---");
+        try {
+            java.util.List<Dashboard> allDashboards = dashboardService.findAll();
+            System.out.println("✓ Nombre de dashboards: " + allDashboards.size());
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        // Test 4: Recherche par période
+        System.out.println("\n--- Test 4: Recherche par période ---");
+        try {
+            java.util.Date start = new java.util.Date();
+            java.util.Date end = new java.util.Date(System.currentTimeMillis() + 86400000);
+            Dashboard dashByPeriode = dashboardService.findByPeriode(start, end);
+            System.out.println("✓ Dashboard trouvé pour la période");
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        // Test 5: Mise à jour d'un dashboard
+        System.out.println("\n--- Test 5: Mise à jour d'un dashboard ---");
+        try {
+            Dashboard dashToUpdate = dashboardService.findById(1);
+            dashToUpdate.setNbPatients(20);
+            dashToUpdate.setTotalRecettes(4200.75);
+            Dashboard updated = dashboardService.update(dashToUpdate);
+            System.out.println("✓ Dashboard mis à jour");
+            System.out.println("  Nouveau nombre de patients: " + updated.getNbPatients());
+            System.out.println("  Nouvelles recettes: " + updated.getTotalRecettes() + " DH");
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        // Test 6: Suppression d'un dashboard
+        System.out.println("\n--- Test 6: Suppression d'un dashboard ---");
+        try {
+            dashboardService.delete(1);
+            System.out.println("✓ Dashboard supprimé");
+        } catch (Exception e) {
+            System.out.println("✗ Erreur: " + e.getMessage());
+        }
+
+        System.out.println("\n========================================");
+        System.out.println("    FIN TEST SERVICE DASHBOARD         ");
+        System.out.println("========================================");
+    }
+
     public static void main(String[] args) {
         try {
             System.out.println("\n");
             System.out.println("================================================");
             System.out.println("   TESTS COMPLETS DES SERVICES (LAYER SERVICE)  ");
             System.out.println("================================================");
+
+            // Test du service Agenda
+            testAgendaService();
+            System.out.println("\n\n");
+
+            // Test du service Dashboard
+            testDashboardService();
+            System.out.println("\n\n");
 
             // Test du service d'authentification
             testAuthService();
