@@ -8,14 +8,15 @@ import javax.swing.*;
 public class Prodenta_Main {
      static void main(String[] args) throws Exception {
          try {
-             UIManager.setLookAndFeel(new FlatLightLaf()); // or FlatDarkLaf
+             UIManager.setLookAndFeel(new FlatLightLaf());
          } catch (Exception ex) {
              ex.printStackTrace();
          }
 
          javax.swing.SwingUtilities.invokeLater(() -> {
              try {
-                 Dashboard_view frame = new Dashboard_view();
+                 Integer roleId = 2;
+                 Dashboard_view frame = new Dashboard_view(roleId);
              } catch (Exception e) {
                  throw new RuntimeException(e);
              }

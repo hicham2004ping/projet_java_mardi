@@ -11,8 +11,14 @@ import java.util.List;
 
 public class Afficher_DossierMedical extends JPanel {
     DossierMedicalController controller;
-    public Afficher_DossierMedical() throws Exception {
+    private Dashboard_view dashboard;
 
+    public Afficher_DossierMedical() throws Exception {
+        this(null);
+    }
+
+    public Afficher_DossierMedical(Dashboard_view dashboard) throws Exception {
+        this.dashboard = dashboard;
         controller = Application_contexte.getDossierMedicalController();
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -94,10 +100,16 @@ public class Afficher_DossierMedical extends JPanel {
             else{
                 int idDossier=Integer.parseInt(tableDossier.getValueAt(indice,0).toString());
                 try {
-                    new Dashboard_view().afficherDetailsDossier(idDossier);
+                    if (dashboard != null) {
+                        dashboard.afficherDetailsDossier(idDossier);
+                    } else {
+                        new Dashboard_view().afficherDetailsDossier(idDossier);
+                    }
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
-                    throw new RuntimeException(ex);
+                    JOptionPane.showMessageDialog(this,
+                            "Erreur: " + ex.getMessage(),
+                            "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
