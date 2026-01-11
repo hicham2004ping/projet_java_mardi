@@ -163,10 +163,13 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
 
     @Override
     public int Total_ordonance(Ordonnance ordonance) {
-        String sql = "SELECT SUM(m.prixUnit) " +
-                "FROM medicament m " +
-                "JOIN ordonnance_medicament om ON om.idMed = m.idMed " +
-                "WHERE om.idOrd = ?";
+        String sql = """
+    SELECT SUM(m.prixUnit) AS totalPrix
+    FROM ordonnance o
+    JOIN prescription p ON o.idOrd = p.idOrd
+    JOIN medicament m ON p.idMed = m.idMed
+    WHERE o.idOrd = ?;
+""";
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, ordonance.getIdOrd());

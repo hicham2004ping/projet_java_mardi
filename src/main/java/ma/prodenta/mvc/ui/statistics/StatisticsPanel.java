@@ -248,5 +248,6 @@ public class StatisticsPanel extends JPanel {
                 tableModel.addRow(row);
             }
         }
+       
     }
 }

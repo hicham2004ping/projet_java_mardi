@@ -22,10 +22,6 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Vue complète du dossier médical avec onglets
- * Basée sur l'interface montrée dans l'image
- */
 public class DossierMedicalView extends JPanel {
 
     private Integer idDossier;

@@ -5,7 +5,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 public class PatientDetailPanel extends JPanel {
-    
+
     private JTabbedPane tabbedPane;
     private JTable consultationTable;
     private JTable prescriptionTable;
@@ -13,7 +13,7 @@ public class PatientDetailPanel extends JPanel {
     public PatientDetailPanel(String patientName) {
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.WHITE);
-        
+
         add(createPatientInfoPanel(patientName), BorderLayout.NORTH);
         add(createTabbedPanel(), BorderLayout.CENTER);
     }
@@ -64,8 +64,8 @@ public class PatientDetailPanel extends JPanel {
 
         String[] columns = {"Date", "Acte Dentaire", "Dents", "Prix", "Actions"};
         Object[][] data = {
-            {"22-11-2025", "Détartrage", "tout", "300", "Modifier"},
-            {"11-10-2025", "Consultation", "-", "300", "Modifier"}
+                {"22-11-2025", "Détartrage", "tout", "300", "Modifier"},
+                {"11-10-2025", "Consultation", "-", "300", "Modifier"}
         };
 
         consultationTable = new JTable(data, columns);
@@ -94,8 +94,8 @@ public class PatientDetailPanel extends JPanel {
 
         String[] columns = {"N°", "Date", "N° Con.", "Médicaments", "Actions"};
         Object[][] data = {
-            {112, "22-11-2025", "120", "Doliprane", "Modifier"},
-            {113, "22-11-2025", "121", "Sensodyne", "Modifier"}
+                {112, "22-11-2025", "120", "Doliprane", "Modifier"},
+                {113, "22-11-2025", "121", "Sensodyne", "Modifier"}
         };
 
         prescriptionTable = new JTable(data, columns);
@@ -116,8 +116,8 @@ public class PatientDetailPanel extends JPanel {
 
         String[] columns = {"N. facture", "Date", "État", "Montant", "Actions"};
         Object[][] data = {
-            {1, "05-11-2024", "Payé", "7000 DH", "Détails"},
-            {2, "13-02-2025", "Payé", "5500 DH", "Détails"}
+                {1, "05-11-2024", "Payé", "7000 DH", "Détails"},
+                {2, "13-02-2025", "Payé", "5500 DH", "Détails"}
         };
 
         JTable financialTable = new JTable(data, columns);

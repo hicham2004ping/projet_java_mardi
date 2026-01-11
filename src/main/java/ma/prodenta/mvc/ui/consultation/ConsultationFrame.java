@@ -7,10 +7,6 @@ import ma.prodenta.mvc.ui.fileattente.FileAttenteFrame;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Frame de consultation - Redirige vers la file d'attente si disponible
- * Sinon affiche un message d'information
- */
 public class ConsultationFrame extends JFrame {
 
     public ConsultationFrame() {

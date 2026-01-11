@@ -20,7 +20,7 @@ import java.net.URL;
 
 public class Dashboard_view extends JFrame {
     public CardLayout cardLayout;
-    public JPanel contenu_Centre;  // Made public for access from Sidebar
+    public JPanel contenu_Centre;
     Afficher_patient afficherPatient;
     private Integer userRoleId;
     private FileAttenteFrame fileAttenteFrame;
@@ -55,7 +55,7 @@ public class Dashboard_view extends JFrame {
         contenu_Centre.add(caissePanel, "caisse");
         contenu_Centre.add(statisticsPanel, "statistics");
 
-        if (userRoleId != null && userRoleId == 3) { // Admin
+        if (userRoleId != null && userRoleId == 50) {
             UtilisateursPanel utilisateursPanel = new UtilisateursPanel();
             AuditLogsPanel auditLogsPanel = new AuditLogsPanel();
             contenu_Centre.add(utilisateursPanel, "utilisateurs");

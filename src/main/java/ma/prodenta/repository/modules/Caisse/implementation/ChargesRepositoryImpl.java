@@ -94,12 +94,12 @@ public class ChargesRepositoryImpl implements ChargesRepository {
 
     private Charges mapRow(ResultSet rs) throws SQLException {
         Charges c = new Charges();
-        c.setIdCharge(rs.getLong("id_charge"));
+        c.setIdCharge(rs.getLong("idCharge"));
         c.setTitre(rs.getString("titre"));
         c.setDescription(rs.getString("description"));
         c.setMontant(rs.getDouble("montant"));
-        c.setDateCharge(rs.getDate("date_charge"));
-        c.setIdCabinet(rs.getInt("id_cabinet"));
+        c.setDateCharge(rs.getDate("dateCharge"));
+        c.setIdCabinet(rs.getInt("idCabinet"));
         return c;
     }
 }
