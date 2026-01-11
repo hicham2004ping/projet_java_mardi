@@ -57,13 +57,13 @@ public class AuthDaoImpl implements AuthDao {
 
     @Override
     public Optional<Utilisateur> login(String login, String motdepasse) throws Exception {
-        String sql = "SELECT * FROM utilisateur WHERE login = ? AND motdepasse = ?";
+        String sql = "SELECT * FROM utilisateur WHERE login = ?";
 
         try (Connection con =SessionFactory.getInstance().getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, login);
-            ps.setString(2, motdepasse);
+
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {

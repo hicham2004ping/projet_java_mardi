@@ -24,8 +24,9 @@ public class cabinetMedicalServiceImpl implements cabinetMedicalService {
     }
 
     @Override
-    public void delete(CabinetMedical cab) throws Exception {
+    public boolean delete(CabinetMedical cab) throws Exception {
         cabinetDao.delete(cab);
+        return false;
     }
 
     @Override

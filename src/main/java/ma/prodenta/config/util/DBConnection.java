@@ -7,7 +7,7 @@ public class DBConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3307/cabinet_medical";
     private static final String USER = "root";
-    private static final String PASSWORD = "2122";
+    private static final String PASSWORD = "root";
 
     public static Connection getConnection() throws Exception {
         return DriverManager.getConnection(URL, USER, PASSWORD);

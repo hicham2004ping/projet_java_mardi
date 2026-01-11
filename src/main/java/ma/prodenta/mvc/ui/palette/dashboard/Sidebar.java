@@ -1,138 +1,200 @@
 package ma.prodenta.mvc.ui.palette.dashboard;
-import ma.prodenta.mvc.ui.consultation.ConsultationFrame;
+
 import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
+import ma.prodenta.mvc.ui.auth.LoginFrame;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Sidebar extends JPanel {
-    JButton dashboard, rendez_vous, patients, agenda, caise, dossier_medical, log_out, users, consultation, file_attente, gerer_consultations;
-    private Dashboard_view view;
+
+    private Dashboard_view dashboard;
     private Integer userRoleId;
 
-    public Sidebar(Dashboard_view view) {
-        this(view, null);
-    }
-
-    public Sidebar(Dashboard_view view, Integer userRoleId) {
-        this.view = view;
+    public Sidebar(Dashboard_view dashboard, Integer userRoleId) {
+        this.dashboard = dashboard;
         this.userRoleId = userRoleId;
 
-        initializeButtons();
-        setupLayout();
-        setupActions();
-    }
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(new Color(50, 50, 50));
+        setBorder(BorderFactory.createEmptyBorder(20, 15, 20, 15));
+        setPreferredSize(new Dimension(230, 800));
 
-    private void initializeButtons() {
-        dashboard = new JButton("Dashboard");
-        rendez_vous = new JButton("Rendez vous");
-        patients = new JButton("Patients");
-        agenda = new JButton("Agenda");
-        caise = new JButton("Caise");
-        dossier_medical = new JButton("Dossier medical");
-        log_out = new JButton("Logout");
-        users = new JButton("Utilisateurs");
-        consultation = new JButton("Consultation");
-        file_attente = new JButton("File d'attente");
-        gerer_consultations = new JButton("Gérer Consultations");
-    }
+        JLabel titleLabel = new JLabel("Prodenta");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(titleLabel);
+        add(Box.createVerticalStrut(30));
 
-    private void setupLayout() {
-        // Calculer le nombre de boutons selon le rôle
-        int buttonCount = 9; // Base: dashboard, patients, dossier_medical, agenda, caise, users, log_out
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setOpaque(false);
 
-        if (isSecretaire()) {
-            buttonCount += 4; // rendez_vous, file_attente, consultation, gerer_consultations
-        } else if (isMedecin()) {
-            buttonCount += 1; // consultation
+        if (isAdmin()) {
+            addAdminButtons(buttonPanel);
         } else {
-            buttonCount += 2; // rendez_vous, consultation (par défaut)
+            addUserButtons(buttonPanel);
         }
 
-        setLayout(new GridLayout(buttonCount, 1));
-
-        // Boutons communs
-        add(dashboard);
-        add(patients);
-        add(dossier_medical);
-
-        // Boutons selon le rôle
-        if (isSecretaire()) {
-            add(rendez_vous);
-            add(file_attente);
-            add(consultation);
-            add(gerer_consultations);
-        } else if (isMedecin()) {
-            add(consultation);
-        } else {
-            // Par défaut, afficher tous
-            add(rendez_vous);
-            add(consultation);
-        }
-
-        // Boutons communs (fin)
-        add(agenda);
-        add(caise);
-        add(users);
-        add(log_out);
-
-        setPreferredSize(new Dimension(300, 500));
+        add(buttonPanel);
     }
 
-    private void setupActions() {
-        patients.addActionListener(e -> {
-            System.out.println("le boutton du patient a ete clicker");
-            view.afficher_Panel("patients");
+    /* =========================
+       Boutons Utilisateur normal
+       ========================= */
+    private void addUserButtons(JPanel panel) {
+
+        JButton dashboardBtn = createButton("Dashboard");
+        JButton rdvBtn = createButton("Rendez-vous");
+        JButton patientsBtn = createButton("Patients");
+        JButton consultationBtn = createButton("Consultations");
+        JButton gererConsultBtn = createButton("Gérer Consultations");
+        JButton fileAttenteBtn = createButton("File d'attente");
+        JButton caisseBtn = createButton("Caisse");
+        JButton situationBtn = createButton("Situation financière");
+        JButton factureBtn = createButton("Factures");
+
+        dashboardBtn.addActionListener(e ->
+                dashboard.afficher_Panel("dashboard")
+        );
+
+        rdvBtn.addActionListener(e ->
+                dashboard.afficher_Panel("rdv")
+        );
+
+        patientsBtn.addActionListener(e ->
+                dashboard.afficher_Panel("patients")
+        );
+
+        consultationBtn.addActionListener(e -> {
+            if (isMedecin()) {
+                dashboard.afficher_Panel("consultation_medecin");
+            } else {
+                dashboard.afficher_Panel("consultation_secretaire");
+            }
         });
 
-        dossier_medical.addActionListener(e -> {
-            System.out.println("le boutton du dossier medical a ete clicker");
-            view.afficher_Panel("Dossier medical");
-        });
+        gererConsultBtn.addActionListener(e ->
+                dashboard.afficher_Panel("Dossier medical")
+        );
 
-        if (isSecretaire()) {
-            rendez_vous.addActionListener(e -> openRDVFrame());
-            file_attente.addActionListener(e -> openFileAttenteFrame());
-            consultation.addActionListener(e -> openConsultationSecretaireFrame());
-            gerer_consultations.addActionListener(e -> openGererConsultations());
-        } else if (isMedecin()) {
-            consultation.addActionListener(e -> openConsultationMedecinFrame());
-        } else {
-            rendez_vous.addActionListener(e -> openConsultation());
-            consultation.addActionListener(e -> openConsultation());
+        fileAttenteBtn.addActionListener(e ->
+                dashboard.afficher_Panel("file_attente")
+        );
+
+        caisseBtn.addActionListener(e ->
+                dashboard.afficher_Panel("caisse")
+        );
+
+        situationBtn.addActionListener(e ->
+                dashboard.afficher_Panel("statistics")
+        );
+
+        factureBtn.addActionListener(e ->
+                dashboard.afficher_Panel("facture")
+        );
+
+        panel.add(dashboardBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(rdvBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(patientsBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(consultationBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(gererConsultBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(fileAttenteBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(caisseBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(situationBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(factureBtn);
+
+        panel.add(Box.createVerticalGlue());
+        addLogoutButton(panel);
+    }
+
+    /* =========================
+       Boutons Admin (inchangés)
+       ========================= */
+    private void addAdminButtons(JPanel panel) {
+
+        JButton usersBtn = createButton("Utilisateurs");
+        JButton logsBtn = createButton("Journaux d'Audit");
+
+        usersBtn.addActionListener(e ->
+                dashboard.afficher_Panel("utilisateurs")
+        );
+
+        logsBtn.addActionListener(e ->
+                dashboard.afficher_Panel("logs")
+        );
+
+        panel.add(usersBtn);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(logsBtn);
+        panel.add(Box.createVerticalGlue());
+
+        addLogoutButton(panel);
+    }
+
+    /* =========================
+       Composants communs
+       ========================= */
+    private JButton createButton(String text) {
+        JButton button = new JButton(text);
+        button.setMaximumSize(new Dimension(200, 40));
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setBackground(new Color(70, 130, 180));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 12));
+        button.setBorder(BorderFactory.createLineBorder(new Color(50, 100, 150)));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
+    }
+
+    private void addLogoutButton(JPanel panel) {
+        JButton logoutBtn = createButton("Déconnexion");
+        logoutBtn.setBackground(new Color(180, 60, 60));
+        logoutBtn.addActionListener(e -> handleLogout());
+        panel.add(logoutBtn);
+    }
+
+    /* =========================
+       Déconnexion
+       ========================= */
+    private void handleLogout() {
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Voulez-vous vous déconnecter ?",
+                "Déconnexion",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            if (frame != null) frame.dispose();
+            new LoginFrame();
         }
     }
 
-    private boolean isSecretaire() {
-        return userRoleId != null && userRoleId == 2;
-    }
-
+    /* =========================
+       Rôles
+       ========================= */
     private boolean isMedecin() {
         return userRoleId != null && userRoleId == 1;
     }
-
-    private void openRDVFrame() {
-        view.afficher_Panel("rdv");
+    private boolean isSecretaire() {
+        return userRoleId != null && userRoleId == 2;
+    }
+    private boolean isAdmin() {
+        return userRoleId != null && userRoleId == 3;
     }
 
-    private void openFileAttenteFrame() {
-        view.afficher_Panel("file_attente");
-    }
 
-    private void openGererConsultations() {
-        // Afficher la liste des dossiers médicaux pour gérer les consultations
-        view.afficher_Panel("Dossier medical");
-    }
 
-    private void openConsultationMedecinFrame() {
-        view.afficher_Panel("consultation_medecin");
-    }
-
-    private void openConsultationSecretaireFrame() {
-        view.afficher_Panel("consultation_secretaire");
-    }
-
-    private void openConsultation() {
-        new ConsultationFrame();
-        setVisible(true);
-    }
 }

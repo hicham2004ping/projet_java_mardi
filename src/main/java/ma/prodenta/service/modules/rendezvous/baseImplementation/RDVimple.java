@@ -9,7 +9,6 @@ import ma.prodenta.repository.modules.consultation.impl.ConsultationDaoimpl;
 import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl;
 import ma.prodenta.service.modules.rendezvous.api.RDVI;
 
-import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -120,12 +119,13 @@ public class RDVimple implements RDVI {
     }
 
     @Override
-    public void delete(RDV rdv) {
+    public boolean delete(RDV rdv) {
         try {
             rdvDAO.delete(rdv);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return false;
     }
 
     @Override

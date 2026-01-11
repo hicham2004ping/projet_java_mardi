@@ -119,6 +119,35 @@ public class Afficher_patient extends JPanel {
         ajouter_Patient.addActionListener(e -> {
             view.afficher_Panel("ajouter_patient");
         });
+
+        modifer_Patient.addActionListener(e -> {
+            int ligne_selectionner = table.getSelectedRow();
+            if (ligne_selectionner != -1) {
+                int id = Integer.parseInt(table.getValueAt(ligne_selectionner, 0).toString());
+                try {
+                    JOptionPane.showMessageDialog(this, "Modification du patient ID: " + id, "Modifier", JOptionPane.INFORMATION_MESSAGE);
+                    // TODO: Open edit patient dialog with patient data
+                } catch (Exception e1) {
+                    System.out.println(e1.getMessage());
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "vous devez selectionner un ligne avant de modifier un patient");
+            }
+        });
+
+        afficher_Detailles.addActionListener(e -> {
+            int ligne_selectionner = table.getSelectedRow();
+            if (ligne_selectionner != -1) {
+                int id = Integer.parseInt(table.getValueAt(ligne_selectionner, 0).toString());
+                try {
+                    view.afficherDetailsDossier(id);
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(this, "Erreur: " + e1.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Sélectionnez un patient");
+            }
+        });
     }
 
     public void ajouter_patient_ligne(PatientDTO patient) {

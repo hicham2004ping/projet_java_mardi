@@ -46,7 +46,7 @@ public class PatientDetailPanel extends JPanel {
         return fieldPanel;
     }
 
-    private JPanel createTabbedPanel() {
+    private JTabbedPane createTabbedPanel() {
         tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("Consultation", createConsultationPanel());

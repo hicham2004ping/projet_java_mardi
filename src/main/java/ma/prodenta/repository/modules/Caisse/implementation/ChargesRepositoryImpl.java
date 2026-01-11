@@ -1,9 +1,9 @@
 // repository/modules/Caisse/implementation/ChargesRepositoryImpl.java
-package ma.prodenta.repository.modules.caisse.implementation;
+package ma.prodenta.repository.modules.Caisse.implementation;
 
 
 import ma.prodenta.entities.En.Charges;
-import ma.prodenta.repository.modules.caisse.api.ChargesRepository;
+import ma.prodenta.repository.modules.Caisse.api.ChargesRepository;
 
 import java.sql.*;
 import java.util.ArrayList;

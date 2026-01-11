@@ -29,10 +29,14 @@ import ma.prodenta.service.modules.agenda.impl.AgendaServiceImpl;
 import ma.prodenta.service.modules.dashboard.impl.DashboardServiceImpl;
 import ma.prodenta.service.modules.auth.impl.AuthServiceImpl;
 import ma.prodenta.service.modules.usermanager.impl.UserManagerServiceImpl;
-import ma.prodenta.repository.modules.agenda.implementation.AgendaRepositoryImpl;
-import ma.prodenta.repository.modules.Dashboard.implementation.DashboardRepositoryImpl;
 import ma.prodenta.mvc.controllers.modules.auth.impl.AuthControlleur_Impl;
 import ma.prodenta.mvc.controllers.modules.userManager.impl.UserManagerControlleur_Impl;
+import ma.prodenta.mvc.controllers.modules.facture.impl.FactureController;
+import ma.prodenta.mvc.controllers.modules.ordonnance.impl.OrdonnanceController;
+import ma.prodenta.mvc.controllers.modules.caisse.impl.CaisseController;
+import ma.prodenta.repository.modules.agenda.implementation.AgendaRepositoryImpl;
+import ma.prodenta.repository.modules.Dashboard.implementation.DashboardRepositoryImpl;
+import ma.prodenta.mvc.ui.auth.LoginFrame;
 
 public class Application_contexte {
 
@@ -83,6 +87,10 @@ public class Application_contexte {
 
     private static final AgendaRepositoryImpl agendaRepository = new AgendaRepositoryImpl(null);
     private static final DashboardRepositoryImpl dashboardRepository = new DashboardRepositoryImpl(null);
+
+    private static final FactureController factureController = new FactureController();
+    private static final OrdonnanceController ordonnanceController = new OrdonnanceController();
+    private static final CaisseController caisseController = new CaisseController();
 
     public static Patient_impl getPatientRepository() {
         return patientRepository;
@@ -138,7 +146,7 @@ public class Application_contexte {
         return consultationServiceImpl;
     }
 
-    public static Ordonance_Service_impl getordonanceService(){
+    public static Ordonance_Service_impl getordonnanceService(){
         return ordonanceServiceImpl;
     }
 
@@ -208,5 +216,24 @@ public class Application_contexte {
 
     public static DashboardRepositoryImpl getDashboardRepository(){
         return dashboardRepository;
+    }
+
+    public static FactureController getFactureController() {
+        return factureController;
+    }
+
+    public static OrdonnanceController getOrdonnanceController() {
+        return ordonnanceController;
+    }
+
+    public static CaisseController getCaisseController() {
+        return caisseController;
+    }
+
+    // Added new fields for LoginFrame
+    private static final LoginFrame loginFrame = new LoginFrame();
+
+    public static LoginFrame getLoginFrame() {
+        return loginFrame;
     }
 }

@@ -1,6 +1,6 @@
 package ma.prodenta.service.modules.caisse.impl;
 import ma.prodenta.entities.En.Charges;
-import ma.prodenta.repository.modules.caisse.api.ChargesRepository;
+import ma.prodenta.repository.modules.Caisse.api.ChargesRepository;
 import ma.prodenta.service.modules.caisse.api.ChargesService;
 
 import java.util.List;

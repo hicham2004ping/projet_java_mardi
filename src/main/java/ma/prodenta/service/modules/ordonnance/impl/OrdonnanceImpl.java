@@ -34,12 +34,13 @@ public class OrdonnanceImpl implements OrdonnanceService {
         }
     }
     @Override
-    public void delete(Ordonnance ord) throws Exception {
+    public boolean delete(Ordonnance ord) throws Exception {
         try {
             ordonnanceDAO.delete(ord);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return false; // reje3tha boolean 7it katl3 bl 7mr :)
     }
 
     @Override

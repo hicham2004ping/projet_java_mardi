@@ -35,8 +35,9 @@ public class CertifSEimpl implements CertifSE {
     }
 
     @Override
-    public void delete(Certificat objet) throws Exception {
+    public boolean delete(Certificat objet) throws Exception {
         cs.delete(objet);
+        return false;
     }
 
     @Override
