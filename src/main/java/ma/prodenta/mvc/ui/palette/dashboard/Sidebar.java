@@ -40,9 +40,6 @@ public class Sidebar extends JPanel {
         add(buttonPanel);
     }
 
-    /* =========================
-       Boutons Utilisateur normal
-       ========================= */
     private void addUserButtons(JPanel panel) {
 
         JButton dashboardBtn = createButton("Dashboard");
@@ -54,6 +51,7 @@ public class Sidebar extends JPanel {
         JButton caisseBtn = createButton("Caisse");
         JButton situationBtn = createButton("Situation financière");
         JButton factureBtn = createButton("Factures");
+        JButton agendaBtn = createButton("Agenda");
 
         dashboardBtn.addActionListener(e ->
                 dashboard.afficher_Panel("dashboard")
@@ -95,9 +93,15 @@ public class Sidebar extends JPanel {
                 dashboard.afficher_Panel("facture")
         );
 
+        agendaBtn.addActionListener(e ->
+                dashboard.afficher_Panel("agenda")
+        );
+
         panel.add(dashboardBtn);
         panel.add(Box.createVerticalStrut(8));
         panel.add(rdvBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(agendaBtn);
         panel.add(Box.createVerticalStrut(8));
         panel.add(patientsBtn);
         panel.add(Box.createVerticalStrut(8));

@@ -1,0 +1,19 @@
+CREATE TABLE agenda (
+    idAgenda INT AUTO_INCREMENT PRIMARY KEY,
+    dateDebut DATETIME NOT NULL,
+    dateFin DATETIME NOT NULL,
+    idMedecin INT,
+    idPatient INT,
+    statut VARCHAR(30) NOT NULL,
+    note TEXT,
+
+    CONSTRAINT fk_agenda_medecin
+        FOREIGN KEY (idMedecin)
+        REFERENCES utilisateur(idUser)
+        ON DELETE SET NULL,
+
+    CONSTRAINT fk_agenda_patient
+        FOREIGN KEY (idPatient)
+        REFERENCES patient(idPatient)
+        ON DELETE SET NULL
+);

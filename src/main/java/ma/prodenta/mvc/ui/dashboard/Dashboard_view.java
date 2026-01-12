@@ -14,6 +14,7 @@ import ma.prodenta.mvc.ui.palette.dashboard.Sidebar;
 import ma.prodenta.mvc.ui.patient.Afficher_patient;
 import ma.prodenta.mvc.ui.patient.Ajouter_patient;
 import ma.prodenta.mvc.ui.rdv.RDVFrame;
+import ma.prodenta.mvc.ui.agenda.AgendaFrame;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -79,6 +80,12 @@ public class Dashboard_view extends JFrame {
             ConsultationMedecinFrame consultationMedecin = new ConsultationMedecinFrame(this, fileAttenteFrame);
             contenu_Centre.add(consultationMedecin, "consultation_medecin");
         }
+        //tout le monde peut voir agenda mais pas admin
+        if (userRoleId != null && userRoleId != 3) {
+            AgendaFrame agendaFrame = new AgendaFrame(this);
+            contenu_Centre.add(agendaFrame, "agenda");
+        }
+
 
         JPanel p = new Sidebar(this, userRoleId);
         JPanel p1 = new Header_bar();
