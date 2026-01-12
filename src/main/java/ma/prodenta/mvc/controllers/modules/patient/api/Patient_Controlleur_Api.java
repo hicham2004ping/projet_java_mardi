@@ -9,4 +9,5 @@ public interface Patient_Controlleur_Api {
     public List<Patient> afficher_tous();
     public Patient afficher_patient(int id);
     public Patient find_by_email(String email);
+    public Patient find_by_id(int id);
 }

@@ -1,5 +1,4 @@
 package ma.prodenta.mvc.ui.auth;
-
 import ma.prodenta.common.exceptions.AuthException;
 import ma.prodenta.common.exceptions.ErreurLectureException;
 import ma.prodenta.common.validators.AuthValidator;
@@ -7,16 +6,11 @@ import ma.prodenta.entities.En.Utilisateur;
 import ma.prodenta.mvc.controllers.modules.auth.impl.AuthControlleur_Impl;
 import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
 import ma.prodenta.service.common.validateur.email.validateur_email;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-/**
- * Login Frame for Prodenta Application
- * Handles user authentication with email/password validation
- */
 public class LoginFrame extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;

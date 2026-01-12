@@ -230,4 +230,10 @@ public class PatientServiceImpl implements PatientService {
         }
         System.out.println("le patient a ete supprimer avec success");
     }
+
+    @Override
+    public void update(Patient objet) throws SQLException, IOException, Exception {
+        Patient_impl patientRepo = Application_contexte.getPatientRepository();
+        patientRepo.update(objet);
+    }
 }

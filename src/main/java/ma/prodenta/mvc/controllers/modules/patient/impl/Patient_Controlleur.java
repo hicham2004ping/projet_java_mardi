@@ -12,6 +12,10 @@ import ma.prodenta.repository.modules.patient.patient_impl.Patient_impl;
 import ma.prodenta.repository.modules.sexe.impl.Sexe_impl;
 import ma.prodenta.service.modules.antecedent.impl.Antecedent_Service_ServiceImpl;
 import ma.prodenta.service.modules.patient.api.PatientService;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,4 +97,21 @@ public class Patient_Controlleur {
             throw e;
         }
     }
-}
+    public Patient find_by_id(int id){
+        try{
+            return patientService.find_by_id(id);
+        }
+        catch (ArgumentException e){
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+    public void update(Patient objet) throws SQLException, IOException, Exception {
+        try{
+            patientService.update(objet);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    }

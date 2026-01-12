@@ -1,7 +1,9 @@
 package ma.prodenta.mvc.ui.dashboard;
+import ma.prodenta.entities.En.Patient;
 import ma.prodenta.mvc.ui.facture.FacturePanel;
 import ma.prodenta.mvc.ui.ordonance.OrdonnancePanel;
 import ma.prodenta.mvc.ui.caisse.CaissePanel;
+import ma.prodenta.mvc.ui.patient.ModifierPatient;
 import ma.prodenta.mvc.ui.statistics.StatisticsPanel;
 import ma.prodenta.mvc.ui.admin.UtilisateursPanel;
 import ma.prodenta.mvc.ui.admin.AuditLogsPanel;
@@ -18,6 +20,7 @@ import ma.prodenta.mvc.ui.agenda.AgendaFrame;
 import ma.prodenta.mvc.ui.acte.ActePanel;
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 
 public class Dashboard_view extends JFrame {
@@ -46,6 +49,7 @@ public class Dashboard_view extends JFrame {
         contenu_Centre.add(new Afficher_DossierMedical(this), "Dossier medical");
         contenu_Centre.add(afficherPatient, "patients");
         contenu_Centre.add(new Ajouter_patient(this), "ajouter_patient");
+
 
         this.facturePanel = new FacturePanel();
         this.ordonnancePanel = new OrdonnancePanel();
@@ -125,6 +129,13 @@ public class Dashboard_view extends JFrame {
                     "Erreur", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }
+    public void ModifierPatient(Patient patient ) throws Exception {
+        System.out.println("on est dans la fonction modification patient");
+        System.out.println("le nom du patient est"+patient.getNom());
+        ModifierPatient modifierPatient= new ModifierPatient(patient);
+        contenu_Centre.add(modifierPatient, "modifierPatient");
+        cardLayout.show(contenu_Centre, "modifierPatient");
     }
 
     public Afficher_patient getAfficherPatient() {
