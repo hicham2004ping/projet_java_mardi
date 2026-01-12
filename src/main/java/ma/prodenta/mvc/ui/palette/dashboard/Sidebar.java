@@ -52,6 +52,7 @@ public class Sidebar extends JPanel {
         JButton situationBtn = createButton("Situation financière");
         JButton factureBtn = createButton("Factures");
         JButton agendaBtn = createButton("Agenda");
+        JButton actesBtn = createButton("Actes");
 
         dashboardBtn.addActionListener(e ->
                 dashboard.afficher_Panel("dashboard")
@@ -97,6 +98,10 @@ public class Sidebar extends JPanel {
                 dashboard.afficher_Panel("agenda")
         );
 
+        actesBtn.addActionListener(e ->
+                dashboard.afficher_Panel("actes")
+        );
+
         panel.add(dashboardBtn);
         panel.add(Box.createVerticalStrut(8));
         panel.add(rdvBtn);
@@ -104,6 +109,8 @@ public class Sidebar extends JPanel {
         panel.add(agendaBtn);
         panel.add(Box.createVerticalStrut(8));
         panel.add(patientsBtn);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(actesBtn);
         panel.add(Box.createVerticalStrut(8));
         panel.add(consultationBtn);
         panel.add(Box.createVerticalStrut(8));
