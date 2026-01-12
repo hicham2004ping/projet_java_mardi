@@ -117,9 +117,6 @@ public class Sidebar extends JPanel {
         addLogoutButton(panel);
     }
 
-    /* =========================
-       Boutons Admin (inchangés)
-       ========================= */
     private void addAdminButtons(JPanel panel) {
 
         JButton usersBtn = createButton("Utilisateurs");
@@ -141,9 +138,6 @@ public class Sidebar extends JPanel {
         addLogoutButton(panel);
     }
 
-    /* =========================
-       Composants communs
-       ========================= */
     private JButton createButton(String text) {
         JButton button = new JButton(text);
         button.setMaximumSize(new Dimension(200, 40));
@@ -164,9 +158,6 @@ public class Sidebar extends JPanel {
         panel.add(logoutBtn);
     }
 
-    /* =========================
-       Déconnexion
-       ========================= */
     private void handleLogout() {
         int confirm = JOptionPane.showConfirmDialog(
                 this,
@@ -181,10 +172,6 @@ public class Sidebar extends JPanel {
             new LoginFrame();
         }
     }
-
-    /* =========================
-       Rôles
-       ========================= */
     private boolean isMedecin() {
         return userRoleId != null && userRoleId == 1;
     }

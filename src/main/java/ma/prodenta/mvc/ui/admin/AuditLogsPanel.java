@@ -6,6 +6,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import ma.prodenta.config.util.DBConnection;
 
 public class AuditLogsPanel extends JPanel {
     private JTable logsTable;
@@ -75,46 +79,47 @@ public class AuditLogsPanel extends JPanel {
 
     private void loadLogs() {
         tableModel.setRowCount(0);
-        
-        // Sample data - in a real application, this would come from a database
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        
-        tableModel.addRow(new Object[]{
-                1,
-                "admin@prodenta.com",
-                "Connexion",
-                LocalDateTime.now().format(formatter),
-                "192.168.1.100",
-                "Succès"
-        });
-        
-        tableModel.addRow(new Object[]{
-                2,
-                "medecin@prodenta.com",
-                "Connexion",
-                LocalDateTime.now().minusHours(1).format(formatter),
-                "192.168.1.101",
-                "Succès"
-        });
-        
-        tableModel.addRow(new Object[]{
-                3,
-                "secretaire@prodenta.com",
-                "Création Patient",
-                LocalDateTime.now().minusHours(2).format(formatter),
-                "192.168.1.102",
-                "Succès"
-        });
-        
-        tableModel.addRow(new Object[]{
-                4,
-                "unknown_user",
-                "Tentative Connexion",
-                LocalDateTime.now().minusHours(3).format(formatter),
-                "192.168.1.103",
-                "Échec"
-        });
+
+        String sql = """
+        SELECT 
+            al.id,
+            u.email,
+            al.action,
+            al.log_date,
+            al.ip_address,
+            al.status
+        FROM audit_logs al
+        LEFT JOIN utilisateur u ON al.idUser = u.idUser
+        ORDER BY al.log_date DESC
+        LIMIT 10
+    """;
+
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                        rs.getInt("id"),
+                        rs.getString("email") != null ? rs.getString("email") : "Utilisateur inconnu",
+                        rs.getString("action"),
+                        rs.getTimestamp("log_date").toLocalDateTime()
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                        rs.getString("ip_address"),
+                        rs.getString("status")
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erreur lors du chargement des logs : " + e.getMessage(),
+                    "Erreur",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
+
 
     private void exportLogs() {
         JFileChooser fileChooser = new JFileChooser();

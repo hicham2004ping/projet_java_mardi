@@ -55,27 +55,25 @@ public class Dashboard_view extends JFrame {
         contenu_Centre.add(caissePanel, "caisse");
         contenu_Centre.add(statisticsPanel, "statistics");
 
-        if (userRoleId != null && userRoleId == 50) {
+        if (userRoleId != null && userRoleId == 3) {
             UtilisateursPanel utilisateursPanel = new UtilisateursPanel();
             AuditLogsPanel auditLogsPanel = new AuditLogsPanel();
             contenu_Centre.add(utilisateursPanel, "utilisateurs");
             contenu_Centre.add(auditLogsPanel, "logs");
         }
 
-        // ... existing role-based panels ...
         if (userRoleId != null && userRoleId == 2) { // Secrétaire
             this.fileAttenteFrame = new FileAttenteFrame(this);
             this.rdvFrame = new RDVFrame(this);
             contenu_Centre.add(fileAttenteFrame, "file_attente");
             contenu_Centre.add(rdvFrame, "rdv");
-            // Ajouter aussi la vue consultation pour la secrétaire (pour tester)
+
             ConsultationMedecinFrame consultationSecretaire = new ConsultationMedecinFrame(this, fileAttenteFrame);
             contenu_Centre.add(consultationSecretaire, "consultation_secretaire");
         }
 
         if (userRoleId != null && userRoleId == 1) { // Médecin
             if (fileAttenteFrame == null) {
-                // Si pas de file d'attente, créer une instance vide pour le médecin
                 this.fileAttenteFrame = new FileAttenteFrame(this);
             }
             ConsultationMedecinFrame consultationMedecin = new ConsultationMedecinFrame(this, fileAttenteFrame);

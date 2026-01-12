@@ -1,0 +1,18 @@
+CREATE TABLE audit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idUser INT NULL,
+    action VARCHAR(100) NOT NULL,
+    log_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(45),
+    status VARCHAR(20) NOT NULL,
+
+    CONSTRAINT fk_audit_user
+        FOREIGN KEY (idUser)
+        REFERENCES utilisateur(idUser)
+        ON DELETE SET NULL
+);
+INSERT INTO audit_logs (idUser, action, ip_address, status)
+VALUES (1, 'Connexion', '192.168.1.10', 'Succès');
+
+INSERT INTO audit_logs (idUser, action, ip_address, status)
+VALUES (NULL, 'Tentative Connexion', '192.168.1.20', 'Échec');
