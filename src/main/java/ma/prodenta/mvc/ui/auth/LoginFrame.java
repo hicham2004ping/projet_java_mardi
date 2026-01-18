@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import ma.prodenta.common.util.UserSession;
 
 public class LoginFrame extends JFrame {
     private JTextField emailField;
@@ -187,6 +188,7 @@ public class LoginFrame extends JFrame {
                 showInfo("Connexion réussie!");
                 SwingUtilities.invokeLater(() -> {
                     try {
+                        UserSession.getInstance().setCurrentUser(user); //up up
                         new Dashboard_view(user.getIdRole());
                         dispose();
                     } catch (Exception ex) {
