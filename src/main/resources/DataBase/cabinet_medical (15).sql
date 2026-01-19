@@ -21,18 +21,8 @@ SET time_zone = "+00:00";
 -- Database: `cabinet_medical`
 --
 
--- --------------------------------------------------------
--- table à ajouter !!
-CREATE TABLE user_manager (
-                              id_user INT AUTO_INCREMENT PRIMARY KEY,
-                              username VARCHAR(100) NOT NULL UNIQUE,
-                              password_hash VARCHAR(255) NOT NULL,
-                              role VARCHAR(50) NOT NULL,
-                              actif BOOLEAN NOT NULL DEFAULT TRUE,
-                              date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
 
---
+-- --------------------------------------------------------------------------------
 -- Table structure for table `acte`
 --
 
@@ -503,7 +493,8 @@ CREATE TABLE `role` (
 
 INSERT INTO `role` (`idRole`, `libelle`) VALUES
 (1, 'Medecin'),
-(2, 'Secretaire');
+(2, 'Secretaire'),
+(3, 'Admin');
 
 -- --------------------------------------------------------
 
@@ -615,8 +606,8 @@ CREATE TABLE `utilisateur` (
 
 INSERT INTO `utilisateur` (`idUser`, `nom`, `email`, `adresse`, `cin`, `tel`, `idSexe`, `login`, `motdepasse`, `dateNaissance`, `lastLoginDate`, `idRole`) VALUES
 (1, 'Karim El Mansouri', 'karim.mansouri@example.com', '12 Rue Al Qods, Casablanca', 'J123456', '0612345678', 1, 'karim_m', '1234@Pass', '1998-05-12', '2025-11-15 14:32:10', 1),
-(2, 'sara', 'ilyasmoulragouba@gmail.com', 'rabat', 'Fjfajf', '0281938192', 2, 'salut', 'Pass@1234', '1995-09-20', NULL, 2);
-
+(2, 'sara', 'ilyasmoulragouba@gmail.com', 'rabat', 'Fjfajf', '0281938192', 2, 'salut', 'Pass@1234', '1995-09-20', NULL, 2),
+(3,'Othmane CH','othmane@admin.com','rabat','blablabla','0657193175',1,'admin','admin','2004-10-13',NULL,3);
 --
 -- Indexes for dumped tables
 --
@@ -1096,6 +1087,34 @@ ALTER TABLE `utilisateur`
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `role` (`idRole`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
+-- --------------------------------------------------------
+-- table à ajouter !!
+CREATE TABLE user_manager (
+                              id_user INT AUTO_INCREMENT PRIMARY KEY,
+                              username VARCHAR(100) NOT NULL UNIQUE,
+                              password_hash VARCHAR(255) NOT NULL,
+                              role VARCHAR(50) NOT NULL,
+                              actif BOOLEAN NOT NULL DEFAULT TRUE,
+                              date_creation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE audit_logs (
+                            id INT AUTO_INCREMENT PRIMARY KEY,
+                            idUser INT NULL,
+                            action VARCHAR(100) NOT NULL,
+                            log_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            ip_address VARCHAR(45),
+                            status VARCHAR(20) NOT NULL,
+
+                            CONSTRAINT fk_audit_user
+                                FOREIGN KEY (idUser)
+                                    REFERENCES utilisateur(idUser)
+                                    ON DELETE SET NULL
+);
+INSERT INTO audit_logs (idUser, action, ip_address, status)
+VALUES (1, 'Connexion', '192.168.1.10', 'Succès');
+
+INSERT INTO audit_logs (idUser, action, ip_address, status)
+VALUES (NULL, 'Tentative Connexion', '192.168.1.20', 'Échec');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
