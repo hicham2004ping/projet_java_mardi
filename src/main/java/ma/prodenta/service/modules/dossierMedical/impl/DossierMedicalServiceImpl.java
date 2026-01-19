@@ -100,6 +100,16 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
         return dossier.find_all_view();
     }
 
+    public Dossier_Medical_vu_generale_DTO find_view(int idDossier) throws Exception {
+        List<Dossier_Medical_vu_generale_DTO> allDossiers = find_all_view();
+        for (Dossier_Medical_vu_generale_DTO dto : allDossiers) {
+            if (dto.getIdDossier() == idDossier) {
+                return dto;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void delte_by_id(int id) throws Exception {
         Dossier_medical_impl dossier_repo=Application_contexte.getDossierMedicalRepository();

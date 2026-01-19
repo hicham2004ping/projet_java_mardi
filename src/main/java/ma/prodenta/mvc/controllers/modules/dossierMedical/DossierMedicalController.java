@@ -110,4 +110,16 @@ public class DossierMedicalController implements DossierMedicalControlleur_Api {
             throw e;
         }
     }
+
+    public Dossier_Medical_vu_generale_DTO find_view(int idDossier) throws Exception {
+        DossierMedicalServiceImpl service = Application_contexte.getDossierMedicalServiceImpl();
+        try {
+            return service.find_view(idDossier);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
 }

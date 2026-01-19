@@ -25,7 +25,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
                             rs.getLong("idOrd"),
                             rs.getDate("dateOrd").toLocalDate(),
                             rs.getInt("idDossier"),
-                            rs.getInt("id_conultation")
+                            rs.getObject("id_consultation", Integer.class)
                     );
                 }
             }
@@ -48,7 +48,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
                         rs.getLong("idOrd"),
                         rs.getDate("dateOrd").toLocalDate(),
                         rs.getInt("idDossier"),
-                        rs.getInt("id_conultation")
+                        rs.getObject("id_consultation", Integer.class)
                 ));
             }
         }
@@ -58,13 +58,13 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
     @Override
     public boolean create(Ordonnance ord) throws SQLException {
         int n = 0;
-        String sql = "INSERT INTO Ordonnance (dateOrd, idDossier,id_conultation) VALUES (?,?,?)";
+        String sql = "INSERT INTO ordonnance (dateOrd, idDossier, id_consultation) VALUES (?,?,?)";
 
         try (Connection conn = SessionFactory.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
             stmt.setDate(1,Date.valueOf(ord.getDateOrd()));
-            stmt.setInt(2, ord.getIdDossier());
-            stmt.setInt(3, ord.getIdconsultation());
+            if (ord.getIdDossier() != null) stmt.setInt(2, ord.getIdDossier()); else stmt.setNull(2, Types.INTEGER);
+            if (ord.getIdConsultation() != null) stmt.setInt(3, ord.getIdConsultation()); else stmt.setNull(3, Types.INTEGER);
             boolean flag= stmt.executeUpdate()>0;
             ResultSet rs = stmt.getGeneratedKeys();
             if(flag){
@@ -85,7 +85,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setDate(1,Date.valueOf(ord.getDateOrd()));
-            stmt.setInt(2, ord.getIdDossier());
+            if (ord.getIdDossier() != null) stmt.setInt(2, ord.getIdDossier()); else stmt.setNull(2, Types.INTEGER);
             stmt.setLong(3, ord.getIdOrd());
 
             stmt.executeUpdate();
@@ -200,7 +200,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
                 ordonance.setIdDossier(idDossier);
                 ordonance.setDateOrd(rs.getDate("dateOrd").toLocalDate());
                 ordonance.setIdOrd(rs.getLong("idOrd"));
-                ordonance.setIdconsultation(rs.getInt("id_Conultation"));
+                ordonance.setIdConsultation(rs.getObject("id_consultation", Integer.class));
                 ordonances.add(ordonance);
                 ordonance = new Ordonnance();
             }
@@ -211,7 +211,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
     @Override
     public List<Ordonnance> consulterOrdonnancesParConsultation(Integer idConsultation) throws SQLException {
         String  requete = """
-        select * from  ordonnance where id_conultation=?
+        select * from  ordonnance where id_consultation=?
         """;
         List<Ordonnance> ordonances = new ArrayList<>();
         Ordonnance ordonance = new Ordonnance();
@@ -221,7 +221,7 @@ public class OrdonnanceDaoImpl implements Ordonance_api {
             stmt.setInt(1, idConsultation);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                ordonance.setIdconsultation(idConsultation);
+                ordonance.setIdConsultation(idConsultation);
                 ordonance.setDateOrd(rs.getDate("dateOrd").toLocalDate());
                 ordonance.setIdDossier(rs.getInt("idDossier"));
                 ordonance.setIdOrd(rs.getLong("idOrd"));

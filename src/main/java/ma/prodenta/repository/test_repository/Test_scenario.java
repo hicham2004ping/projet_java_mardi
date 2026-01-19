@@ -134,7 +134,7 @@ public class Test_scenario {
                         if(flag4){
                             System.out.println("creation  du intervention avec succes");
                             //creation de l'ordonance
-                            ordonnance.setIdconsultation(consultation.getIdConsult());
+                            ordonnance.setIdConsultation(consultation.getIdConsult());
                             ordonnance.setIdDossier(d1.find_patient(patientRepository.findById(id_patient)).getIdDossier());
                             ordonnance.setDateOrd(LocalDate.now());
                             boolean flag5=ordonnanceDao.create(ordonnance);

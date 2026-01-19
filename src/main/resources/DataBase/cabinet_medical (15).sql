@@ -79,11 +79,7 @@ CREATE TABLE admin (
                        email VARCHAR(150) UNIQUE,
                        role VARCHAR(50),
                        lastLoginDate DATETIME,
-                       idRole INT,
-
-     FOREIGN KEY (idRole) REFERENCES role(idRole)
-         ON DELETE SET NULL
-         ON UPDATE CASCADE
+                       idRole INT
 );
 
 -- --------------------------------------------------------
@@ -227,6 +223,23 @@ INSERT INTO `dossiermedical` (`idDossier`, `dateCreation`, `idPatient`, `idMedec
 (6, '2025-12-07', 16, 1);
 
 -- --------------------------------------------------------
+--
+-- Table structure for table `file_attente`
+--
+CREATE TABLE `file_attente` (
+  `idFileAttente` int(11) NOT NULL AUTO_INCREMENT,
+  `idDossier` int(11) NOT NULL,
+  `dateFile` date NOT NULL,
+  `statut` enum('En attente','En consultation','Terminé') DEFAULT 'En attente',
+  `position` int(11) DEFAULT 1,
+  `dateArrivee` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idFileAttente`),
+  KEY `idDossier` (`idDossier`),
+  KEY `dateFile` (`dateFile`),
+  UNIQUE KEY `unique_daily_queue` (`idDossier`, `dateFile`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `facture`
@@ -364,7 +377,7 @@ CREATE TABLE `ordonnance` (
   `idOrd` int(11) NOT NULL,
   `dateOrd` date DEFAULT NULL,
   `idDossier` int(11) DEFAULT NULL,
-  `id_conultation` int(11) DEFAULT NULL
+  `id_consultation` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -712,7 +725,7 @@ ALTER TABLE `niveaurisque`
 ALTER TABLE `ordonnance`
   ADD PRIMARY KEY (`idOrd`),
   ADD KEY `idDossier` (`idDossier`),
-  ADD KEY `fk_consultation2` (`id_conultation`);
+  ADD KEY `fk_consultation2` (`id_consultation`);
 
 --
 -- Indexes for table `patient`
@@ -845,6 +858,12 @@ ALTER TABLE `consultation`
 --
 ALTER TABLE `dossiermedical`
   MODIFY `idDossier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `file_attente`
+--
+ALTER TABLE `file_attente`
+  MODIFY `idFileAttente` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `facture`
@@ -981,6 +1000,12 @@ ALTER TABLE `dossiermedical`
   ADD CONSTRAINT `dossiermedical_ibfk_2` FOREIGN KEY (`idMedecin`) REFERENCES `medecin` (`idUser`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `file_attente`
+--
+ALTER TABLE `file_attente`
+  ADD CONSTRAINT `file_attente_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `facture`
 --
 ALTER TABLE `facture`
@@ -1010,7 +1035,7 @@ ALTER TABLE `medicament`
 -- Constraints for table `ordonnance`
 --
 ALTER TABLE `ordonnance`
-  ADD CONSTRAINT `fk_consultation2` FOREIGN KEY (`id_conultation`) REFERENCES `consultation` (`idConsult`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_consultation2` FOREIGN KEY (`id_consultation`) REFERENCES `consultation` (`idConsult`) ON DELETE CASCADE,
   ADD CONSTRAINT `ordonnance_ibfk_1` FOREIGN KEY (`idDossier`) REFERENCES `dossiermedical` (`idDossier`) ON DELETE CASCADE;
 
 --
@@ -1065,6 +1090,11 @@ ALTER TABLE `staff`
 ALTER TABLE `utilisateur`
   ADD CONSTRAINT `utilisateur_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `role` (`idRole`) ON DELETE CASCADE,
   ADD CONSTRAINT `utilisateur_ibfk_2` FOREIGN KEY (`idSexe`) REFERENCES `sexe` (`idSexe`) ON DELETE CASCADE;
+--
+-- Constraints for table `admin`
+--
+ALTER TABLE `admin`
+  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `role` (`idRole`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

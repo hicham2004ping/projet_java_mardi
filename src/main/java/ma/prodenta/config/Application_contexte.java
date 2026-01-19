@@ -13,7 +13,6 @@ import ma.prodenta.repository.modules.intervention_medcin.impl.Intervention_impl
 import ma.prodenta.repository.modules.statut_consultation.impl.Statut_consultation_impl;
 import ma.prodenta.service.modules.actes.impl.Acte_Service_impl;
 import ma.prodenta.service.modules.consultation.impl.Consultation_service_impl;
-import ma.prodenta.service.modules.dossierMedical.api.DossierMedicalService;
 import ma.prodenta.service.modules.dossierMedical.impl.DossierMedicalServiceImpl;
 import ma.prodenta.service.modules.intervention.impl.Intervention_Service_impl;
 import ma.prodenta.service.modules.ordonnance.impl.Ordonance_Service_impl;
@@ -37,6 +36,8 @@ import ma.prodenta.mvc.controllers.modules.caisse.impl.CaisseController;
 import ma.prodenta.repository.modules.agenda.implementation.AgendaRepositoryImpl;
 import ma.prodenta.repository.modules.Dashboard.implementation.DashboardRepositoryImpl;
 import ma.prodenta.mvc.ui.auth.LoginFrame;
+import ma.prodenta.repository.modules.fieldattente.FileAttenteDaoImpl;
+import ma.prodenta.service.modules.FileAttenteService;
 
 public class Application_contexte {
 
@@ -84,6 +85,9 @@ public class Application_contexte {
 
     private static final Intervention_impl interventionRepository = new Intervention_impl();
     private static final CertificatDaoimpl certificatRepository = new CertificatDaoimpl();
+
+    private static final FileAttenteDaoImpl fileAttenteRepository = new FileAttenteDaoImpl();
+    private static final FileAttenteService fileAttenteService = new FileAttenteService();
 
     private static final AgendaRepositoryImpl agendaRepository = new AgendaRepositoryImpl(null);
     private static final DashboardRepositoryImpl dashboardRepository = new DashboardRepositoryImpl(null);
@@ -164,6 +168,15 @@ public class Application_contexte {
     public static CertificatDaoimpl getCertificatRepository(){
         return certificatRepository;
     }
+
+    public static FileAttenteDaoImpl getFileAttenteRepository(){
+        return fileAttenteRepository;
+    }
+
+    public static FileAttenteService getFileAttenteService(){
+        return fileAttenteService;
+    }
+
     public static Assurance_impl getAssurance_impl(){
         return assurance_impl;
     }

@@ -1,7 +1,11 @@
 package ma.prodenta.mvc.ui.fileattente;
 
+import ma.prodenta.config.Application_contexte;
+import ma.prodenta.entities.En.FileAttente;
 import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
 import ma.prodenta.mvc.ui.dossier.DossierMedicalView;
+import ma.prodenta.service.modules.FileAttenteService;
+import ma.prodenta.common.exceptions.ServiceException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -9,11 +13,13 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 
 public class ConsultationMedecinFrame extends JPanel {
 
     private Dashboard_view dashboard;
     private FileAttenteFrame fileAttenteFrame;
+    private FileAttenteService fileAttenteService;
     private JTable table;
     private DefaultTableModel model;
     private JButton btnProchainPatient, btnActualiser;
@@ -22,6 +28,7 @@ public class ConsultationMedecinFrame extends JPanel {
     public ConsultationMedecinFrame(Dashboard_view dashboard, FileAttenteFrame fileAttenteFrame) {
         this.dashboard = dashboard;
         this.fileAttenteFrame = fileAttenteFrame;
+        this.fileAttenteService = Application_contexte.getFileAttenteService();
 
         initializeUI();
         startAutoRefresh();
@@ -100,27 +107,43 @@ public class ConsultationMedecinFrame extends JPanel {
     }
 
     private void prendreProchainPatient() {
-        FileAttenteFrame.FileAttenteItem prochain = fileAttenteFrame.getProchainPatient();
+        try {
+            FileAttente prochain = fileAttenteService.getFirstPatientInWaiting(LocalDate.now());
 
-        if (prochain == null) {
+            if (prochain == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Aucun patient en attente",
+                        "Information", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            // Marquer comme "En consultation"
+            fileAttenteService.markAsInConsultation(prochain.getIdFileAttente());
+            fileAttenteFrame.refresh();
+
+            // Ouvrir le dossier médical
+            ouvrirDossierPatient(prochain.getIdDossier());
+        } catch (ServiceException e) {
             JOptionPane.showMessageDialog(this,
-                    "Aucun patient en attente",
-                    "Information", JOptionPane.INFORMATION_MESSAGE);
-            return;
+                    "Erreur: " + e.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Marquer comme "En consultation"
-        fileAttenteFrame.marquerEnConsultation(prochain.getIdDossier());
-
-        // Ouvrir le dossier médical
-        ouvrirDossierPatient(prochain.getIdDossier());
     }
 
     private void ouvrirDossierPatient() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            Integer idDossier = (Integer) model.getValueAt(selectedRow, 0);
-            ouvrirDossierPatient(idDossier);
+            Integer idFileAttente = (Integer) model.getValueAt(selectedRow, 0);
+            try {
+                FileAttente fileAttente = fileAttenteService.findById(idFileAttente);
+                if (fileAttente != null) {
+                    ouvrirDossierPatient(fileAttente.getIdDossier());
+                }
+            } catch (ServiceException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Erreur: " + e.getMessage(),
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this,
                     "Veuillez sélectionner un patient",
@@ -132,9 +155,6 @@ public class ConsultationMedecinFrame extends JPanel {
         try {
             // Utiliser la méthode du dashboard pour afficher le dossier
             dashboard.afficherDetailsDossier(idDossier);
-
-            // Marquer comme "En consultation" si pas déjà fait
-            fileAttenteFrame.marquerEnConsultation(idDossier);
             actualiser();
 
         } catch (Exception e) {
@@ -146,38 +166,69 @@ public class ConsultationMedecinFrame extends JPanel {
     }
 
     private void actualiser() {
-        model.setRowCount(0);
+        try {
+            model.setRowCount(0);
 
-        if (fileAttenteFrame == null) {
-            lblAucunPatient.setVisible(true);
-            table.setVisible(false);
-            return;
-        }
-
-        // Récupérer tous les patients de la file d'attente
-        java.util.List<FileAttenteFrame.FileAttenteItem> patients =
-                new java.util.ArrayList<>(fileAttenteFrame.getFileAttente().values());
-
-        if (patients.isEmpty()) {
-            lblAucunPatient.setVisible(true);
-            table.setVisible(false);
-        } else {
-            lblAucunPatient.setVisible(false);
-            table.setVisible(true);
-
-            int position = 1;
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("HH:mm:ss");
-
-            for (FileAttenteFrame.FileAttenteItem item : patients) {
-                model.addRow(new Object[]{
-                        item.getIdDossier(), // Stocker l'ID dans la première colonne (cachée)
-                        position++,
-                        item.getNom(),
-                        item.getPrenom(),
-                        df.format(item.getDateArrivee()),
-                        item.getStatut()
-                });
+            if (fileAttenteService == null) {
+                lblAucunPatient.setVisible(true);
+                table.setVisible(false);
+                return;
             }
+
+            // Récupérer tous les patients de la file d'attente pour aujourd'hui
+            java.util.List<FileAttente> patients = fileAttenteService.getQueueByDate(LocalDate.now());
+
+            if (patients.isEmpty()) {
+                lblAucunPatient.setVisible(true);
+                table.setVisible(false);
+            } else {
+                lblAucunPatient.setVisible(false);
+                table.setVisible(true);
+
+                int position = 1;
+                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("HH:mm:ss");
+
+                for (FileAttente item : patients) {
+                    model.addRow(new Object[]{
+                            item.getIdFileAttente(),
+                            position++,
+                            getDossierNom(item.getIdDossier()),
+                            getDossierPrenom(item.getIdDossier()),
+                            df.format(java.sql.Timestamp.valueOf(item.getDateArrivee())),
+                            item.getStatut()
+                    });
+                }
+            }
+        } catch (ServiceException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Erreur lors de l'actualisation: " + e.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Récupère le nom du patient par idDossier
+     */
+    private String getDossierNom(Integer idDossier) {
+        try {
+            var dossierController = Application_contexte.getDossierMedicalController();
+            var dossier = dossierController.find_view(idDossier);
+            return dossier != null ? dossier.getPatient_nom() : "?";
+        } catch (Exception e) {
+            return "?";
+        }
+    }
+
+    /**
+     * Récupère le prénom du patient par idDossier
+     */
+    private String getDossierPrenom(Integer idDossier) {
+        try {
+            var dossierController = Application_contexte.getDossierMedicalController();
+            var dossier = dossierController.find_view(idDossier);
+            return dossier != null ? dossier.getPatient_prenom() : "?";
+        } catch (Exception e) {
+            return "?";
         }
     }
 
@@ -189,10 +240,16 @@ public class ConsultationMedecinFrame extends JPanel {
         timer.start();
     }
 
-
-    public void terminerConsultation(Integer idDossier) {
-        fileAttenteFrame.terminerConsultation(idDossier);
-        actualiser();
+    public void terminerConsultation(Integer idFileAttente) {
+        try {
+            fileAttenteService.removePatientFromQueue(idFileAttente);
+            fileAttenteFrame.refresh();
+            actualiser();
+        } catch (ServiceException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Erreur: " + e.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
 

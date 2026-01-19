@@ -5,37 +5,41 @@ import ma.prodenta.entities.En.*;
 import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
 import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
 import ma.prodenta.mvc.ui.dossier.DossierMedicalView;
+import ma.prodenta.service.modules.FileAttenteService;
+import ma.prodenta.common.exceptions.ServiceException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 
-/**
- * Interface pour la secrétaire - Gérer la file d'attente
- */
+
 public class FileAttenteFrame extends JPanel {
 
     private Dashboard_view dashboard;
     private DossierMedicalController dossierController;
+    private FileAttenteService fileAttenteService;
     private DefaultTableModel model;
     private JTable table;
-    private Map<Integer, FileAttenteItem> fileAttente; // En mémoire pour l'instant
+    private LocalDate currentDate; // Groupe par date
 
     /**
-     * Getter pour accéder à la file d'attente depuis l'extérieur
+     * Getter pour accéder au service de file d'attente
      */
-    public Map<Integer, FileAttenteItem> getFileAttente() {
-        return fileAttente;
+    public FileAttenteService getFileAttenteService() {
+        return fileAttenteService;
     }
 
     public FileAttenteFrame(Dashboard_view dashboard) {
         this.dashboard = dashboard;
         this.dossierController = Application_contexte.getDossierMedicalController();
-        this.fileAttente = new LinkedHashMap<>(); // Maintient l'ordre d'insertion
+        this.fileAttenteService = Application_contexte.getFileAttenteService();
+        this.currentDate = LocalDate.now(); // Initialiser avec la date du jour
 
         initializeUI();
     }
@@ -69,7 +73,7 @@ public class FileAttenteFrame extends JPanel {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("File d'attente"));
+        scrollPane.setBorder(BorderFactory.createTitledBorder("File d'attente - " + currentDate));
         scrollPane.setPreferredSize(new Dimension(900, 400));
 
         // Masquer la colonne ID
@@ -140,33 +144,15 @@ public class FileAttenteFrame extends JPanel {
                 if (selectedRow != -1) {
                     Integer idDossier = (Integer) dossierModel.getValueAt(selectedRow, 0);
                     try {
-                        Patient patient = dossierController.find_patient(idDossier);
-
-                        // Vérifier si déjà dans la file
-                        if (fileAttente.containsKey(idDossier)) {
-                            JOptionPane.showMessageDialog(dialog,
-                                    "Ce patient est déjà dans la file d'attente",
-                                    "Information", JOptionPane.INFORMATION_MESSAGE);
-                            return;
-                        }
-
-                        // Ajouter à la file
-                        FileAttenteItem item = new FileAttenteItem();
-                        item.setIdDossier(idDossier);
-                        item.setIdPatient(patient.getId());
-                        item.setNom(patient.getNom());
-                        item.setPrenom(patient.getPrenom());
-                        item.setDateArrivee(new Date());
-                        item.setStatut("En attente");
-
-                        fileAttente.put(idDossier, item);
+                        // Ajouter à la base de données pour la date du jour
+                        fileAttenteService.addPatientToQueue(idDossier, currentDate);
                         actualiser();
                         dialog.dispose();
 
                         JOptionPane.showMessageDialog(this,
                                 "Patient ajouté à la file d'attente",
                                 "Succès", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception ex) {
+                    } catch (ServiceException ex) {
                         JOptionPane.showMessageDialog(dialog,
                                 "Erreur: " + ex.getMessage(),
                                 "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -192,12 +178,18 @@ public class FileAttenteFrame extends JPanel {
     private void retirerPatient() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            Integer idDossier = (Integer) model.getValueAt(selectedRow, 0);
-            fileAttente.remove(idDossier);
-            actualiser();
-            JOptionPane.showMessageDialog(this,
-                    "Patient retiré de la file",
-                    "Succès", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                Integer idFileAttente = (Integer) model.getValueAt(selectedRow, 0);
+                fileAttenteService.removePatientFromQueue(idFileAttente);
+                actualiser();
+                JOptionPane.showMessageDialog(this,
+                        "Patient retiré de la file",
+                        "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (ServiceException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Erreur: " + e.getMessage(),
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this,
                     "Veuillez sélectionner un patient à retirer",
@@ -206,20 +198,53 @@ public class FileAttenteFrame extends JPanel {
     }
 
     private void actualiser() {
-        model.setRowCount(0);
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        try {
+            model.setRowCount(0);
+            SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 
-        int position = 1;
-        for (FileAttenteItem item : fileAttente.values()) {
-            model.addRow(new Object[]{
-                    item.getIdDossier(), // ID caché
-                    position++,
-                    item.getNom(),
-                    item.getPrenom(),
-                    df.format(item.getDateArrivee()),
-                    item.getStatut(),
-                    "Actions"
-            });
+            // Charger la file du jour depuis la base de données
+            List<FileAttente> fileAttenteList = fileAttenteService.getQueueByDate(currentDate);
+
+            int position = 1;
+            for (FileAttente fileAttente : fileAttenteList) {
+                model.addRow(new Object[]{
+                        fileAttente.getIdFileAttente(),
+                        position++,
+                        getDossierNom(fileAttente.getIdDossier()),
+                        getDossierPrenom(fileAttente.getIdDossier()),
+                        df.format(java.sql.Timestamp.valueOf(fileAttente.getDateArrivee())),
+                        fileAttente.getStatut(),
+                        "Actions"
+                });
+            }
+        } catch (ServiceException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Erreur lors de l'actualisation: " + e.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Récupère le nom du patient par idDossier
+     */
+    private String getDossierNom(Integer idDossier) {
+        try {
+            var dossier = dossierController.find_view(idDossier);
+            return dossier != null ? dossier.getPatient_nom() : "?";
+        } catch (Exception e) {
+            return "?";
+        }
+    }
+
+    /**
+     * Récupère le prénom du patient par idDossier
+     */
+    private String getDossierPrenom(Integer idDossier) {
+        try {
+            var dossier = dossierController.find_view(idDossier);
+            return dossier != null ? dossier.getPatient_prenom() : "?";
+        } catch (Exception e) {
+            return "?";
         }
     }
 
@@ -233,63 +258,54 @@ public class FileAttenteFrame extends JPanel {
     /**
      * Récupère le prochain patient en attente
      */
-    public FileAttenteItem getProchainPatient() {
-        for (FileAttenteItem item : fileAttente.values()) {
-            if ("En attente".equals(item.getStatut())) {
-                return item;
-            }
+    public FileAttente getProchainPatient() {
+        try {
+            return fileAttenteService.getFirstPatientInWaiting(currentDate);
+        } catch (ServiceException e) {
+            return null;
         }
-        return null;
     }
 
     /**
      * Marque un patient comme "En consultation"
      */
-    public void marquerEnConsultation(Integer idDossier) {
-        FileAttenteItem item = fileAttente.get(idDossier);
-        if (item != null) {
-            item.setStatut("En consultation");
+    public void marquerEnConsultation(Integer idFileAttente) {
+        try {
+            fileAttenteService.markAsInConsultation(idFileAttente);
             actualiser();
+        } catch (ServiceException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Erreur: " + e.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     /**
      * Marque un patient comme "Terminé" et le retire de la file
      */
-    public void terminerConsultation(Integer idDossier) {
-        fileAttente.remove(idDossier);
-        actualiser();
+    public void terminerConsultation(Integer idFileAttente) {
+        try {
+            fileAttenteService.removePatientFromQueue(idFileAttente);
+            actualiser();
+        } catch (ServiceException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Erreur: " + e.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
-     * Classe interne pour représenter un item de la file d'attente
+     * Définit la date de la file d'attente (pour changer de jour)
      */
-    public static class FileAttenteItem {
-        private Integer idDossier;
-        private Integer idPatient;
-        private String nom;
-        private String prenom;
-        private Date dateArrivee;
-        private String statut;
-
-        // Getters et setters
-        public Integer getIdDossier() { return idDossier; }
-        public void setIdDossier(Integer idDossier) { this.idDossier = idDossier; }
-
-        public Integer getIdPatient() { return idPatient; }
-        public void setIdPatient(Integer idPatient) { this.idPatient = idPatient; }
-
-        public String getNom() { return nom; }
-        public void setNom(String nom) { this.nom = nom; }
-
-        public String getPrenom() { return prenom; }
-        public void setPrenom(String prenom) { this.prenom = prenom; }
-
-        public Date getDateArrivee() { return dateArrivee; }
-        public void setDateArrivee(Date dateArrivee) { this.dateArrivee = dateArrivee; }
-
-        public String getStatut() { return statut; }
-        public void setStatut(String statut) { this.statut = statut; }
+    public void setCurrentDate(LocalDate date) {
+        this.currentDate = date;
+        actualiser();
     }
+
+    public LocalDate getCurrentDate() {
+        return currentDate;
+    }
+
+
 }
 

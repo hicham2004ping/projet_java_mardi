@@ -195,7 +195,7 @@ public class OrdonnancePanel extends JPanel {
                     ordonnance.getIdOrd(),
                     dateStr,
                     ordonnance.getIdDossier(),
-                    ordonnance.getIdconsultation(),
+                    ordonnance.getIdConsultation(),
                     String.format("%d DH", total)
                 };
                 ordonnanceTableModel.addRow(row);
@@ -224,7 +224,7 @@ public class OrdonnancePanel extends JPanel {
                 details.append("ID Ordonnance: ").append(ordonnance.getIdOrd()).append("\n");
                 details.append("Date: ").append(ordonnance.getDateOrd().format(dateFormat)).append("\n");
                 details.append("ID Dossier: ").append(ordonnance.getIdDossier()).append("\n");
-                details.append("ID Consultation: ").append(ordonnance.getIdconsultation()).append("\n");
+                details.append("ID Consultation: ").append(ordonnance.getIdConsultation()).append("\n");
                 details.append("Total: ").append(ordonnanceService.totalOrdonnance(ordonnance)).append(" DH\n\n");
                 
                 List<Medicament> medicaments = ordonnanceService.medicamentsOrdonnance(ordonnance);

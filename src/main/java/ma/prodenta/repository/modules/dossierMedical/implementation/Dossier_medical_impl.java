@@ -56,7 +56,7 @@ public class Dossier_medical_impl implements DossierMedicalRepository {
                 ordonnance.setDateOrd(rs.getDate("dateOrd").toLocalDate());
                 ordonnance.setIdDossier(dossier.getIdDossier());
                 ordonnance.setIdOrd((long)rs.getInt("o.idOrd"));
-                ordonnance.setIdconsultation(rs.getInt("id_conultation"));
+                ordonnance.setIdConsultation(rs.getInt("id_conultation"));
                 list.add(ordonnance);
                 ordonnance=new Ordonnance();
             }

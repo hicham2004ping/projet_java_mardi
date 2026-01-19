@@ -12,5 +12,5 @@ public class Ordonnance implements Serializable {
     private Long idOrd;
     private LocalDate dateOrd;
     private Integer idDossier;
-    private int idconsultation;
+    private Integer idConsultation;
 }

@@ -895,8 +895,8 @@ public class DossierMedicalView extends JPanel {
                 }
                 ord.setIdDossier(idDossier);
                 Integer lastConsultId = getLastConsultationId();
-                // Si pas de consultation, utiliser 0
-                ord.setIdconsultation(lastConsultId != null ? lastConsultId : 0);
+                // Si pas de consultation, laisser null
+                ord.setIdConsultation(lastConsultId);
 
                 // Créer l'ordonnance dans la base
                 if (!ordonnanceService.create(ord)) {
