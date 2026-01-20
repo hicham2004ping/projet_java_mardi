@@ -6,6 +6,10 @@ import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URL;
 
 public class Sidebar extends JPanel {
 
@@ -21,16 +25,13 @@ public class Sidebar extends JPanel {
                 : UserSession.getInstance().getCurrentRoleId();
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(new Color(50, 50, 50));
+        setBackground(new Color(255, 255, 255));
         setBorder(BorderFactory.createEmptyBorder(20, 15, 20, 15));
-        setPreferredSize(new Dimension(230, 800));
+        setPreferredSize(new Dimension(220, 800));
 
-        JLabel titleLabel = new JLabel("Prodenta");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(titleLabel);
-        add(Box.createVerticalStrut(30));
+        // Header avec logo agrandi
+        add(createHeaderPanel());
+        add(Box.createVerticalStrut(35));
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -50,121 +51,165 @@ public class Sidebar extends JPanel {
         add(buttonPanel);
     }
 
+    private JPanel createHeaderPanel() {
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        headerPanel.setOpaque(false);
+        
+        // Essayer de charger le logo depuis les ressources
+        JLabel logoLabel = new JLabel();
+        try {
+            URL logoURL = getClass().getResource("/static/images/icones/logo.png");
+            if (logoURL != null) {
+                ImageIcon logoIcon = new ImageIcon(logoURL);
+                // Redimensionner le logo à une taille plus grande
+                Image scaledImage = logoIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                logoLabel.setIcon(new ImageIcon(scaledImage));
+            } else {
+                // Fallback: emoji
+                logoLabel.setText("🦷");
+                logoLabel.setFont(new Font("Arial", Font.PLAIN, 64));
+            }
+        } catch (Exception e) {
+            // Fallback: emoji
+            logoLabel.setText("🦷");
+            logoLabel.setFont(new Font("Arial", Font.PLAIN, 64));
+        }
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        JLabel titleLabel = new JLabel("ProDenta");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        titleLabel.setForeground(new Color(30, 120, 170));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        JLabel subtitleLabel = new JLabel("Cabinet Médical");
+        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        subtitleLabel.setForeground(new Color(100, 120, 140));
+        subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        headerPanel.add(logoLabel);
+        headerPanel.add(Box.createVerticalStrut(10));
+        headerPanel.add(titleLabel);
+        headerPanel.add(Box.createVerticalStrut(4));
+        headerPanel.add(subtitleLabel);
+        
+        return headerPanel;
+    }
 
     // Menus by role
     private void addMedecinButtons(JPanel panel) {
-        JButton dashboardBtn = createButton("Dashboard");
-        JButton agendaBtn = createButton("Agenda");
-        JButton patientsBtn = createButton("Patients");
-        JButton consultationBtn = createButton("Consultations");
-
-        dashboardBtn.addActionListener(e -> dashboard.afficher_Panel("dashboard"));
-        agendaBtn.addActionListener(e -> dashboard.afficher_Panel("agenda"));
-        patientsBtn.addActionListener(e -> dashboard.afficher_Panel("patients"));
-        consultationBtn.addActionListener(e -> dashboard.afficher_Panel("consultation_medecin"));
-
-        panel.add(dashboardBtn);
+        addMenuButton(panel, "📊 Dashboard", e -> dashboard.afficher_Panel("dashboard"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(agendaBtn);
+        addMenuButton(panel, "📅 Agenda", e -> dashboard.afficher_Panel("agenda"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(patientsBtn);
+        addMenuButton(panel, "👥 Patients", e -> dashboard.afficher_Panel("patients"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(consultationBtn);
+        addMenuButton(panel, "🏥 Consultations", e -> dashboard.afficher_Panel("consultation_medecin"));
 
         panel.add(Box.createVerticalGlue());
         addLogoutButton(panel);
     }
 
     private void addSecretaireButtons(JPanel panel) {
-        JButton dashboardBtn = createButton("Dashboard");
-        JButton rdvBtn = createButton("Rendez-vous");
-        JButton agendaBtn = createButton("Agenda");
-        JButton patientsBtn = createButton("Patients");
-        JButton actesBtn = createButton("Actes");
-        JButton consultationBtn = createButton("Consultations");
-        JButton gererConsultBtn = createButton("Gérer Consultations");
-        JButton fileAttenteBtn = createButton("File d'attente");
-        JButton caisseBtn = createButton("Caisse");
-        JButton situationBtn = createButton("Situation financière");
-        JButton factureBtn = createButton("Factures");
-
-        dashboardBtn.addActionListener(e -> dashboard.afficher_Panel("dashboard"));
-        rdvBtn.addActionListener(e -> dashboard.afficher_Panel("rdv"));
-        agendaBtn.addActionListener(e -> dashboard.afficher_Panel("agenda"));
-        patientsBtn.addActionListener(e -> dashboard.afficher_Panel("patients"));
-        actesBtn.addActionListener(e -> dashboard.afficher_Panel("actes"));
-        consultationBtn.addActionListener(e -> dashboard.afficher_Panel("consultation_secretaire"));
-        gererConsultBtn.addActionListener(e -> dashboard.afficher_Panel("Dossier medical"));
-        fileAttenteBtn.addActionListener(e -> dashboard.afficher_Panel("file_attente"));
-        caisseBtn.addActionListener(e -> dashboard.afficher_Panel("caisse"));
-        situationBtn.addActionListener(e -> dashboard.afficher_Panel("statistics"));
-        factureBtn.addActionListener(e -> dashboard.afficher_Panel("facture"));
-
-        panel.add(dashboardBtn);
+        addMenuButton(panel, "📊 Dashboard", e -> dashboard.afficher_Panel("dashboard"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(rdvBtn);
+        addMenuButton(panel, "📅 Rendez-vous", e -> dashboard.afficher_Panel("rdv"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(agendaBtn);
+        addMenuButton(panel, "👥 Patients", e -> dashboard.afficher_Panel("patients"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(patientsBtn);
+        addMenuButton(panel, "📆 Agenda", e -> dashboard.afficher_Panel("agenda"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(actesBtn);
+        addMenuButton(panel, "⏳ File d'attente", e -> dashboard.afficher_Panel("file_attente"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(consultationBtn);
+        addMenuButton(panel, "💰 Caisse", e -> dashboard.afficher_Panel("caisse"));
         panel.add(Box.createVerticalStrut(8));
-        panel.add(gererConsultBtn);
-        panel.add(Box.createVerticalStrut(8));
-        panel.add(fileAttenteBtn);
-        panel.add(Box.createVerticalStrut(8));
-        panel.add(caisseBtn);
-        panel.add(Box.createVerticalStrut(8));
-        panel.add(situationBtn);
-        panel.add(Box.createVerticalStrut(8));
-        panel.add(factureBtn);
+        addMenuButton(panel, "📋 Dossier médical", e -> dashboard.afficher_Panel("Dossier medical"));
 
         panel.add(Box.createVerticalGlue());
         addLogoutButton(panel);
     }
 
     private void addAdminButtons(JPanel panel) {
-        JButton usersBtn = createButton("Utilisateurs");
-        JButton logsBtn = createButton("Journaux d'Audit");
-
-        usersBtn.addActionListener(e -> dashboard.afficher_Panel("utilisateurs"));
-        logsBtn.addActionListener(e -> dashboard.afficher_Panel("logs"));
-
-        panel.add(usersBtn);
-        panel.add(Box.createVerticalStrut(10));
-        panel.add(logsBtn);
+        addMenuButton(panel, "👤 Utilisateurs", e -> dashboard.afficher_Panel("utilisateurs"));
+        panel.add(Box.createVerticalStrut(8));
+        addMenuButton(panel, "📊 Journaux d'Audit", e -> dashboard.afficher_Panel("logs"));
 
         panel.add(Box.createVerticalGlue());
         addLogoutButton(panel);
     }
 
     private void addMinimalButtons(JPanel panel) {
-        JButton dashboardBtn = createButton("Dashboard");
-        dashboardBtn.addActionListener(e -> dashboard.afficher_Panel("dashboard"));
-
-        panel.add(dashboardBtn);
+        addMenuButton(panel, "📊 Dashboard", e -> dashboard.afficher_Panel("dashboard"));
         panel.add(Box.createVerticalGlue());
         addLogoutButton(panel);
     }
+
+    private void addMenuButton(JPanel panel, String text, ActionListener action) {
+        JButton button = createButton(text);
+        button.addActionListener(action);
+        panel.add(button);
+    }
+
     private JButton createButton(String text) {
         JButton button = new JButton(text);
-        button.setMaximumSize(new Dimension(200, 40));
+        button.setMaximumSize(new Dimension(190, 45));
+        button.setPreferredSize(new Dimension(190, 45));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setBackground(new Color(70, 130, 180));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.setBorder(BorderFactory.createLineBorder(new Color(50, 100, 150)));
+        button.setBackground(new Color(245, 247, 250));
+        button.setForeground(new Color(40, 120, 160));
+        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button.setBorder(BorderFactory.createLineBorder(new Color(180, 200, 220), 2));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setContentAreaFilled(true);
+
+        // Hover effect avec couleurs assortis
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(new Color(30, 120, 170));
+                button.setForeground(Color.WHITE);
+                button.setBorder(BorderFactory.createLineBorder(new Color(20, 100, 150), 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(new Color(245, 247, 250));
+                button.setForeground(new Color(40, 120, 160));
+                button.setBorder(BorderFactory.createLineBorder(new Color(180, 200, 220), 2));
+            }
+        });
+
         return button;
     }
 
     private void addLogoutButton(JPanel panel) {
-        JButton logoutBtn = createButton("Déconnexion");
-        logoutBtn.setBackground(new Color(180, 60, 60));
+        JButton logoutBtn = new JButton("🔓 Log Out");
+        logoutBtn.setMaximumSize(new Dimension(190, 45));
+        logoutBtn.setPreferredSize(new Dimension(190, 45));
+        logoutBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        logoutBtn.setBackground(new Color(255, 100, 100));
+        logoutBtn.setForeground(Color.WHITE);
+        logoutBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        logoutBtn.setBorder(BorderFactory.createLineBorder(new Color(220, 80, 80), 2));
+        logoutBtn.setFocusPainted(false);
+        logoutBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        logoutBtn.setContentAreaFilled(true);
+
+        logoutBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logoutBtn.setBackground(new Color(220, 80, 80));
+                logoutBtn.setBorder(BorderFactory.createLineBorder(new Color(180, 60, 60), 2));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logoutBtn.setBackground(new Color(255, 100, 100));
+                logoutBtn.setBorder(BorderFactory.createLineBorder(new Color(220, 80, 80), 2));
+            }
+        });
+
         logoutBtn.addActionListener(e -> handleLogout());
         panel.add(logoutBtn);
     }

@@ -78,6 +78,8 @@ public class Dashboard_view extends JFrame {
         if (this.userRoleId != null && this.userRoleId == 2) { // Secrétaire
             this.fileAttenteFrame = new FileAttenteFrame(this);
             this.rdvFrame = new RDVFrame(this);
+            SecretaireDashboardPanel secretaireDashboard = new SecretaireDashboardPanel(this, fileAttenteFrame);
+            contenu_Centre.add(secretaireDashboard, "dashboard");
             contenu_Centre.add(fileAttenteFrame, "file_attente");
             contenu_Centre.add(rdvFrame, "rdv");
 
@@ -89,6 +91,8 @@ public class Dashboard_view extends JFrame {
             if (fileAttenteFrame == null) {
                 this.fileAttenteFrame = new FileAttenteFrame(this);
             }
+            MedecinDashboardPanel medecinDashboard = new MedecinDashboardPanel(this, fileAttenteFrame);
+            contenu_Centre.add(medecinDashboard, "dashboard");
             ConsultationMedecinFrame consultationMedecin = new ConsultationMedecinFrame(this, fileAttenteFrame);
             contenu_Centre.add(consultationMedecin, "consultation_medecin");
         }
@@ -118,6 +122,16 @@ public class Dashboard_view extends JFrame {
         add(p, BorderLayout.WEST);
         add(p1, BorderLayout.NORTH);
         add(contenu_Centre, BorderLayout.CENTER);
+
+        // Afficher le dashboard par défaut pour les médecins
+        if (this.userRoleId != null && this.userRoleId == 1) {
+            afficher_Panel("dashboard");
+        }
+
+        // Afficher le dashboard par défaut pour les secrétaires
+        if (this.userRoleId != null && this.userRoleId == 2) {
+            afficher_Panel("dashboard");
+        }
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
