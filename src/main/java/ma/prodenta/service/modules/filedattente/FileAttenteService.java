@@ -1,4 +1,4 @@
-package ma.prodenta.service.modules;
+package ma.prodenta.service.modules.filedattente;
 
 import ma.prodenta.entities.En.FileAttente;
 import ma.prodenta.repository.modules.fieldattente.FileAttenteDaoImpl;

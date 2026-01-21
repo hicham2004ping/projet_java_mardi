@@ -37,7 +37,7 @@ import ma.prodenta.repository.modules.agenda.implementation.AgendaRepositoryImpl
 import ma.prodenta.repository.modules.Dashboard.implementation.DashboardRepositoryImpl;
 import ma.prodenta.mvc.ui.auth.LoginFrame;
 import ma.prodenta.repository.modules.fieldattente.FileAttenteDaoImpl;
-import ma.prodenta.service.modules.FileAttenteService;
+import ma.prodenta.service.modules.filedattente.FileAttenteService;
 
 public class Application_contexte {
 

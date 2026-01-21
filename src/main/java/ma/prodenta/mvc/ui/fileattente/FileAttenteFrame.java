@@ -4,8 +4,7 @@ import ma.prodenta.config.Application_contexte;
 import ma.prodenta.entities.En.*;
 import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
 import ma.prodenta.mvc.ui.dashboard.Dashboard_view;
-import ma.prodenta.mvc.ui.dossier.DossierMedicalView;
-import ma.prodenta.service.modules.FileAttenteService;
+import ma.prodenta.service.modules.filedattente.FileAttenteService;
 import ma.prodenta.common.exceptions.ServiceException;
 
 import javax.swing.*;
@@ -14,8 +13,6 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
 import java.util.List;
 
 

@@ -4,7 +4,7 @@ import ma.prodenta.config.Application_contexte;
 import ma.prodenta.entities.En.FileAttente;
 import ma.prodenta.mvc.controllers.modules.dossierMedical.DossierMedicalController;
 import ma.prodenta.mvc.ui.fileattente.FileAttenteFrame;
-import ma.prodenta.service.modules.FileAttenteService;
+import ma.prodenta.service.modules.filedattente.FileAttenteService;
 import ma.prodenta.common.exceptions.ServiceException;
 
 import javax.swing.*;
@@ -12,7 +12,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Timer;
